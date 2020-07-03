@@ -3,8 +3,7 @@
 (uiop:define-package #:nervous-island.grid
   (:use #:cl)
   (:shadow #:space)
-  (:local-nicknames (#:a #:alexandria)
-                    (#:p #:protest/base))
+  (:local-nicknames (#:a #:alexandria))
   (:export
    #:direction #:*directions* #:diagonal #:diagonals
    #:coord #:axial #:axial-q #:axial-r #:cube #:cube-x #:cube-y #:cube-z
