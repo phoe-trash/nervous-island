@@ -471,28 +471,23 @@
       (list start)
       (let ((visited (make-hash-table :test #'equalp))
             (previous (make-hash-table :test #'equalp))
-            (fringes (make-array 0 :adjustable t)))
+            (fringes (make-array max-depth :adjustable t :initial-element '())))
         (setf (gethash (coords start) visited) t)
         (vector-push-extend (list start) fringes)
-        (loop
-          for k from 1 to max-depth
-          do (vector-push-extend '() fringes)
-             (loop
-               for fringe in (aref fringes (1- k))
-               for neighbors = (neighbors board fringe)
-               do (dolist (neighbor neighbors)
-                    (cond
-                      ((space= neighbor end)
-                       (setf (gethash (coords neighbor) previous) fringe)
+        (loop for k from 1 to max-depth do
+          (loop for fringe in (aref fringes (1- k)) do
+            (loop for neighbor in (neighbors board fringe)
+                  when (space= neighbor end)
+                    do (setf (gethash (coords neighbor) previous) fringe)
                        (return-from %bfs-pathfind
                          (loop for elt = end
                                  then (gethash (coords elt) previous)
                                while elt collect elt into result
-                               finally (return (nreverse result)))))
-                      ((not (gethash (coords neighbor) visited))
-                       (setf (gethash (coords neighbor) visited) t
+                               finally (return (nreverse result))))
+                  when (not (gethash (coords neighbor) visited))
+                    do (setf (gethash (coords neighbor) visited) t
                              (gethash (coords neighbor) previous) fringe)
-                       (push neighbor (aref fringes k))))))))))
+                       (push neighbor (aref fringes k))))))))
 
 (defgeneric pathfind (board start end &optional max-depth)
   (:method ((board null) (start space) (end space) &optional (max-depth 20))
