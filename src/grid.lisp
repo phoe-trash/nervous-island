@@ -1,17 +1,16 @@
 ;;;; src/grid.lisp
 
-(defpackage #:nervous-island.grid
+(uiop:define-package #:nervous-island.grid
   (:use #:cl)
   (:shadow #:space)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base))
   (:export
-   #:tile #:tile= #:direction #:*directions* #:diagonal #:diagonals
-   #:board-tile #:instant-tile
+   #:direction #:*directions* #:diagonal #:diagonals
    #:coord #:axial #:axial-q #:axial-r #:cube #:cube-x #:cube-y #:cube-z
    #:cube-axial #:axial-cube #:axial+ #:axial- #:cube+
    #:cube- #:axial-move #:cube-move
-   #:space #:tiles #:coords #:make-space #:ensure-space #:space= #:ensure-space
+   #:space #:coords #:make-space #:ensure-space #:space= #:ensure-space
    #:board #:make-board #:spaces #:space-present-p #:space #:only-present-spaces
    #:neighbors #:neighbor #:diagonals #:diagonal #:range #:distance
    #:range-intersection #:rotate #:ring #:spiral-ring #:linedraw #:pathfind))
@@ -28,14 +27,6 @@
 (deftype diagonal () '(member :qw :wq :we :ew :ed :de :ds :sd :as :sa :aq :qa))
 
 (defparameter *diagonals* '(:qw :wq :we :ew :ed :de :ds :sd :as :sa :aq :qa))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Tile
-
-(p:define-protocol-class tile () ())
-
-(defgeneric tile= (tile-1 tile-2)
-  (:method (tile-1 tile-2) nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Coordinates
@@ -119,32 +110,24 @@
 ;;; Space
 
 (defclass space ()
-  ((%tiles :accessor tiles :initarg :tiles)
-   (%coords :reader coords :initarg :coords))
-  (:default-initargs :tiles '() :coords '()))
+  ((%coords :reader coords :initarg :coords))
+  (:default-initargs :coords '()))
 
-(defmethod initialize-instance :before ((space space) &key tiles coords)
-  (assert (every (a:rcurry #'typep 'tile) tiles))
+(defmethod initialize-instance :before ((space space) &key coords)
   (assert (typep coords 'axial)))
 
-(defun make-space (coords &optional tiles)
-  (make-instance 'space :coords coords :tiles tiles))
+(defun make-space (coords)
+  (make-instance 'space :coords coords))
 
 (defgeneric space= (space-1 space-2)
   (:method (space-1 space-2) nil)
   (:method ((space-1 space) (space-2 space))
-    (and (equalp (coords space-1) (coords space-2))
-         (let ((tiles-1 (tiles space-1))
-               (tiles-2 (tiles space-2)))
-           (= (length tiles-1) (length tiles-2))
-           (every #'tile= tiles-1 tiles-2)))))
+    (equalp (coords space-1) (coords space-2))))
 
 (defmethod print-object ((object space) stream)
   (print-unreadable-object (object stream :type t :identity nil)
     (let ((axial (coords object)))
-      (format stream "~D ~D" (axial-q axial) (axial-r axial))
-      (when (tiles object)
-        (format stream " (~D tile~:P)" (list-length (tiles object)))))))
+      (format stream "~D ~D" (axial-q axial) (axial-r axial)))))
 
 (defun ensure-space (thing)
   (etypecase thing
