@@ -1,4 +1,4 @@
-;;;; src/board.lisp
+;;;; src/coords/board.lisp
 
 (uiop:define-package #:nervous-island.board
   (:use #:cl)

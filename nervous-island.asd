@@ -8,8 +8,9 @@
   :serial t
   :pathname "src"
   :components ((:file "common")
-               (:file "coord")
-               (:file "board")
+               (:module "coords"
+                :components ((:file "coord")
+                             (:file "board")))
                (:module "tiles"
                 :components ((:file "army")
                              (:file "tile")
