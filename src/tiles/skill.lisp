@@ -1,4 +1,4 @@
-;;;; src/skill.lisp
+;;;; src/tiles/skill.lisp
 
 (uiop:define-package #:nervous-island.skill
   (:use #:cl)

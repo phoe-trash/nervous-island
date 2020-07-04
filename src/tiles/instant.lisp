@@ -1,4 +1,4 @@
-;;;; src/instant.lisp
+;;;; src/tiles/instant.lisp
 
 (uiop:define-package #:nervous-island.instant
   (:use #:cl)

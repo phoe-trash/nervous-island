@@ -1,4 +1,4 @@
-;;;; src/army.lisp
+;;;; src/tiles/army.lisp
 
 (uiop:define-package #:nervous-island.army
   (:use #:cl)

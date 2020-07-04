@@ -1,4 +1,4 @@
-;;;; src/attack.lisp
+;;;; src/tiles/attack.lisp
 
 (uiop:define-package #:nervous-island.attack
   (:use #:cl)

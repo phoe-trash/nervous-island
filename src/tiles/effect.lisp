@@ -1,4 +1,4 @@
-;;;; src/effect.lisp
+;;;; src/tiles/effect.lisp
 
 (uiop:define-package #:nervous-island.effect
   (:use #:cl)

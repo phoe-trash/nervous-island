@@ -1,4 +1,4 @@
-;;;; src/tile.lisp
+;;;; src/tiles/tile.lisp
 
 (uiop:define-package #:nervous-island.tile
   (:use #:cl)
