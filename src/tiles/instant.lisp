@@ -5,9 +5,7 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:nt #:nervous-island.tile))
-  (:export
-   ;; Instant tiles
-   #:battle #:move #:push-back #:sniper #:grenade #:air-strike))
+  (:export #:battle #:move #:push-back #:sniper #:grenade #:air-strike))
 
 (in-package #:nervous-island.instant)
 

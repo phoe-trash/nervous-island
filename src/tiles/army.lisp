@@ -4,11 +4,12 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base))
-  (:export
-   ;; Army - protocol
-   #:army #:hq-tiles #:name #:tiles))
+  (:export #:army #:hq-tiles #:name #:tiles))
 
 (in-package #:nervous-island.army)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Army
 
 (protest/base:define-protocol-class army ()
   ((%hq-tiles :reader hq-tiles :initarg :hq-tiles)

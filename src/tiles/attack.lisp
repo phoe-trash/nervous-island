@@ -5,9 +5,7 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:ns #:nervous-island.skill))
-  (:export
-   ;; Attacks
-   #:attack #:strength #:melee #:ranged #:gauss-cannon))
+  (:export #:attack #:strength #:melee #:ranged #:gauss-cannon))
 
 (in-package #:nervous-island.attack)
 
