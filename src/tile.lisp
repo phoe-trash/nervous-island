@@ -24,14 +24,14 @@
   (:default-initargs :target nil))
 
 (p:define-protocol-class board-tile (tile)
-  ((%direction :accessor direction :initarg :direction))
+  ((%direction :reader direction :initarg :direction))
   (:default-initargs :direction :w))
 
 (p:define-protocol-class hq (board-tile)
-  ((%hit-points :accessor hit-points :initarg :hit-points))
+  ((%hit-points :reader hit-points :initarg :hit-points))
   (:default-initargs :hit-points 20))
 (p:define-protocol-class unit (board-tile)
-  ((%skills :accessor skills :initarg :skills))
+  ((%skills :reader skills :initarg :skills))
   (:default-initargs :skills '()))
 (p:define-protocol-class foundation (board-tile) ())
 
