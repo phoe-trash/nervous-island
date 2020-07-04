@@ -11,7 +11,7 @@
   (:import-from #:nervous-island.instant
                 #:battle #:move #:air-strike #:push-back)
   (:export
-   #:army
+   #:army #:hq
    #:blocker #:hybrid #:gauss-cannon #:juggernaut #:hunter-killer #:clown
    #:armored-hunter #:armored-guard #:guard #:protector #:hornet #:net-fighter
    #:stormtrooper

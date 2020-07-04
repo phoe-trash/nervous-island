@@ -11,7 +11,7 @@
   (:import-from #:nervous-island.instant
                 #:battle #:move #:sniper)
   (:export
-   #:army
+   #:army #:hq
    #:runner #:hmg #:commando #:annihilator #:mobile-armor #:brawler
    #:saboteur #:recon-center #:medic #:officer #:scoper #:scout
    #:battle #:move #:sniper))

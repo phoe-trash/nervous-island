@@ -16,6 +16,8 @@
                (:file "attack")
                (:file "effect")
                (:file "armies/outpost")
-               (:file "armies/moloch"))
+               (:file "armies/moloch")
+               (:file "armies/borgo")
+               (:file "armies/hegemony"))
   :depends-on (#:alexandria
                #:protest/base))

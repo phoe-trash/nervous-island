@@ -11,7 +11,10 @@
   (:import-from #:nervous-island.instant
                 #:battle #:move #:grenade)
   (:export
-   #:army))
+   #:army #:hq
+   #:mutant #:claws #:super-mutant #:net-fighter #:brawler #:assassin
+   #:medic #:officer #:super-officer #:scout
+   #:battle #:move #:grenade))
 
 (in-package #:nervous-island.armies.borgo)
 
