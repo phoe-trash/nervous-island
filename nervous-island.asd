@@ -25,4 +25,9 @@
                              (:file "hegemony")))
                (:file "user"))
   :depends-on (#:alexandria
-               #:protest/base))
+               #:protest/base)
+  :in-order-to ((test-op (load-op :nervous-island.test)))
+  :perform
+  (test-op (o c)
+           (symbol-call '#:parachute '#:test :nervous-island.test
+                        :report (find-symbol "INTERACTIVE" "PARACHUTE"))))

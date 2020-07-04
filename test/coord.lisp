@@ -78,7 +78,7 @@
 (define-test linedraw
   (let* ((start (nc:ensure-axial '(-2 0)))
          (end (nc:ensure-axial '(2 -2)))
-         (line (nb:linedraw start end))
+         (line (nc:linedraw start end))
          (expected-axials '((-2 0) (-1 0) (0 -1) (1 -1) (2 -2)))
          (expected (mapcar #'nc:ensure-axial expected-axials)))
     (is = (length expected) (length line))

@@ -105,7 +105,7 @@
     (cube-position (cube-axial (apply #'make-cube thing)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Algorithm
+;;; Operations
 
 (defun neighbors (axial)
   (check-type axial axial)
