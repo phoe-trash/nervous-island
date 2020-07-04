@@ -1,4 +1,4 @@
-;;;; src/coords/coord.lisp
+;;;; src/state/coord.lisp
 
 (uiop:define-package #:nervous-island.coord
   (:use #:cl)

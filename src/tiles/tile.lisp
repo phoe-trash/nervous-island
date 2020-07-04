@@ -4,7 +4,6 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
-                    (#:nb #:nervous-island.board)
                     (#:nr #:nervous-island.army))
   (:export
    ;; Tiles - protocol

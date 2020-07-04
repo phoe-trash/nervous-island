@@ -1,4 +1,4 @@
-;;;; src/coords/board.lisp
+;;;; src/state/board.lisp
 
 (uiop:define-package #:nervous-island.board
   (:use #:cl)
@@ -6,7 +6,7 @@
                     (#:nc #:nervous-island.coord)
                     (#:ncom #:nervous-island.common))
   (:export
-   #:board #:make-board #:axial-present-p #:only-present-axials
+   #:board #:axials #:make-board #:axial-present-p #:only-present-axials
    #:neighbors #:neighbor #:diagonals #:diagonal #:range #:distance
    #:range-intersection #:rotate #:ring #:spiral-ring #:pathfind))
 

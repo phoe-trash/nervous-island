@@ -8,9 +8,6 @@
   :serial t
   :pathname "src"
   :components ((:file "common")
-               (:module "coords"
-                :components ((:file "coord")
-                             (:file "board")))
                (:module "tiles"
                 :components ((:file "army")
                              (:file "tile")
@@ -23,6 +20,14 @@
                              (:file "outpost")
                              (:file "borgo")
                              (:file "hegemony")))
+               (:module "state"
+                :components ((:file "coord")
+                             (:file "board")
+                             (:file "space")
+                             (:file "player")
+                             (:file "phase")
+                             (:file "choice")
+                             (:file "state")))
                (:file "user"))
   :depends-on (#:alexandria
                #:protest/base)
