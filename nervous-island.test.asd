@@ -8,7 +8,8 @@
   :serial t
   :pathname "test"
   :components ((:file "package")
-               (:file "grid"))
+               (:file "coord")
+               (:file "board"))
   :depends-on (#:alexandria
                #:parachute
                #:named-readtables

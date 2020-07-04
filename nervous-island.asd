@@ -7,7 +7,9 @@
   :version "0.0"
   :serial t
   :pathname "src"
-  :components ((:file "grid")
+  :components ((:file "common")
+               (:file "coord")
+               (:file "board")
                (:module "tiles"
                 :components ((:file "army")
                              (:file "tile")
