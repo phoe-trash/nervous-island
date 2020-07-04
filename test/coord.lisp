@@ -92,8 +92,3 @@
          (expected (mapcar #'nc:ensure-axial expected-axials)))
     (is = (length expected) (length path))
     (true (every #'equalp path expected))))
-
-
-
-
-
