@@ -8,7 +8,7 @@
                     (#:nr #:nervous-island.army))
   (:export
    ;; Tiles - protocol
-   #:tile #:owner #:tile= #:instant #:target #:board-tile #:direction
+   #:tile #:owner #:tile= #:instant #:target #:board-tile
    #:hq #:hit-points #:unit #:skills #:foundation #:warrior #:module #:implant
    ;; Macros
    #:define-unit))
@@ -39,9 +39,7 @@
   ((%target :reader target :initarg :target))
   (:default-initargs :target nil))
 
-(p:define-protocol-class board-tile (tile)
-  ((%direction :reader direction :initarg :direction))
-  (:default-initargs :direction :w))
+(p:define-protocol-class board-tile (tile) ())
 
 (p:define-protocol-class foundation (board-tile) ())
 

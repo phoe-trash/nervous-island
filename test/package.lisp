@@ -6,7 +6,9 @@
   (:local-nicknames (#:g #:nervous-island.grid)
                     (#:a #:alexandria)))
 
-(defvar *center* (g:ensure-space '(0 0)))
+(in-package #:nervous-island.test)
+
+(defvar *center* (g:ensure-axial'(0 0)))
 
 (defun make-standard-board ()
   (apply #'g:make-board '((-2 2) (-2 1) (-2 0)
