@@ -2,8 +2,10 @@
 
 (uiop:define-package #:nervous-island.user
   (:use #:cl)
-  (:local-nicknames (#:a #:alexandria)
-                    (#:na #:nervous-island.attack)
+  ;; External packages
+  (:local-nicknames (#:a #:alexandria))
+  ;; Nervous Island packages
+  (:local-nicknames (#:na #:nervous-island.attack)
                     (#:nb #:nervous-island.board)
                     (#:nc #:nervous-island.coord)
                     (#:nch #:nervous-island.choice)
@@ -16,8 +18,9 @@
                     (#:ns #:nervous-island.skill)
                     (#:nsp #:nervous-island.space)
                     (#:nst #:nervous-island.state)
-                    (#:nt #:nervous-island.tile)
-                    (#:moloch #:nervous-island.armies.moloch)
+                    (#:nt #:nervous-island.tile))
+  ;; Nervous Island armies
+  (:local-nicknames (#:moloch #:nervous-island.armies.moloch)
                     (#:outpost #:nervous-island.armies.outpost)
                     (#:borgo #:nervous-island.armies.borgo)
                     (#:hegemony #:nervous-island.armies.hegemony)))
