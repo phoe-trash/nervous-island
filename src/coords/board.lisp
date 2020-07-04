@@ -80,28 +80,6 @@
     (check-axial-present board center)
     (only-present-axials board (nc:range center radius))))
 
-(defgeneric distance (board start end &optional max-depth)
-  (:method ((board board) (start nc:axial) (end nc:axial)
-            &optional (max-depth 20))
-    (check-axial-present board start)
-    (check-axial-present board end)
-    (if (equalp start end)
-        0
-        (let ((visited (make-hash-table :test #'equalp))
-              (fringes (make-array 0 :adjustable t)))
-          (setf (gethash start visited) t)
-          (vector-push-extend (list start) fringes)
-          (loop for k from 1 to max-depth
-                do (vector-push-extend '() fringes)
-                   (loop for fringe in (aref fringes (1- k))
-                         for neighbors = (neighbors board fringe)
-                         do (dolist (neighbor neighbors)
-                              (cond ((equalp neighbor end)
-                                     (return-from distance k))
-                                    ((not (gethash neighbor visited))
-                                     (setf (gethash neighbor visited) t)
-                                     (push neighbor (aref fringes k)))))))))))
-
 (defgeneric range-intersection (board center-1 range-1 center-2 range-2)
   (:method ((board board)
             (center-1 nc:axial) range-1
@@ -126,6 +104,27 @@
   (:method ((board board) (center nc:axial) radius)
     (check-axial-present board center)
     (only-present-axials board (nc:spiral-ring center radius))))
+
+(defgeneric distance (board start end &optional max-depth)
+  (:method ((board board) (start nc:axial) (end nc:axial)
+            &optional (max-depth 20))
+    (check-axial-present board start)
+    (check-axial-present board end)
+    (if (equalp start end)
+        0
+        (let ((visited (make-hash-table :test #'equalp))
+              (fringes (make-array 0 :adjustable t)))
+          (setf (gethash start visited) t)
+          (vector-push-extend (list start) fringes)
+          (loop for k from 1 to max-depth do
+            (vector-push-extend '() fringes)
+            (loop for fringe in (aref fringes (1- k)) do
+              (loop for neighbor in (neighbors board fringe)
+                    when (equalp neighbor end)
+                      do (return-from distance k)
+                    when (not (gethash neighbor visited))
+                      do (setf (gethash neighbor visited) t)
+                         (push neighbor (aref fringes k)))))))))
 
 (defgeneric pathfind (board start end &optional max-depth)
   (:method ((board board) (start nc:axial) (end nc:axial)
