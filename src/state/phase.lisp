@@ -28,19 +28,13 @@
 (defclass turn (player-phase) ())
 
 (defclass before-battle (player-phase) ())
-
 (defclass battle (player-phase)
   ((%initiative :reader initiative :initarg :initiative))
   (:default-initargs :initiative (a:required-argument :initiative)))
-
 (defclass after-battle (player-phase) ())
 
 (defclass before-final-battle (final before-battle) ())
-
-(defclass final-battle (final battle)
-  ((%initiative :reader initiative :initarg :initiative))
-  (:default-initargs :initiative (a:required-argument :initiative)))
-
+(defclass final-battle (final battle) ())
 (defclass after-final-battle (final after-battle) ())
 
 (defclass end (final) ())
