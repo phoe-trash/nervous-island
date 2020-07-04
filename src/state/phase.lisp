@@ -18,6 +18,11 @@
   ((%player :reader player :initarg :player))
   (:default-initargs :player (a:required-argument :player)))
 
+(p:define-protocol-class final (phase) ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Phase - concrete classes
+
 (defclass start (player-phase) ())
 
 (defclass turn (player-phase) ())
@@ -29,8 +34,6 @@
   (:default-initargs :initiative (a:required-argument :initiative)))
 
 (defclass after-battle (player-phase) ())
-
-(p:define-protocol-class final (phase) ())
 
 (defclass before-final-battle (final before-battle) ())
 
