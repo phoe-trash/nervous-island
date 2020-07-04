@@ -36,8 +36,6 @@
   ((%strength :reader strength :initarg :strength))
   (:default-initargs :strength 1))
 
-
-
 (p:define-protocol-class melee-officer (numeric-effect) ())
 (p:define-protocol-class ranged-officer (numeric-effect) ())
 (p:define-protocol-class scout (numeric-effect) ())

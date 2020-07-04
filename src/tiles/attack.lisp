@@ -10,7 +10,7 @@
 (in-package #:nervous-island.attack)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Attacks
+;;; Attacks - protocol
 
 (p:define-protocol-class attack (ns:active-directed)
   ((%strength :reader strength :initarg :strength))
@@ -20,6 +20,9 @@
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~A ~A ~S ~A" (type-of object) 'attack
             (ns:direction object) (strength object))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Attacks - concrete classes
 
 (defclass melee (attack) ())
 (defun melee (direction &optional (strength 1))
