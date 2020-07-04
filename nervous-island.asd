@@ -8,6 +8,13 @@
   :serial t
   :pathname "src"
   :components ((:file "package")
-               (:file "grid"))
+               (:file "grid")
+               (:file "army")
+               (:file "tile")
+               (:file "instant")
+               (:file "skill")
+               (:file "attack")
+               (:file "effect")
+               (:file "armies/outpost"))
   :depends-on (#:alexandria
                #:protest/base))
