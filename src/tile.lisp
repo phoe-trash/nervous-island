@@ -25,21 +25,19 @@
   ((%owner :reader owner :initarg :owner))
   (:default-initargs :owner nil))
 
+(defmethod print-object ((object tile) stream)
+  (print-unreadable-object (object stream :type nil :identity t)
+    (let ((owner (if (owner object) (nr:name (owner object)) 'unowned)))
+      (format stream "~A ~A" owner (type-of object)))))
+
 (defgeneric tile= (tile-1 tile-2)
   (:method (tile-1 tile-2)
     (and (eq (class-name tile-1) (class-name tile-2))
          (eq (owner tile-1) (owner tile-2)))))
 
-(defun print-tile (object stream type)
-  (print-unreadable-object (object stream :type nil :identity t)
-    (let ((owner (if (owner object) (nr:name (owner object)) 'unowned)))
-      (format stream "~A ~A - ~S" owner type (type-of object)))))
-
 (p:define-protocol-class instant (tile)
   ((%target :reader target :initarg :target))
   (:default-initargs :target nil))
-(defmethod print-object ((object instant) stream)
-  (print-tile object stream 'instant))
 
 (p:define-protocol-class board-tile (tile)
   ((%direction :reader direction :initarg :direction))
@@ -52,19 +50,12 @@
   (:default-initargs :skills '()))
 
 (p:define-protocol-class hq (skill-having board-tile) ())
+
 (p:define-protocol-class unit (skill-having board-tile) ())
 
-(p:define-protocol-class warrior (unit) ())
-(defmethod print-object ((object warrior) stream)
-  (print-tile object stream 'warrior))
-
-(p:define-protocol-class module (unit) ())
-(defmethod print-object ((object module) stream)
-  (print-tile object stream 'module))
-
-(p:define-protocol-class implant (unit) ())
-(defmethod print-object ((object implant) stream)
-  (print-tile object stream 'implant))
+(defclass warrior (unit) ())
+(defclass module (unit) ())
+(defclass implant (unit) ())
 
 (defmacro define-unit (name (&rest superclasses) &body skills)
   `(defclass ,name ,superclasses ()

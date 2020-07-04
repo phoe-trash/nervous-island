@@ -18,6 +18,7 @@
                (:file "armies/outpost")
                (:file "armies/moloch")
                (:file "armies/borgo")
-               (:file "armies/hegemony"))
+               (:file "armies/hegemony")
+               (:file "user"))
   :depends-on (#:alexandria
                #:protest/base))
