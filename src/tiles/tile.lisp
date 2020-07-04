@@ -9,7 +9,7 @@
   (:export
    ;; Tiles - protocol
    #:tile #:owner #:tile= #:instant #:target #:board-tile
-   #:hq #:hit-points #:unit #:skills #:foundation #:warrior #:module #:implant
+   #:hq #:starting-hp #:unit #:skills #:foundation #:warrior #:module #:implant
    ;; Macros
    #:define-unit))
 
@@ -19,7 +19,6 @@
 ;;; Tiles - protocol
 
 ;; TODO negative tests for initial arguments everywhere
-;; TODO print-object for all those
 
 (p:define-protocol-class tile ()
   ((%owner :reader owner :initarg :owner))
@@ -47,7 +46,9 @@
   ((%skills :reader skills :initarg :skills))
   (:default-initargs :skills '()))
 
-(p:define-protocol-class hq (skill-having board-tile) ())
+(p:define-protocol-class hq (skill-having board-tile)
+  ((%starting-hp :reader starting-hp :initarg :starting-hp))
+  (:default-initargs :starting-hp 20))
 
 (p:define-protocol-class unit (skill-having board-tile) ())
 

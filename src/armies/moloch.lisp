@@ -26,7 +26,7 @@
 (defclass army (nr:army) ()
   (:default-initargs
    :name :moloch
-   :hq (make-instance 'hq)
+   :hq-tiles (list (make-instance 'hq))
    :tiles '((blocker 2) (hybrid 2) gauss-cannon juggernaut (hunter-killer 2)
             clown (armored-hunter 2) armored-guard guard protector hornet
             net-fighter stormtrooper

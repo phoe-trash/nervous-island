@@ -6,15 +6,15 @@
                     (#:p #:protest/base))
   (:export
    ;; Army - protocol
-   #:army #:hq #:name #:tiles))
+   #:army #:hq-tiles #:name #:tiles))
 
 (in-package #:nervous-island.army)
 
 (protest/base:define-protocol-class army ()
-  ((%hq :reader hq :initarg :hq)
+  ((%hq-tiles :reader hq-tiles :initarg :hq-tiles)
    (%name :reader name :initarg :name)
    (%tiles :reader tiles))
-  (:default-initargs :hq (a:required-argument :hq)
+  (:default-initargs :hq-tiles (a:required-argument :hq-tiles)
                      :name (a:required-argument :name)
                      :tiles (a:required-argument :tiles)))
 

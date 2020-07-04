@@ -24,7 +24,7 @@
 (defclass army (nr:army) ()
   (:default-initargs
    :name :borgo
-   :hq (make-instance 'hq)
+   :hq-tiles (list (make-instance 'hq))
    :tiles '((mutant 6) (claws 4) super-mutant (net-fighter 2) (brawler 2)
             (assassin 2)
             medic (officer 2) super-officer (scout 2)

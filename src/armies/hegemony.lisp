@@ -25,7 +25,7 @@
 (defclass army (nr:army) ()
   (:default-initargs
    :name :hegemony
-   :hq (make-instance 'hq)
+   :hq-tiles (list (make-instance 'hq))
    :tiles '((runner 3) thug (ganger 4) gladiator (net-fighter 2) net-master
             guard (universal-soldier 3)
             boss (officer-1 2) officer-2 scout transport quartermaster
