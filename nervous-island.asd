@@ -15,6 +15,7 @@
                (:file "skill")
                (:file "attack")
                (:file "effect")
-               (:file "armies/outpost"))
+               (:file "armies/outpost")
+               (:file "armies/moloch"))
   :depends-on (#:alexandria
                #:protest/base))

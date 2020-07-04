@@ -7,7 +7,7 @@
                     (#:nt #:nervous-island.tile))
   (:export
    ;; Instant tiles
-   #:battle #:move #:push-back #:sniper #:grenade #:bomb))
+   #:battle #:move #:push-back #:sniper #:grenade #:air-strike))
 
 (in-package #:nervous-island.instant)
 
@@ -33,6 +33,6 @@
   (:default-initargs :target '(:enemy)))
 (defun grenade () (make-instance 'grenade))
 
-(defclass bomb (nt:instant) ()
+(defclass air-strike (nt:instant) ()
   (:default-initargs :target '(:enemy)))
-(defun bomb () (make-instance 'bomb))
+(defun air-strike () (make-instance 'air-strike))
