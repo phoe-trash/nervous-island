@@ -1,4 +1,4 @@
-;;;; test/armies/skill.lisp
+;;;; test/tiles/skill.lisp
 
 (in-package #:nervous-island.test)
 

@@ -9,7 +9,8 @@
   (:export
    ;; Tiles - protocol
    #:tile #:owner #:tile= #:instant #:target #:board-tile #:skill-having
-   #:hq #:starting-hp #:unit #:skills #:foundation #:warrior #:module #:implant
+   #:hq #:starting-hit-points #:unit #:skills #:foundation #:warrior #:module
+   #:implant
    ;; Macros
    #:define-unit))
 
@@ -58,14 +59,16 @@
   (apply #'call-next-method tile slots args))
 
 (p:define-protocol-class hq (skill-having board-tile)
-  ((%starting-hp :reader starting-hp :initarg :starting-hp))
-  (:default-initargs :starting-hp 20))
+  ((%starting-hit-points :reader starting-hit-points
+                         :initarg :starting-hit-points))
+  (:default-initargs :starting-hit-points 20))
 
 (defmethod shared-initialize :around
-    ((tile hq) slots &rest args &key (starting-hp nil starting-hp-p))
-  (when starting-hp-p
-    (check-type starting-hp (integer 1))
-    (nconc (list :starting-hp starting-hp) args))
+    ((tile hq) slots &rest args
+     &key (starting-hit-points nil starting-hit-points-p))
+  (when starting-hit-points-p
+    (check-type starting-hit-points (integer 1))
+    (nconc (list :starting-hit-points starting-hit-points) args))
   (apply #'call-next-method tile slots args))
 
 (p:define-protocol-class unit (skill-having board-tile) ())

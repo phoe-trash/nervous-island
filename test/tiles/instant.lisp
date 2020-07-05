@@ -1,3 +1,3 @@
-;;;; test/armies/instant.lisp
+;;;; test/tiles/instant.lisp
 
 (in-package #:nervous-island.test)

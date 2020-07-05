@@ -1,4 +1,4 @@
-;;;; test/space.lisp
+;;;; test/state/space.lisp
 
 (in-package #:nervous-island.test)
 

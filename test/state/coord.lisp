@@ -1,4 +1,4 @@
-;;;; test/board.lisp
+;;;; test/state/board.lisp
 
 (in-package #:nervous-island.test)
 

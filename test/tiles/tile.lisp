@@ -1,4 +1,4 @@
-;;;; test/armies/tile.lisp
+;;;; test/tiles/tile.lisp
 
 (in-package #:nervous-island.test)
 
@@ -33,6 +33,6 @@
 (defclass tile-test-hq (nt:hq) ())
 
 (define-test tile-hq
-  (fail (make-instance 'tile-test-hq :starting-hp nil) type-error)
+  (fail (make-instance 'tile-test-hq :starting-hit-points nil) type-error)
   (true (make-instance 'tile-test-hq))
-  (true (make-instance 'tile-test-hq :starting-hp 42)))
+  (true (make-instance 'tile-test-hq :starting-hit-points 42)))

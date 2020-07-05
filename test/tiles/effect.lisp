@@ -1,4 +1,4 @@
-;;;; test/armies/effect.lisp
+;;;; test/tiles/effect.lisp
 
 (in-package #:nervous-island.test)
 

@@ -1,4 +1,4 @@
-;;;; test/armies/attack.lisp
+;;;; test/tiles/attack.lisp
 
 (in-package #:nervous-island.test)
 
