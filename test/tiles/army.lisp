@@ -2,6 +2,8 @@
 
 (in-package #:nervous-island.test)
 
+;;; TODO REINITIALIZE-INSTANCE tests everywhere
+
 (defclass army-test-hq (nt:hq) ())
 
 (defclass army-test-warrior (nt:warrior) ())
@@ -33,3 +35,15 @@
   (fail (make-instance 'army-test-army :hq-tiles '(#:foo)))
   (fail (make-instance 'army-test-army :tiles '((#:foo 34))))
   (fail (make-instance 'army-test-army :tile-count 36) 'nr:tile-count-error))
+
+(define-test army-reinitialize
+  (let* ((army (make-instance 'army-test-army))
+         (name (nr:name army))
+         (tile-count (nr:tile-count army))
+         (hq-tiles (nr:hq-tiles army))
+         (tiles (nr:tiles army)))
+    (is eq army (reinitialize-instance army))
+    (is eq name (nr:name army))
+    (is eql tile-count (nr:tile-count army))
+    (is eq hq-tiles (nr:hq-tiles army))
+    (is eq tiles (nr:tiles army))))

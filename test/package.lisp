@@ -29,6 +29,8 @@
 
 (in-package #:nervous-island.test)
 
+;; TODO 
+
 (defvar *center-axial* (nc:ensure-axial '(0 0)))
 
 (defvar *center-cube* (nc:ensure-cube '(0 0 0)))

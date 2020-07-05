@@ -17,9 +17,11 @@
   (:default-initargs :strength 1))
 
 (defmethod shared-initialize :around
-    ((attack attack) slots &rest args &key strength)
-  (check-type strength (or (eql t) (integer 1)))
-  (apply #'call-next-method attack slots :strength strength args))
+    ((attack attack) slots &rest args &key (strength nil strengthp))
+  (when strengthp
+    (check-type strength (or (eql t) (integer 1)))
+    (nconc (list :strength strength) args))
+  (apply #'call-next-method attack slots args))
 
 (defmethod print-object ((object attack) stream)
   (print-unreadable-object (object stream :type nil :identity nil)

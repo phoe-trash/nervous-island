@@ -31,12 +31,14 @@
                      (duplicated-axial-axial condition)))))
 
 (defmethod shared-initialize :after
-    ((board board) slots &key axials)
-  (dolist (axial axials)
-    (check-type axial nc:axial)
-    (if (gethash axial (axials board))
-        (error 'duplicated-axial :axial axial)
-        (setf (gethash axial (axials board)) axial))))
+    ((board board) slots &key (axials nil axialsp))
+  (when axialsp
+    (check-type axials list)
+    (dolist (axial axials)
+      (check-type axial nc:axial)
+      (if (gethash axial (axials board))
+          (error 'duplicated-axial :axial axial)
+          (setf (gethash axial (axials board)) axial)))))
 
 (defun make-board (&rest axial-designators)
   (let ((axials (mapcar #'nc:ensure-axial axial-designators)))

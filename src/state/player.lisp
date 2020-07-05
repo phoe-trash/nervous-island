@@ -3,6 +3,7 @@
 (uiop:define-package #:nervous-island.player
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
+                    (#:Φ #:phoe-toolbox)
                     (#:nr #:nervous-island.army)
                     (#:nt #:nervous-island.tile))
   (:export #:player #:army #:hit-points #:hand #:draw-pile #:discard-pile))
@@ -33,3 +34,7 @@
   (unless draw-pile-p
     (let ((draw-pile (a:shuffle (copy-list (nr:tiles (army player))))))
       (setf (slot-value player '%draw-pile) draw-pile))))
+
+(defgeneric edit-player (player &rest initargs)
+  (:method ((player player) &rest initargs)
+    (apply #'φ:shallow-copy-object player initargs)))

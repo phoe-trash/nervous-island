@@ -28,9 +28,12 @@
   (:default-initargs :activation-time :initiative))
 
 (defmethod shared-initialize :around
-    ((skill active) slots &rest args &key activation-time)
-  (check-type activation-time activation-time)
-  (apply #'call-next-method skill slots :activation-time activation-time args))
+    ((skill active) slots &rest args
+     &key (activation-time nil activation-time-p))
+  (when activation-time-p
+    (check-type activation-time activation-time)
+    (nconc (list :activation-time activation-time) args))
+  (apply #'call-next-method skill slots args))
 
 (p:define-protocol-class passive (skill) ())
 
@@ -39,9 +42,12 @@
   (:default-initargs :direction (a:required-argument :direction)))
 
 (defmethod shared-initialize :around
-    ((skill directed) slots &rest args &key direction)
-  (check-type direction (or ncom:direction ncom:diagonal))
-  (apply #'call-next-method skill slots :direction direction args))
+    ((skill directed) slots &rest args
+     &key (direction nil directionp))
+  (when directionp
+    (check-type direction (or ncom:direction ncom:diagonal))
+    (nconc (list :direction direction) args))
+  (apply #'call-next-method skill slots args))
 
 (defmethod print-object ((object directed) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
