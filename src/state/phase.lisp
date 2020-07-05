@@ -25,6 +25,8 @@
 
 (defclass start (player-phase) ())
 
+(defclass draw-tiles (player-phase) ())
+(defclass discard-tile (player-phase) ())
 (defclass turn (player-phase) ())
 
 (defclass before-battle (player-phase) ())

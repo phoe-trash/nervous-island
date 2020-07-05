@@ -20,7 +20,7 @@
                 :components ((:file "coord")
                              (:file "board")
                              (:file "space")
-                             ;; (:file "player")
+                             (:file "player")
                              ;; (:file "phase")
                              ;; (:file "choice")
                              ;; (:file "state")
