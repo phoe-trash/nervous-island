@@ -15,22 +15,17 @@
 (defclass battle (nt:instant) ())
 (defun battle () (make-instance 'battle))
 
-(defclass move (nt:instant) ()
-  (:default-initargs :target '(:friendly)))
+(defclass move (nt:instant) ())
 (defun move () (make-instance 'move))
 
-(defclass push-back (nt:instant) ()
-  (:default-initargs :target '(:friendly)))
+(defclass push-back (nt:instant) ())
 (defun push-back () (make-instance 'push-back))
 
-(defclass sniper (nt:instant) ()
-  (:default-initargs :target '(:enemy)))
+(defclass sniper (nt:instant) ())
 (defun sniper () (make-instance 'sniper))
 
-(defclass grenade (nt:instant) ()
-  (:default-initargs :target '(:enemy)))
+(defclass grenade (nt:instant) ())
 (defun grenade () (make-instance 'grenade))
 
-(defclass air-strike (nt:instant) ()
-  (:default-initargs :target '(:enemy)))
+(defclass air-strike (nt:instant) ())
 (defun air-strike () (make-instance 'air-strike))

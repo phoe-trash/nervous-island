@@ -22,14 +22,15 @@
    (%foundation :reader foundation :initarg :foundation))
   (:default-initargs :tokens '() :tile nil :rotation nil :foundation nil))
 
-(defmethod shared-initialize :before ((space space) slots
+(defmethod shared-initialize :around ((space space) slots
                                       &key tile rotation foundation)
-  (when tile
-    (check-type tile (and nt:tile (not nt:foundation)))
-    (unless rotation (a:required-argument :rotation))
-    (check-type rotation ncom:direction))
-  (when foundation
-    (check-type foundation nt:foundation)))
+  (check-type tile (or null (and nt:tile (not nt:foundation))))
+  (when (and tile (not rotation))
+    (a:required-argument :rotation))
+  (check-type rotation (or null ncom:direction))
+  (check-type foundation (or null nt:foundation))
+  (call-next-method space slots :tile tile :rotation rotation
+                                :foundation foundation))
 
 (defun make-spaces (axials)
   (let ((spaces (make-hash-table :test #'equalp)))

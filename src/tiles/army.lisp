@@ -39,8 +39,19 @@
 
 (deftype tile-designator () '(or symbol (cons symbol (cons (integer 1) null))))
 
-(defmethod shared-initialize :before
-    ((army army) slots &key hq-tiles tiles tile-count)
+(defmethod shared-initialize :around
+    ((army army) slots &key name tile-count hq-tiles tiles)
+  (check-type name symbol)
+  (check-type tile-count (integer 1))
+  (check-type hq-tiles list)
+  (loop for cons on hq-tiles do (check-type (car cons) tile-designator))
+  (check-type tiles list)
+  (loop for cons on tiles do (check-type (car cons) tile-designator))
+  (call-next-method army slots :name name :tile-count tile-count
+                               :hq-tiles hq-tiles :tiles tiles))
+
+(defmethod shared-initialize :after
+    ((army army) slots &key tile-count hq-tiles tiles)
   (flet ((process-tile-designators (designators)
            (let ((result '()))
              (dolist (designator designators result)
@@ -48,12 +59,14 @@
                (let ((class (a:ensure-car designator))
                      (count (if (consp designator) (second designator) 1)))
                  (dotimes (i count)
-                   (push (make-instance class :owner army) result)))))))
+                   (push (make-instance class :owner army) result))))))
+         (check-tile-count (hq-tiles tiles)
+           (let ((expected tile-count)
+                 (actual (+ (length hq-tiles) (length tiles))))
+             (unless (= expected actual)
+               (error 'tile-count-error :expected expected :actual actual)))))
     (let ((hq-tiles (process-tile-designators hq-tiles))
           (tiles (process-tile-designators tiles)))
-      (let ((expected tile-count)
-            (actual (+ (length hq-tiles) (length tiles))))
-        (unless (= expected actual)
-          (error 'tile-count-error :expected expected :actual actual)))
+      (check-tile-count hq-tiles tiles)
       (setf (slot-value army '%tiles) tiles
             (slot-value army '%hq-tiles) hq-tiles))))

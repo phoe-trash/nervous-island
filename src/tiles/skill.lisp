@@ -3,7 +3,8 @@
 (uiop:define-package #:nervous-island.skill
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
-                    (#:p #:protest/base))
+                    (#:p #:protest/base)
+                    (#:ncom #:nervous-island.common))
   (:export
    ;; Skills - protocol
    #:skill #:directed #:direction #:undirected
@@ -19,14 +20,26 @@
 
 (p:define-protocol-class skill () ())
 
+(deftype activation-time ()
+  '(member :initiative :initiative-player-choice :turn))
+
 (p:define-protocol-class active (skill)
   ((%activation-time :reader activation-time :initarg :activation-time))
   (:default-initargs :activation-time :initiative))
+
+(defmethod shared-initialize :around ((skill active) slots &key activation-time)
+  (check-type activation-time activation-time)
+  (call-next-method skill slots :activation-time activation-time))
+
 (p:define-protocol-class passive (skill) ())
 
 (p:define-protocol-class directed (skill)
   ((%direction :reader direction :initarg :direction))
   (:default-initargs :direction (a:required-argument :direction)))
+
+(defmethod shared-initialize :around ((skill directed) slots &key direction)
+  (check-type direction (or ncom:direction ncom:diagonal))
+  (call-next-method skill slots :direction direction))
 
 (defmethod print-object ((object directed) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
@@ -53,7 +66,7 @@
 (defun net (direction) (make-instance 'net :direction direction))
 
 (defclass mobility (active-undirected) ()
-  (:default-initargs :activation-time :player-turn))
+  (:default-initargs :activation-time :turn))
 (defun mobility () (make-instance 'mobility))
 
 (defclass explosion (active-undirected) ()

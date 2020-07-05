@@ -23,6 +23,11 @@
   ((%owner :reader owner :initarg :owner))
   (:default-initargs :owner nil))
 
+(defmethod shared-initialize :around
+    ((tile tile) slots &key owner)
+  (check-type owner (or null nr:army))
+  (call-next-method tile slots :owner owner))
+
 (defmethod print-object ((object tile) stream)
   (print-unreadable-object (object stream :type nil :identity t)
     (let ((owner (if (owner object) (nr:name (owner object)) 'unowned)))
@@ -33,9 +38,7 @@
     (and (eq (class-name tile-1) (class-name tile-2))
          (eq (owner tile-1) (owner tile-2)))))
 
-(p:define-protocol-class instant (tile)
-  ((%target :reader target :initarg :target))
-  (:default-initargs :target nil))
+(p:define-protocol-class instant (tile) ())
 
 (p:define-protocol-class board-tile (tile) ())
 

@@ -20,6 +20,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; State
 
+;; TODO alliances
+
 (defclass state ()
   ((%board :reader board :initarg :board)
    (%players :reader players :initarg :players)

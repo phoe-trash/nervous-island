@@ -30,8 +30,7 @@
              (format stream "Duplicated axial ~S"
                      (duplicated-axial-axial condition)))))
 
-(defmethod shared-initialize ((board board) slots &key axials)
-  (call-next-method)
+(defmethod shared-initialize :after ((board board) slots &key axials)
   (dolist (axial axials)
     (check-type axial nc:axial)
     (if (gethash axial (axials board))
