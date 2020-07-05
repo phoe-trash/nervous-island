@@ -2,10 +2,15 @@
 
 (uiop:define-package #:nervous-island.phase
   (:use #:cl)
-  (:shadow #:phase)
+  (:shadow #:phase #:number)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base))
-  (:export #:phase #:player-phase #:start #:turn #:battle #:end))
+  (:export #:phase #:player-phase #:player #:number #:final
+           #:start #:draw-tiles #:discard-tile #:turn
+           #:before-battle #:battle #:after-battle
+           #:final-draw-tiles #:final-discard-tile #:final-turn
+           #:before-final-battle #:final-battle #:after-final-battle #:end
+           #:possible-phases))
 
 (in-package #:nervous-island.phase)
 
@@ -15,8 +20,10 @@
 (p:define-protocol-class phase () ())
 
 (p:define-protocol-class player-phase (phase)
-  ((%player :reader player :initarg :player))
-  (:default-initargs :player (a:required-argument :player)))
+  ((%player :reader player :initarg :player)
+   (%number :reader number :initarg :number))
+  (:default-initargs :player (a:required-argument :player)
+                     :number (a:required-argument :number)))
 
 (p:define-protocol-class final (phase) ())
 
@@ -34,6 +41,10 @@
   ((%initiative :reader initiative :initarg :initiative))
   (:default-initargs :initiative (a:required-argument :initiative)))
 (defclass after-battle (player-phase) ())
+
+(defclass final-draw-tiles (final player-phase) ())
+(defclass final-discard-tile (final player-phase) ())
+(defclass final-turn (final player-phase) ())
 
 (defclass before-final-battle (final before-battle) ())
 (defclass final-battle (final battle) ())

@@ -21,7 +21,7 @@
                              (:file "board")
                              (:file "space")
                              (:file "player")
-                             ;; (:file "phase")
+                             (:file "phase")
                              ;; (:file "choice")
                              ;; (:file "state")
                              )))
