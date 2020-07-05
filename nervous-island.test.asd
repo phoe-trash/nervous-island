@@ -15,12 +15,6 @@
                              (:file "effect")
                              (:file "tile")
                              (:file "instant")))
-               (:module "armies"
-                :components (;; (:file "moloch")
-                             ;; (:file "outpost")
-                             ;; (:file "borgo")
-                             ;; (:file "hegemony")
-                             ))
                (:module "state"
                 :components ((:file "coord")
                              (:file "board")
