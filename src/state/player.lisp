@@ -106,6 +106,8 @@
                      (expected condition) (actual condition)))))
 
 (defun check-total-army-size (player)
+  ;; TODO rewrite into CHECK-FOREIGN-TILES that errors whenever a tile is
+  ;; detected that is not a part of the game state
   (let* ((hand-size (length (hand player)))
          (draw-pile-size (length (draw-pile player)))
          (discard-pile-size (length (discard-pile player)))

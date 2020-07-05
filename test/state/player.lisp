@@ -26,29 +26,31 @@
     (is eq '() (np:discard-pile player))))
 
 (define-test player-instantiation-negative
-  (let* ((army (make-instance 'player-test-army))
-         (hq (first (nr:hq-tiles army))))
-    ;; Army
+  ;; Type errors
+  (let* ((army (make-instance 'player-test-army)))
     (fail (make-instance 'np:player :army 42) 'type-error)
-    ;; Hit points
     (fail (make-instance 'np:player :army army :hit-points :zero) 'type-error)
-    (let ((hit-points (a:plist-hash-table (list hq 43) :test #'eq)))
-      (fail (make-instance 'np:player :army army :hit-points hit-points)
-          'np:hq-hit-points-over-limit))
-    (let* ((hq-2 (make-instance 'player-test-hq))
-           (hit-points (a:plist-hash-table (list hq 42 hq-2 42) :test #'eq)))
-      (fail (make-instance 'np:player :army army :hit-points hit-points)
-          'np:mismatched-hq-tiles))
-    ;; Hand
     (fail (make-instance 'np:player :army army :hand 42) 'type-error)
     (fail (make-instance 'np:player :army army :hand '(42)) 'type-error)
-    ;; Draw pile
     (fail (make-instance 'np:player :army army :draw-pile 42) 'type-error)
     (fail (make-instance 'np:player :army army :draw-pile '(42)) 'type-error)
-    ;; Discard pile
     (fail (make-instance 'np:player :army army :discard-pile 42) 'type-error)
     (fail (make-instance 'np:player :army army :discard-pile '(42))
         'type-error))
+  ;; HQ hit points over limit
+  (let* ((army (make-instance 'player-test-army))
+         (hq (first (nr:hq-tiles army)))
+         (hit-points (a:plist-hash-table (list hq 43) :test #'eq)))
+    (fail (make-instance 'np:player :army army :hit-points hit-points)
+        'np:hq-hit-points-over-limit))
+  ;; Mismatched HQ tiles
+  (let* ((army (make-instance 'player-test-army))
+         (hq-1 (first (nr:hq-tiles army)))
+         (hq-2 (make-instance 'player-test-hq))
+         (hit-points (a:plist-hash-table (list hq-1 42 hq-2 42) :test #'eq)))
+    (fail (make-instance 'np:player :army army :hit-points hit-points)
+        'np:mismatched-hq-tiles))
+  ;; Too many tiles in hand
   (let* ((army (make-instance 'player-test-army))
          (tiles (nr:tiles army))
          (discard-pile (subseq tiles 0 1))
