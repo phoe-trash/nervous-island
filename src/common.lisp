@@ -3,10 +3,10 @@
 (uiop:define-package #:nervous-island.common
   (:use #:cl)
   (:export
-   ;; Types
-   #:direction #:diagonal
-   ;; Constants
-   #:*directions* #:diagonals))
+   ;; Types and constants
+   #:direction #:diagonal #:*directions* #:diagonals
+   ;; Conditions
+   #:nervous-island-condition #:nervous-island-error))
 
 (in-package #:nervous-island.common)
 
@@ -20,3 +20,10 @@
 (defparameter *directions* '(:q :w :e :d :s :a))
 
 (defparameter *diagonals* '(:qw :wq :we :ew :ed :de :ds :sd :as :sa :aq :qa))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Conditions
+
+(define-condition nervous-island-condition () ())
+
+(define-condition nervous-island-error (nervous-island-condition error) ())

@@ -37,7 +37,7 @@
   (y 0 :type integer :read-only t)
   (z 0 :type integer :read-only t))
 
-(define-condition invalid-coords (error)
+(define-condition invalid-coords (ncom:nervous-island-error)
   ((%coordinates :reader invalid-coords-coords :initarg :coords))
   (:default-initargs :coords (a:required-argument :coords))
   (:report (lambda (condition stream)

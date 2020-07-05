@@ -23,7 +23,7 @@
   (print-unreadable-object (object stream :type t :identity t)
     (format stream "(~D axials)" (hash-table-count (axials object)))))
 
-(define-condition duplicated-axial (error)
+(define-condition duplicated-axial (ncom:nervous-island-error)
   ((%axial :reader duplicated-axial-axial :initarg :axial))
   (:default-initargs :axial (a:required-argument :axial))
   (:report (lambda (condition stream)

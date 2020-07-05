@@ -3,7 +3,8 @@
 (uiop:define-package #:nervous-island.army
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
-                    (#:p #:protest/base))
+                    (#:p #:protest/base)
+                    (#:ncom #:nervous-island.common))
   (:export #:army #:name #:tile-count #:hq-tiles #:tiles #:tile-designator
            #:tile-count-error))
 
@@ -26,8 +27,7 @@
   (print-unreadable-object (object stream :type nil :identity t)
     (format stream "~A ~A" (name object) 'army)))
 
-;; TODO common condition type for NI errors
-(define-condition tile-count-error (error)
+(define-condition tile-count-error (ncom:nervous-island-error)
   ((%expected :reader tile-count-error-expected :initarg :expected)
    (%actual :reader tile-count-error-actual :initarg :actual))
   (:default-initargs :actual (a:required-argument :actual)
