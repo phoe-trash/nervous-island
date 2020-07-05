@@ -18,8 +18,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - protocol
 
-;; TODO negative tests for initial arguments everywhere
-
 (p:define-protocol-class tile ()
   ((%owner :reader owner :initarg :owner))
   (:default-initargs :owner nil))

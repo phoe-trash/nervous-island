@@ -20,7 +20,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; State
 
-;; TODO alliances
+;;; TODO alliances
 
 (defclass state ()
   ((%board :reader board :initarg :board)

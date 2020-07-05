@@ -119,4 +119,15 @@
     (fail (nsp:edit-spaces spaces space-2 :axial (nc:make-axial 0 0))
         'nsp:cannot-edit-axial)))
 
-(define-test space-find-tile)
+(define-test space-find-tile
+  (let* ((tile-1 (make-instance 'space-test-tile))
+         (tile-2 (make-instance 'space-test-tile))
+         (tile-3 (make-instance 'space-test-tile))
+         (space-1 (make-instance 'nsp:space :axial (nc:make-axial 0 0)
+                                            :tile tile-1 :rotation :w))
+         (space-2 (make-instance 'nsp:space :axial (nc:make-axial 0 1)
+                                            :tile tile-2 :rotation :w))
+         (spaces (nsp:make-spaces space-1 space-2)))
+    (is eq space-1 (nsp:find-tile spaces tile-1))
+    (is eq space-2 (nsp:find-tile spaces tile-2))
+    (is eq nil (nsp:find-tile spaces tile-3))))

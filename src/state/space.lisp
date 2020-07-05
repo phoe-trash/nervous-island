@@ -19,8 +19,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Space
 
-;;; TODO define tokens in some way
-
 (defclass space ()
   ((%axial :reader axial :initarg :axial)
    (%tokens :reader tokens :initarg :tokens)
@@ -105,6 +103,7 @@
                     (nt:foundation #'foundation)
                     (nt:tile #'tile))))
       (maphash (lambda (axial space)
+                 (declare (ignore axial))
                  (when (eq tile (funcall #'fn space))
-                   (return-from find-tile axial)))
+                   (return-from find-tile space)))
                spaces))))
