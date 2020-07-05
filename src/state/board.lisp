@@ -6,7 +6,8 @@
                     (#:nc #:nervous-island.coord)
                     (#:ncom #:nervous-island.common))
   (:export
-   #:board #:axials #:make-board #:axial-present-p #:only-present-axials
+   #:board #:axials #:duplicated-axial #:make-board #:axial-present-p
+   #:only-present-axials
    #:neighbors #:neighbor #:diagonals #:diagonal #:range #:distance
    #:range-intersection #:rotate #:ring #:spiral-ring #:pathfind))
 
@@ -22,11 +23,19 @@
   (print-unreadable-object (object stream :type t :identity t)
     (format stream "(~D axials)" (hash-table-count (axials object)))))
 
-(defmethod initialize-instance :after ((board board) &key axials)
+(define-condition duplicated-axial (error)
+  ((%axial :reader duplicated-axial-axial :initarg :axial))
+  (:default-initargs :axial (a:required-argument :axial))
+  (:report (lambda (condition stream)
+             (format stream "Duplicated axial ~S"
+                     (duplicated-axial-axial condition)))))
+
+(defmethod shared-initialize ((board board) slots &key axials)
+  (call-next-method)
   (dolist (axial axials)
     (check-type axial nc:axial)
     (if (gethash axial (axials board))
-        (error "Duplicated axial ~S" axial)
+        (error 'duplicated-axial :axial axial)
         (setf (gethash axial (axials board)) axial))))
 
 (defun make-board (&rest axial-designators)

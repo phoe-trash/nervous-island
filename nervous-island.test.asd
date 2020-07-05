@@ -8,8 +8,29 @@
   :serial t
   :pathname "test"
   :components ((:file "package")
-               (:file "coord")
-               (:file "board"))
+               (:module "tiles"
+                :components ((:file "army")
+                             ;; (:file "tile")
+                             ;; (:file "instant")
+                             ;; (:file "skill")
+                             ;; (:file "attack")
+                             ;; (:file "effect")
+                             ))
+               (:module "armies"
+                :components (;; (:file "moloch")
+                             ;; (:file "outpost")
+                             ;; (:file "borgo")
+                             ;; (:file "hegemony")
+                             ))
+               (:module "state"
+                :components ((:file "coord")
+                             (:file "board")
+                             (:file "space")
+                             ;; (:file "player")
+                             ;; (:file "phase")
+                             ;; (:file "choice")
+                             ;; (:file "state")
+                             )))
   :depends-on (#:alexandria
                #:parachute
                #:named-readtables

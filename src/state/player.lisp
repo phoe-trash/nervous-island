@@ -22,8 +22,7 @@
    :army (a:required-argument :army) :hand '() :discard-pile '()))
 
 (defmethod initialize-instance :after
-    ((player player) &key
-                       (hit-points nil hit-points-p)
+    ((player player) &key (hit-points nil hit-points-p)
                        (draw-pile nil draw-pile-p))
   (declare (ignore hit-points draw-pile))
   (unless hit-points-p

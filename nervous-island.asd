@@ -30,6 +30,7 @@
                              (:file "state")))
                (:file "user"))
   :depends-on (#:alexandria
+               #:phoe-toolbox
                #:protest/base)
   :in-order-to ((test-op (load-op :nervous-island.test)))
   :perform

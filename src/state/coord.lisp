@@ -6,11 +6,11 @@
                     (#:ncom #:nervous-island.common))
   (:export
    #:coord #:axial #:axial-q #:axial-r #:cube #:cube-x #:cube-y #:cube-z
-   #:cube-axial #:axial-cube #:axial+ #:axial- #:axial-position #:cube+
-   #:cube- #:axial-move #:cube-move #:cube-position #:ensure-axial
+   #:make-axial #:make-cube #:invalid-coords #:cube-axial #:axial-cube
+   #:axial+ #:axial- #:cube+ #:cube- #:axial-move #:cube-move
+   #:axial-position #:cube-position #:ensure-axial #:ensure-cube
    #:neighbors #:diagonals #:range #:distance #:range-intersection
-   #:rotate-axial #:rotate #:ring #:spiral-ring #:cube-round #:axial-round
-   #:lerp #:linedraw))
+   #:rotate #:ring #:spiral-ring #:cube-round #:axial-round #:lerp #:linedraw))
 
 (in-package #:nervous-island.coord)
 
@@ -24,6 +24,8 @@
   (r 0 :type integer :read-only t))
 
 (defun make-axial (q r)
+  (check-type q integer)
+  (check-type r integer)
   (%make-axial :q q :r r))
 
 (defmethod print-object ((object axial) stream)
@@ -35,8 +37,19 @@
   (y 0 :type integer :read-only t)
   (z 0 :type integer :read-only t))
 
+(define-condition invalid-coords (error)
+  ((%coordinates :reader invalid-coords-coords :initarg :coords))
+  (:default-initargs :coords (a:required-argument :coords))
+  (:report (lambda (condition stream)
+             (format stream "Invalid coordinates: ~S"
+                     (invalid-coords-coords condition)))))
+
 (defun make-cube (x y z)
-  (assert (= 0 (+ x y z)))
+  (check-type x integer)
+  (check-type y integer)
+  (check-type z integer)
+  (unless (= 0 (+ x y z))
+    (error 'invalid-coords :coords (list x y z)))
   (%make-cube :x x :y y :z z))
 
 (defmethod print-object ((object cube) stream)
@@ -57,29 +70,23 @@
          (y (- 0 x z)))
     (make-cube x y z)))
 
-(defgeneric axial+ (a b)
-  (:method ((a axial) (b axial))
-    (make-axial (+ (axial-q a) (axial-q b))
-                (+ (axial-r a) (axial-r b)))))
+(defun axial+ (a b)
+  (make-axial (+ (axial-q a) (axial-q b))
+              (+ (axial-r a) (axial-r b))))
 
-(defgeneric axial- (a b)
-  (:method ((a axial) (b axial))
-    (make-axial (- (axial-q a) (axial-q b))
-                (- (axial-r a) (axial-r b)))))
+(defun axial- (a b)
+  (make-axial (- (axial-q a) (axial-q b))
+              (- (axial-r a) (axial-r b))))
 
-(deftype axial-position () '(cons integer (cons integer null)))
+(defun cube+ (a b)
+  (make-cube (+ (cube-x a) (cube-x b))
+             (+ (cube-y a) (cube-y b))
+             (+ (cube-z a) (cube-z b))))
 
-(defgeneric cube+ (a b)
-  (:method ((a cube) (b cube))
-    (make-cube (+ (cube-x a) (cube-x b))
-               (+ (cube-y a) (cube-y b))
-               (+ (cube-z a) (cube-z b)))))
-
-(defgeneric cube- (a b)
-  (:method ((a cube) (b cube))
-    (make-cube (- (cube-x a) (cube-x b))
-               (- (cube-y a) (cube-y b))
-               (- (cube-z a) (cube-z b)))))
+(defun cube- (a b)
+  (make-cube (- (cube-x a) (cube-x b))
+             (- (cube-y a) (cube-y b))
+             (- (cube-z a) (cube-z b))))
 
 (defgeneric axial-move (axial direction)
   (:method ((axial axial) direction)
@@ -95,7 +102,15 @@
   (:method ((cube cube) direction)
     (axial-cube (axial-move (cube-axial cube) direction))))
 
-(deftype cube-position () '(cons integer (cons integer (cons integer null))))
+(deftype axial-position () '(cons integer (cons integer null)))
+
+(deftype cube-position ()
+  '(and (cons integer (cons integer (cons integer null)))
+    (satisfies cube-position-good-coords)))
+
+(defun cube-position-good-coords (position)
+  (destructuring-bind (x y z) position
+    (= 0 (+ x y z))))
 
 (defun ensure-axial (thing)
   (etypecase thing
@@ -103,6 +118,13 @@
     (axial-position (apply #'make-axial thing))
     (cube (cube-axial thing))
     (cube-position (cube-axial (apply #'make-cube thing)))))
+
+(defun ensure-cube (thing)
+  (etypecase thing
+    (cube thing)
+    (cube-position (apply #'make-cube thing))
+    (axial (axial-cube thing))
+    (axial-position (axial-cube (apply #'make-axial thing)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Operations

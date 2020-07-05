@@ -4,9 +4,11 @@
   (:use #:cl)
   (:shadow #:space)
   (:local-nicknames (#:a #:alexandria)
+                    (#:Φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common)
                     (#:nt #:nervous-island.tile))
-  (:export #:space #:tokens #:tile #:rotation #:foundation #:make-spaces))
+  (:export
+   #:space #:tokens #:tile #:rotation #:foundation #:make-spaces #:edit-space))
 
 (in-package #:nervous-island.space)
 
@@ -20,16 +22,19 @@
    (%foundation :reader foundation :initarg :foundation))
   (:default-initargs :tokens '() :tile nil :rotation nil :foundation nil))
 
-(defmethod initialize-instance :after
-    ((space space) &key
-                     (tile nil tile-p)
-                     (rotation nil rotation-p))
-  (when tile-p
+(defmethod shared-initialize :before ((space space) slots
+                                      &key tile rotation foundation)
+  (when tile
     (check-type tile (and nt:tile (not nt:foundation)))
-    (unless rotation-p (a:required-argument :rotation))
-    (check-type rotation ncom:direction)))
+    (unless rotation (a:required-argument :rotation))
+    (check-type rotation ncom:direction))
+  (when foundation
+    (check-type foundation nt:foundation)))
 
 (defun make-spaces (axials)
   (let ((spaces (make-hash-table :test #'equalp)))
     (dolist (axial axials spaces)
       (setf (gethash axial spaces) (make-instance 'space)))))
+
+(defun edit-space (space &rest initargs)
+  (apply #'φ:shallow-copy-object space initargs))
