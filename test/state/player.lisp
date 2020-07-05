@@ -16,12 +16,81 @@
 (define-test player-instantiation
   (let* ((army (make-instance 'player-test-army))
          (hq (first (nr:hq-tiles army)))
-         (player (make-instance 'np:player :army army)))
+         (player (make-instance 'np:player :army army))
+         (hit-points (np:hit-points player))
+         (draw-pile (np:draw-pile player)))
     (is eq army (np:army player))
-    (let ((hit-points (np:hit-points player)))
-      (is eq 42 (gethash hq hit-points)))
+    (is eq 42 (gethash hq hit-points))
     (is eq '() (np:hand player))
-    (let ((draw-pile (np:draw-pile player)))
-      (is = 34 (length draw-pile))
-      (true (every (a:rcurry #'typep 'player-test-warrior) draw-pile)))
+    (is a:set-equal (nr:tiles army) draw-pile)
     (is eq '() (np:discard-pile player))))
+
+(define-test player-instantiation-negative
+  (let* ((army (make-instance 'player-test-army))
+         (hq (first (nr:hq-tiles army))))
+    ;; Army
+    (fail (make-instance 'np:player :army 42) 'type-error)
+    ;; Hit points
+    (fail (make-instance 'np:player :army army :hit-points :zero) 'type-error)
+    (let ((hit-points (a:plist-hash-table (list hq 43) :test #'eq)))
+      (fail (make-instance 'np:player :army army :hit-points hit-points)
+          'np:hq-hit-points-over-limit))
+    (let* ((hq-2 (make-instance 'player-test-hq))
+           (hit-points (a:plist-hash-table (list hq 42 hq-2 42) :test #'eq)))
+      (fail (make-instance 'np:player :army army :hit-points hit-points)
+          'np:mismatched-hq-tiles))
+    ;; Hand
+    (fail (make-instance 'np:player :army army :hand 42) 'type-error)
+    (fail (make-instance 'np:player :army army :hand '(42)) 'type-error)
+    ;; Draw pile
+    (fail (make-instance 'np:player :army army :draw-pile 42) 'type-error)
+    (fail (make-instance 'np:player :army army :draw-pile '(42)) 'type-error)
+    ;; Discard pile
+    (fail (make-instance 'np:player :army army :discard-pile 42) 'type-error)
+    (fail (make-instance 'np:player :army army :discard-pile '(42))
+        'type-error))
+  (let* ((army (make-instance 'player-test-army))
+         (tiles (nr:tiles army))
+         (discard-pile (subseq tiles 0 1))
+         (hand (subseq tiles 1 4))
+         (draw-pile (subseq tiles 3)))
+    (fail (make-instance 'np:player :army army :hand hand :draw-pile draw-pile
+                                    :discard-pile discard-pile)
+        np:too-many-tiles)))
+
+(define-test player-edit-player
+  (let* ((army (make-instance 'player-test-army))
+         (hq (first (nr:hq-tiles army)))
+         (tiles (nr:tiles army))
+         (hit-points-1 (a:plist-hash-table (list hq 20)))
+         (discard-pile-1 (subseq tiles 0 1))
+         (hand-1 (subseq tiles 1 4))
+         (draw-pile-1 (subseq tiles 4))
+         (hit-points-2 (a:plist-hash-table (list hq 10)))
+         (discard-pile-2 (subseq tiles 0 4))
+         (hand-2 (subseq tiles 8 9))
+         (draw-pile-2 (subseq tiles 9))
+         (player-1 (make-instance 'np:player :army army :hand hand-1
+                                             :hit-points hit-points-1
+                                             :draw-pile draw-pile-1
+                                             :discard-pile discard-pile-1)))
+    (is eql hit-points-1 (np:hit-points player-1))
+    (is eql hand-1 (np:hand player-1))
+    (is eql draw-pile-1 (np:draw-pile player-1))
+    (is eql discard-pile-1 (np:discard-pile player-1))
+    (let ((player-2 (np:edit-player player-1
+                                    :hit-points hit-points-2 :hand hand-2
+                                    :draw-pile draw-pile-2
+                                    :discard-pile discard-pile-2)))
+      (isnt eql player-1 player-2)
+      (is eq (np:army player-1) (np:army player-2))
+      (is eql hit-points-2 (np:hit-points player-2))
+      (is eql hand-2 (np:hand player-2))
+      (is eql draw-pile-2 (np:draw-pile player-2))
+      (is eql discard-pile-2 (np:discard-pile player-2)))))
+
+(define-test player-edit-player-negative
+  (let* ((army-1 (make-instance 'player-test-army))
+         (army-2 (make-instance 'player-test-army))
+         (player (make-instance 'np:player :army army-1)))
+    (fail (np:edit-player player :army army-2) np:cannot-edit-army)))

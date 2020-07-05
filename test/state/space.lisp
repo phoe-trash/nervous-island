@@ -117,7 +117,7 @@
          (space-2 (make-instance 'nsp:space :axial (nc:make-axial 0 1)))
          (spaces (nsp:make-spaces space-1 space-2)))
     (fail (nsp:edit-spaces spaces space-2 :axial (nc:make-axial 0 0))
-        'nsp:cannot-edit-axial)))
+        nsp:cannot-edit-axial)))
 
 (define-test space-find-tile
   (let* ((tile-1 (make-instance 'space-test-tile))
