@@ -20,17 +20,22 @@
       (mapc #'make '(nph:start nph:draw-tiles nph:discard-tile nph:turn
                      nph:before-battle nph:after-battle
                      nph:final-draw-tiles nph:final-discard-tile nph:final-turn
+                     nph:before-final-full-board-battle
+                     nph:after-final-full-board-battle
                      nph:before-final-battle nph:after-final-battle)))
     (dotimes (n 10)
       (flet ((make (class)
                (make-instance class :player player :number 1 :initiative n)))
         (true (make 'nph:battle))
+        (true (make 'nph:final-full-board-battle))
         (true (make 'nph:final-battle))))
     (true (make-instance 'nph:end))))
 
 (define-test phase-instantiation-negative
   (fail (make-instance 'nph:phase) p:protocol-object-instantiation)
+  (fail (make-instance 'nph:battle-part) p:protocol-object-instantiation)
   (fail (make-instance 'nph:final) p:protocol-object-instantiation)
+  (fail (make-instance 'nph:final-full-board) p:protocol-object-instantiation)
   (let* ((army (make-instance 'phase-test-army))
          (player (make-instance 'np:player :army army)))
     (fail (make-instance 'nph:player-phase :player player

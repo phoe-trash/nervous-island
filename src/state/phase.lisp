@@ -5,10 +5,13 @@
   (:shadow #:phase #:number)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base))
-  (:export #:phase #:player-phase #:player #:number #:final
+  (:export #:phase #:player-phase #:player #:number
+           #:battle-part #:final #:final-full-board
            #:start #:draw-tiles #:discard-tile #:turn
            #:before-battle #:battle #:after-battle
            #:final-draw-tiles #:final-discard-tile #:final-turn
+           #:before-final-full-board-battle #:final-full-board-battle
+           #:after-final-full-board-battle
            #:before-final-battle #:final-battle #:after-final-battle #:end
            #:possible-phases))
 
@@ -25,7 +28,11 @@
   (:default-initargs :player (a:required-argument :player)
                      :number (a:required-argument :number)))
 
+(p:define-protocol-class battle-part (phase) ())
+
 (p:define-protocol-class final (phase) ())
+
+(p:define-protocol-class final-full-board (final battle-part) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Phase - concrete classes
@@ -36,15 +43,19 @@
 (defclass discard-tile (player-phase) ())
 (defclass turn (player-phase) ())
 
-(defclass before-battle (player-phase) ())
-(defclass battle (player-phase)
+(defclass before-battle (battle-part player-phase) ())
+(defclass battle (battle-part player-phase)
   ((%initiative :reader initiative :initarg :initiative))
   (:default-initargs :initiative (a:required-argument :initiative)))
-(defclass after-battle (player-phase) ())
+(defclass after-battle (battle-part player-phase) ())
 
 (defclass final-draw-tiles (final player-phase) ())
 (defclass final-discard-tile (final player-phase) ())
 (defclass final-turn (final player-phase) ())
+
+(defclass before-final-full-board-battle (final-full-board before-battle) ())
+(defclass final-full-board-battle (final-full-board battle) ())
+(defclass after-final-full-board-battle (final-full-board after-battle) ())
 
 (defclass before-final-battle (final before-battle) ())
 (defclass final-battle (final battle) ())
