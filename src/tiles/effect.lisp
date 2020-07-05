@@ -25,9 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - protocol
 
-(p:define-protocol-class effect (ns:passive)
-  ((%targets :reader targets :initarg :targets))
-  (:default-initargs :targets '(:friendly)))
+(p:define-protocol-class effect (ns:passive) ())
 
 (p:define-protocol-class directed-effect (ns:directed effect) ())
 (p:define-protocol-class undirected-effect (ns:undirected effect) ())
@@ -46,10 +44,8 @@
 (p:define-protocol-class quartermaster (effect) ())
 (p:define-protocol-class recon-center (effect) ())
 
-(p:define-protocol-class scoper (effect) ()
-  (:default-initargs :targets '(:enemy)))
-(p:define-protocol-class saboteur (effect) ()
-  (:default-initargs :targets '(:enemy)))
+(p:define-protocol-class scoper (effect) ())
+(p:define-protocol-class saboteur (effect) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - concrete classes, directed

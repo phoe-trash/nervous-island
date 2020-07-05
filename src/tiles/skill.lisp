@@ -27,9 +27,10 @@
   ((%activation-time :reader activation-time :initarg :activation-time))
   (:default-initargs :activation-time :initiative))
 
-(defmethod shared-initialize :around ((skill active) slots &key activation-time)
+(defmethod shared-initialize :around
+    ((skill active) slots &rest args &key activation-time)
   (check-type activation-time activation-time)
-  (call-next-method skill slots :activation-time activation-time))
+  (apply #'call-next-method skill slots :activation-time activation-time args))
 
 (p:define-protocol-class passive (skill) ())
 
@@ -37,9 +38,10 @@
   ((%direction :reader direction :initarg :direction))
   (:default-initargs :direction (a:required-argument :direction)))
 
-(defmethod shared-initialize :around ((skill directed) slots &key direction)
+(defmethod shared-initialize :around
+    ((skill directed) slots &rest args &key direction)
   (check-type direction (or ncom:direction ncom:diagonal))
-  (call-next-method skill slots :direction direction))
+  (apply #'call-next-method skill slots :direction direction args))
 
 (defmethod print-object ((object directed) stream)
   (print-unreadable-object (object stream :type nil :identity nil)

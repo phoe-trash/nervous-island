@@ -16,4 +16,6 @@
                p:protocol-object-instantiation)))
     (mapcar #'test '(ns:directed ns:active-directed ns:passive-directed)))
   (fail (make-instance 'skill-test-directed :direction 0) 'type-error)
-  (fail (make-instance 'skill-test-active :activation-time 0) 'type-error))
+  (fail (make-instance 'skill-test-active :activation-time 0) 'type-error)
+  (true (make-instance 'skill-test-active :activation-time :turn))
+  (true (make-instance 'skill-test-directed :direction :w)))

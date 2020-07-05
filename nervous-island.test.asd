@@ -10,12 +10,11 @@
   :components ((:file "package")
                (:module "tiles"
                 :components ((:file "army")
-                             ;; (:file "skill")
-                             ;; (:file "attack")
-                             ;; (:file "effect")
+                             (:file "skill")
+                             (:file "attack")
+                             (:file "effect")
                              (:file "tile")
-                             ;; (:file "instant")
-                             ))
+                             (:file "instant")))
                (:module "armies"
                 :components (;; (:file "moloch")
                              ;; (:file "outpost")

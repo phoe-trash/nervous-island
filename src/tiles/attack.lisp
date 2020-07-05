@@ -16,6 +16,11 @@
   ((%strength :reader strength :initarg :strength))
   (:default-initargs :strength 1))
 
+(defmethod shared-initialize :around
+    ((attack attack) slots &rest args &key strength)
+  (check-type strength (or (eql t) (integer 1)))
+  (apply #'call-next-method attack slots :strength strength args))
+
 (defmethod print-object ((object attack) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~A ~A ~S ~A" (type-of object) 'attack
