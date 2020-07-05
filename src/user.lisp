@@ -18,7 +18,8 @@
                     (#:ns #:nervous-island.skill)
                     (#:nsp #:nervous-island.space)
                     (#:nst #:nervous-island.state)
-                    (#:nt #:nervous-island.tile))
+                    (#:nt #:nervous-island.tile)
+                    (#:nto #:nervous-island.token))
   ;; Nervous Island armies
   (:local-nicknames (#:moloch #:nervous-island.armies.moloch)
                     (#:outpost #:nervous-island.armies.outpost)

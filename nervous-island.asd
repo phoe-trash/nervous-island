@@ -14,7 +14,8 @@
                              (:file "attack")
                              (:file "effect")
                              (:file "tile")
-                             (:file "instant")))
+                             (:file "instant")
+                             (:file "token")))
                (:module "armies"
                 :components ((:file "moloch")
                              (:file "outpost")

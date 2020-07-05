@@ -20,7 +20,8 @@
                     (#:ns #:nervous-island.skill)
                     (#:nsp #:nervous-island.space)
                     (#:nst #:nervous-island.state)
-                    (#:nt #:nervous-island.tile))
+                    (#:nt #:nervous-island.tile)
+                    (#:nto #:nervous-island.token))
   ;; Nervous Island armies
   (:local-nicknames (#:moloch #:nervous-island.armies.moloch)
                     (#:outpost #:nervous-island.armies.outpost)
@@ -28,8 +29,6 @@
                     (#:hegemony #:nervous-island.armies.hegemony)))
 
 (in-package #:nervous-island.test)
-
-;; TODO 
 
 (defvar *center-axial* (nc:ensure-axial '(0 0)))
 

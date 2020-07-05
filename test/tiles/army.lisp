@@ -1,8 +1,6 @@
-;;;; test/armies/army.lisp
+;;;; test/tiles/army.lisp
 
 (in-package #:nervous-island.test)
-
-;;; TODO REINITIALIZE-INSTANCE tests everywhere
 
 (defclass army-test-hq (nt:hq) ())
 

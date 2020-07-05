@@ -44,7 +44,7 @@
   (declare (ignore spaces choices current-player))
   (unless spaces-p
     (setf (slot-value state '%spaces)
-          (nsp:make-spaces (nb:axials (board state)))))
+          (apply #'nsp:make-spaces (nb:axials (board state)))))
   (unless current-player-p
     (setf (slot-value state '%current-player)
           (first (players state))))

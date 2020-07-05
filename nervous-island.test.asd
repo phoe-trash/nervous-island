@@ -14,7 +14,8 @@
                              (:file "attack")
                              (:file "effect")
                              (:file "tile")
-                             (:file "instant")))
+                             (:file "instant")
+                             (:file "token")))
                (:module "state"
                 :components ((:file "coord")
                              (:file "board")

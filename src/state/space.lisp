@@ -8,10 +8,11 @@
                     (#:nb #:nervous-island.board)
                     (#:nc #:nervous-island.coord)
                     (#:ncom #:nervous-island.common)
-                    (#:nt #:nervous-island.tile))
+                    (#:nt #:nervous-island.tile)
+                    (#:nto #:nervous-island.token))
   (:export
    #:space #:axial #:tokens #:tile #:rotation #:foundation #:make-spaces
-   #:edit-space #:find-tile))
+   #:edit-space #:edit-spaces #:find-tile #:cannot-edit-axial))
 
 (in-package #:nervous-island.space)
 
@@ -41,6 +42,8 @@
     (nconc (list :axial axial) args))
   (when tokensp
     (check-type tokens list)
+    (loop for cons on tokens
+          do (check-type (car cons) nto:token))
     (nconc (list :tokens tokens) args))
   (when tilep
     (check-type tile (or null (and nt:tile (not nt:foundation))))
@@ -60,7 +63,7 @@
             ((not rotation-present-p) (a:required-argument :rotation)))))
   (apply #'call-next-method space slots args))
 
-(defun make-spaces (things)
+(defun make-spaces (&rest things)
   (let ((spaces (make-hash-table :test #'equalp)))
     (dolist (thing things spaces)
       (let (axial space)
@@ -88,7 +91,7 @@
              (cannot-edit-axial-space condition)
              (cannot-edit-axial-spaces condition)))))
 
-(defun edit-spaces (spaces space &rest initargs &key axial)
+(defun edit-spaces (spaces space &rest initargs &key axial &allow-other-keys)
   (when axial (error 'cannot-edit-axial :space space :spaces spaces))
   (let ((axial (axial space))
         (new-space (apply #'edit-space space initargs))
