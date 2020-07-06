@@ -12,6 +12,10 @@
    :hq-tiles '(phase-test-hq)
    :tiles '((phase-test-warrior 34))))
 
+(defclass phase-test-player-phase (nph:player-phase) ())
+
+(defclass phase-test-with-initiatives (nph:with-initiatives) ())
+
 (define-test phase-instantiation
   (let* ((army (make-instance 'phase-test-army))
          (player (make-instance 'np:player :army army)))
@@ -25,11 +29,13 @@
                      nph:before-final-battle nph:after-final-battle)))
     (dotimes (n 10)
       (flet ((make (class)
-               (make-instance class :player player :number 1 :initiative n)))
-        (true (make 'nph:battle))
-        (true (make 'nph:final-full-board-battle))
-        (true (make 'nph:final-battle))))
-    (true (make-instance 'nph:end))))
+               (true (make-instance class :player player :number 1
+                                          :initiative n))))
+        (mapc #'make
+              '(nph:battle nph:final-full-board-battle nph:final-battle))))
+    (true (make-instance 'nph:end))
+    (true (make-instance 'phase-test-with-initiatives :initiative 1))
+    (true (make-instance 'phase-test-player-phase :player player :number 1))))
 
 (define-test phase-instantiation-negative
   (fail (make-instance 'nph:phase) p:protocol-object-instantiation)
@@ -41,5 +47,15 @@
     (fail (make-instance 'nph:player-phase :player player
                                            :number 1)
         p:protocol-object-instantiation))
-  ;; TODO typechecks for PLAYER-PHASE and BATTLE
-  )
+  (let* ((army (make-instance 'phase-test-army))
+         (player (make-instance 'np:player :army army)))
+    (fail (make-instance 'phase-test-player-phase))
+    (fail (make-instance 'phase-test-player-phase :player player))
+    (fail (make-instance 'phase-test-player-phase :number 1))
+    (fail (make-instance 'phase-test-player-phase :player 42 :number 1)
+        type-error)
+    (fail (make-instance 'phase-test-player-phase :player player :number '())
+        type-error))
+  (fail (make-instance 'phase-test-with-initiatives))
+  (fail (make-instance 'phase-test-with-initiatives :initiative '())
+      type-error))
