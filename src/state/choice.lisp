@@ -4,7 +4,7 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base))
-  (:export #:choice #:place-hq-tiles))
+  (:export #:choice #:place-hq-tile))
 
 (in-package #:nervous-island.choice)
 
@@ -16,6 +16,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Choice - concrete classes
 
-(defclass place-hq-tiles (choice)
-  ((%hq-tiles :reader hq-tiles :initarg :hq-tiles))
-  (:default-initargs :hq-tiles (a:required-argument :hq-tiles)))
+(defclass place-hq-tile (choice)
+  ((%hq-tile :reader hq-tile :initarg :hq-tile))
+  (:default-initargs :hq-tile (a:required-argument :hq-tile)))

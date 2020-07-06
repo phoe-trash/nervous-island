@@ -27,6 +27,7 @@
                              (:file "space")
                              (:file "player")
                              (:file "phase")
+                             (:file "step")
                              (:file "choice")
                              (:file "state")))
                (:file "user"))
