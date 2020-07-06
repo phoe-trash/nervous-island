@@ -4,7 +4,7 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
-                    (#:ns #:nervous-island.skill))
+                    (#:nsk #:nervous-island.skill))
   (:export
    ;; Module effects - protocol
    #:effect #:directed-effect #:undirected-effect #:numeric-effect
@@ -25,10 +25,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - protocol
 
-(p:define-protocol-class effect (ns:passive) ())
+(p:define-protocol-class effect (nsk:passive) ())
 
-(p:define-protocol-class directed-effect (ns:directed effect) ())
-(p:define-protocol-class undirected-effect (ns:undirected effect) ())
+(p:define-protocol-class directed-effect (nsk:directed effect) ())
+(p:define-protocol-class undirected-effect (nsk:undirected effect) ())
 
 (p:define-protocol-class numeric-effect (effect)
   ((%strength :reader strength :initarg :strength))

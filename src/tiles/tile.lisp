@@ -5,7 +5,7 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:nr #:nervous-island.army)
-                    (#:ns #:nervous-island.skill))
+                    (#:nsk #:nervous-island.skill))
   (:export
    ;; Tiles - protocol
    #:tile #:owner #:tile= #:instant #:target #:board-tile #:skill-having
@@ -54,7 +54,7 @@
     ((tile skill-having) slots &rest args &key (skills nil skillsp))
   (when skillsp
     (check-type skills list)
-    (loop for cons on skills do (check-type (car cons) ns:skill))
+    (loop for cons on skills do (check-type (car cons) nsk:skill))
     (nconc (list :skills skills) args))
   (apply #'call-next-method tile slots args))
 

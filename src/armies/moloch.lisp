@@ -6,7 +6,7 @@
                     (#:na #:nervous-island.attack)
                     (#:ne #:nervous-island.effect)
                     (#:nr #:nervous-island.army)
-                    (#:ns #:nervous-island.skill)
+                    (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile))
   (:import-from #:nervous-island.instant
                 #:battle #:move #:air-strike #:push-back)
@@ -39,7 +39,7 @@
 (nt:define-unit hq (nt:hq)
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
-  (ns:initiative 0)
+  (nsk:initiative 0)
   (ne:directed-ranged-officer :q) (ne:directed-ranged-officer :w)
   (ne:directed-ranged-officer :e) (ne:directed-ranged-officer :a)
   (ne:directed-ranged-officer :s) (ne:directed-ranged-officer :d))
@@ -48,46 +48,46 @@
 ;;; Warriors
 
 (nt:define-unit blocker (nt:warrior)
-  (ns:armor :w) (ns:toughness) (ns:toughness))
+  (nsk:armor :w) (nsk:toughness) (nsk:toughness))
 
 (nt:define-unit hybrid (nt:warrior)
-  (na:ranged :w) (ns:initiative 3))
+  (na:ranged :w) (nsk:initiative 3))
 
 (nt:define-unit gauss-cannon (nt:warrior)
-  (na:gauss-cannon :a) (ns:initiative 1) (ns:toughness))
+  (na:gauss-cannon :a) (nsk:initiative 1) (nsk:toughness))
 
 (nt:define-unit juggernaut (nt:warrior)
-  (na:melee :w 2) (na:ranged :e) (ns:toughness)
-  (ns:armor :w) (ns:armor :a) (ns:armor :d))
+  (na:melee :w 2) (na:ranged :e) (nsk:toughness)
+  (nsk:armor :w) (nsk:armor :a) (nsk:armor :d))
 
 (nt:define-unit hunter-killer (nt:warrior)
-  (na:melee :q) (na:melee :w) (na:melee :e) (na:melee :s) (ns:initiative 3))
+  (na:melee :q) (na:melee :w) (na:melee :e) (na:melee :s) (nsk:initiative 3))
 
 (nt:define-unit clown (nt:warrior)
-  (na:melee :q) (na:melee :w) (ns:initiative 2) (ns:explosion) (ns:toughness))
+  (na:melee :q) (na:melee :w) (nsk:initiative 2) (nsk:explosion) (nsk:toughness))
 
 (nt:define-unit armored-hunter (nt:warrior)
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
-  (ns:initiative 2) (ns:armor :q) (ns:armor :w))
+  (nsk:initiative 2) (nsk:armor :q) (nsk:armor :w))
 
 (nt:define-unit armored-guard (nt:warrior)
-  (na:ranged :q) (na:ranged :e) (ns:initiative 2) (ns:armor :w))
+  (na:ranged :q) (na:ranged :e) (nsk:initiative 2) (nsk:armor :w))
 
 (nt:define-unit guard (nt:warrior)
-  (na:ranged :q) (na:ranged :w) (ns:initiative 2))
+  (na:ranged :q) (na:ranged :w) (nsk:initiative 2))
 
 (nt:define-unit protector (nt:warrior)
-  (na:ranged :q) (na:ranged :w) (na:ranged :e) (ns:initiative 1) (ns:toughness))
+  (na:ranged :q) (na:ranged :w) (na:ranged :e) (nsk:initiative 1) (nsk:toughness))
 
 (nt:define-unit hornet (nt:warrior)
-  (na:melee :w 2) (ns:initiative 2))
+  (na:melee :w 2) (nsk:initiative 2))
 
 (nt:define-unit net-fighter (nt:warrior)
-  (ns:net :q) (ns:net :w))
+  (nsk:net :q) (nsk:net :w))
 
 (nt:define-unit stormtrooper (nt:warrior)
-  (na:ranged :w) (ns:initiative 2) (ns:initiative 1) (ns:toughness))
+  (na:ranged :w) (nsk:initiative 2) (nsk:initiative 1) (nsk:toughness))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Modules

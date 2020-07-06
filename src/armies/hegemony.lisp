@@ -6,7 +6,7 @@
                     (#:na #:nervous-island.attack)
                     (#:ne #:nervous-island.effect)
                     (#:nr #:nervous-island.army)
-                    (#:ns #:nervous-island.skill)
+                    (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile))
   (:import-from #:nervous-island.instant
                 #:battle #:move #:push-back #:sniper)
@@ -37,7 +37,7 @@
 (nt:define-unit hq (nt:hq)
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
-  (ns:initiative 0)
+  (nsk:initiative 0)
   (ne:directed-melee-officer :q) (ne:directed-melee-officer :w)
   (ne:directed-melee-officer :e) (ne:directed-melee-officer :a)
   (ne:directed-melee-officer :s) (ne:directed-melee-officer :d))
@@ -46,29 +46,29 @@
 ;;; Warriors
 
 (nt:define-unit runner (nt:warrior)
-  (na:melee :w) (ns:initiative 2) (ns:mobility))
+  (na:melee :w) (nsk:initiative 2) (nsk:mobility))
 
 (nt:define-unit thug (nt:warrior)
-  (na:melee :q) (na:melee :w 2) (na:melee :e) (ns:initiative 2))
+  (na:melee :q) (na:melee :w 2) (na:melee :e) (nsk:initiative 2))
 
 (nt:define-unit ganger (nt:warrior)
-  (na:melee :q) (ns:initiative 3))
+  (na:melee :q) (nsk:initiative 3))
 
 (nt:define-unit gladiator (nt:warrior)
   (na:melee :q 2) (na:melee :w 2) (na:melee :e 2)
-  (ns:armor :q) (ns:armor :w) (ns:armor :e)  (ns:initiative 1) (ns:toughness))
+  (nsk:armor :q) (nsk:armor :w) (nsk:armor :e)  (nsk:initiative 1) (nsk:toughness))
 
 (nt:define-unit net-fighter (nt:warrior)
-  (ns:net :e))
+  (nsk:net :e))
 
 (nt:define-unit net-master (nt:warrior)
-  (ns:net :a) (ns:net :d) (na:melee :s) (ns:initiative 2))
+  (nsk:net :a) (nsk:net :d) (na:melee :s) (nsk:initiative 2))
 
 (nt:define-unit guard (nt:warrior)
-  (na:melee :a) (na:melee :q) (na:melee :w) (ns:initiative 2) (ns:toughness))
+  (na:melee :a) (na:melee :q) (na:melee :w) (nsk:initiative 2) (nsk:toughness))
 
 (nt:define-unit universal-soldier (nt:warrior)
-  (na:ranged :q) (na:melee :q) (ns:initiative 3))
+  (na:ranged :q) (na:melee :q) (nsk:initiative 3))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Modules

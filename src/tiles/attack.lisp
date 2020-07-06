@@ -4,7 +4,7 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
-                    (#:ns #:nervous-island.skill))
+                    (#:nsk #:nervous-island.skill))
   (:export #:attack #:strength #:melee #:ranged #:gauss-cannon))
 
 (in-package #:nervous-island.attack)
@@ -12,7 +12,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - protocol
 
-(p:define-protocol-class attack (ns:active-directed)
+(p:define-protocol-class attack (nsk:active-directed)
   ((%strength :reader strength :initarg :strength))
   (:default-initargs :strength 1))
 
@@ -26,7 +26,7 @@
 (defmethod print-object ((object attack) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~A ~A ~S ~A" (type-of object) 'attack
-            (ns:direction object) (strength object))))
+            (nsk:direction object) (strength object))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - concrete classes

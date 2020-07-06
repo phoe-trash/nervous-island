@@ -2,8 +2,6 @@
 
 (uiop:define-package #:nervous-island.user
   (:use #:cl)
-  ;; External packages
-  (:local-nicknames (#:a #:alexandria))
   ;; Nervous Island packages
   (:local-nicknames (#:na #:nervous-island.attack)
                     (#:nb #:nervous-island.board)
@@ -15,7 +13,7 @@
                     (#:np #:nervous-island.player)
                     (#:nph #:nervous-island.phase)
                     (#:nr #:nervous-island.army)
-                    (#:ns #:nervous-island.skill)
+                    (#:nsk #:nervous-island.skill)
                     (#:nsp #:nervous-island.space)
                     (#:nst #:nervous-island.state)
                     (#:nt #:nervous-island.tile)

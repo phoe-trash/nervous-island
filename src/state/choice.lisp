@@ -11,9 +11,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Choice - protocol
 
-(p:define-protocol-class choice ()
-  ((%player :reader player :initarg :player))
-  (:default-initargs :player (a:required-argument :player)))
+(p:define-protocol-class choice () ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Choice - concrete classes
 
 (defclass place-hq-tiles (choice)
   ((%hq-tiles :reader hq-tiles :initarg :hq-tiles))

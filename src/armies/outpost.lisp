@@ -6,7 +6,7 @@
                     (#:na #:nervous-island.attack)
                     (#:ne #:nervous-island.effect)
                     (#:nr #:nervous-island.army)
-                    (#:ns #:nervous-island.skill)
+                    (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile))
   (:import-from #:nervous-island.instant
                 #:battle #:move #:sniper)
@@ -35,7 +35,7 @@
 (nt:define-unit hq (nt:hq)
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
-  (ns:initiative 0)
+  (nsk:initiative 0)
   (ne:directed-mother :q) (ne:directed-mother :w)
   (ne:directed-mother :e) (ne:directed-mother :a)
   (ne:directed-mother :s) (ne:directed-mother :d))
@@ -44,23 +44,23 @@
 ;;; Warriors
 
 (nt:define-unit runner (nt:warrior)
-  (na:melee :w) (ns:initiative 2) (ns:mobility))
+  (na:melee :w) (nsk:initiative 2) (nsk:mobility))
 
 (nt:define-unit hmg (nt:warrior)
-  (na:ranged :w) (ns:initiative 2) (ns:initiative 1))
+  (na:ranged :w) (nsk:initiative 2) (nsk:initiative 1))
 
 (nt:define-unit commando (nt:warrior)
-  (na:ranged :d) (ns:initiative 3))
+  (na:ranged :d) (nsk:initiative 3))
 
 (nt:define-unit annihilator (nt:warrior)
-  (na:ranged :a 2) (ns:initiative 2))
+  (na:ranged :a 2) (nsk:initiative 2))
 
 (nt:define-unit mobile-armor (nt:warrior)
-  (na:ranged :q) (na:melee :w 2) (ns:initiative 3) (ns:initiative 2)
-  (ns:mobility))
+  (na:ranged :q) (na:melee :w 2) (nsk:initiative 3) (nsk:initiative 2)
+  (nsk:mobility))
 
 (nt:define-unit brawler (nt:warrior)
-  (na:melee :w 2) (ns:initiative 3))
+  (na:melee :w 2) (nsk:initiative 3))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Modules

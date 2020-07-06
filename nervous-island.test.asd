@@ -22,7 +22,7 @@
                              (:file "space")
                              (:file "player")
                              (:file "phase")
-                             ;; (:file "choice")
+                             (:file "choice")
                              ;; (:file "state")
                              )))
   :depends-on (#:alexandria
