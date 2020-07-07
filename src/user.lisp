@@ -6,6 +6,7 @@
   (:local-nicknames (#:na #:nervous-island.attack)
                     (#:nb #:nervous-island.board)
                     (#:nc #:nervous-island.coord)
+                    (#:nd #:nervous-island.damage)
                     (#:nch #:nervous-island.choice)
                     (#:ncom #:nervous-island.common)
                     (#:ne #:nervous-island.effect)

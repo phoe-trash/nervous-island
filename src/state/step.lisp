@@ -54,16 +54,12 @@
 
 (define-step draw-tile (step-with-tile) ())
 
-(define-step create-damage (step-with-tile step-with-target-tile
-                            step-with-damage) ())
+(define-step create-damage (step-with-damage) ())
 
-(define-step heal-damage (step-with-tile step-with-target-tile
-                          step-with-damage) ())
+(define-step heal-damage (step-with-tile step-with-damage) ())
 
-(define-step apply-damage (step-with-tile step-with-target-tile
-                           step-with-damage) ())
+(define-step apply-damage (step-with-damage) ())
 
-(define-step discard-tile-from-space (step-with-tile)
-  ((space :type nsp:space)))
+(define-step discard-tile (step-with-tile) ())
 
 (define-step start-full-board-battle (step) ())
