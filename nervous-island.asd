@@ -26,6 +26,7 @@
                              (:file "board")
                              (:file "space")
                              (:file "player")
+                             (:file "damage")
                              (:file "phase")
                              (:file "step")
                              (:file "choice")
@@ -33,6 +34,7 @@
                (:file "user"))
   :depends-on (#:alexandria
                #:phoe-toolbox
+               #:trivial-indent
                #:protest/base)
   :in-order-to ((test-op (load-op :nervous-island.test)))
   :perform

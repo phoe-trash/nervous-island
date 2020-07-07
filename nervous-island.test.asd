@@ -21,6 +21,7 @@
                              (:file "board")
                              (:file "space")
                              (:file "player")
+                             (:file "damage")
                              (:file "phase")
                              (:file "step")
                              (:file "choice")
