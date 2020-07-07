@@ -14,7 +14,7 @@
                     (#:nsp #:nervous-island.space)
                     (#:nt #:nervous-island.tile)
                     (#:nto #:nervous-island.token))
-  (:export #:damage))
+  (:export #:damage #:attack-damage #:non-attack-damage))
 
 (in-package #:nervous-island.damage)
 

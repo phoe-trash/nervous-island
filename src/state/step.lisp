@@ -8,6 +8,7 @@
                     (#:Φ #:phoe-toolbox)
                     (#:na #:nervous-island.attack)
                     (#:ncom #:nervous-island.common)
+                    (#:nd #:nervous-island.damage)
                     (#:nsp #:nervous-island.space)
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile)
@@ -46,19 +47,18 @@
   ((target-tile :type nt:tile)))
 
 (define-protocol-step step-with-damage (step)
-  ((source :type (or nt:warrior nt:instant nt:foundation nto:token))
-   (attack :type (or null na:attack))))
+  ((damage :type nd:damage)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Steps - concrete classes
 
 (define-step draw-tile (step-with-tile) ())
 
-(define-step deal-damage (step-with-tile step-with-target-tile
-                          step-with-damage) ())
+(define-step create-damage (step-with-tile step-with-target-tile
+                            step-with-damage) ())
 
-(define-step heal-target (step-with-tile step-with-target-tile)
-  ((damage :type t))) ;; TODO nd:damage
+(define-step heal-damage (step-with-tile step-with-target-tile
+                          step-with-damage) ())
 
 (define-step apply-damage (step-with-tile step-with-target-tile
                            step-with-damage) ())
