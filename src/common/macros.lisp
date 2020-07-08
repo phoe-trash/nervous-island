@@ -35,13 +35,14 @@
                (let ((keyword (a:make-keyword name)))
                  (a:with-gensyms (var predicate)
                    (list name var predicate type keyword)))))
-           (make-key (decorated-slot)
-             `(,(second decorated-slot) nil ,(third decorated-slot)))
-           (make-ignore (decorated-slot)
-             `(,(second decorated-slot) ,(third decorated-slot)))
-           (make-typecheck (decorated-slot)
-             (destructuring-bind (name var predicate type keyword)
-                 decorated-slot
+           (make-key (decorated)
+             (destructuring-bind (name var predicate type keyword) decorated
+               (declare (ignore name type))
+               `((,keyword ,var) nil ,predicate)))
+           (make-ignore (decorated)
+             `(,(second decorated) ,(third decorated)))
+           (make-typecheck (decorated)
+             (destructuring-bind (name var predicate type keyword) decorated
                (declare (ignore name))
                `(when ,predicate
                   (check-type ,var ,type)
