@@ -7,7 +7,9 @@
   :version "0.0"
   :serial t
   :pathname "src"
-  :components ((:file "common")
+  :components ((:module "common"
+                :components ((:file "common")
+                             (:file "macros")))
                (:module "tiles"
                 :components ((:file "army")
                              (:file "skill")
