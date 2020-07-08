@@ -3,73 +3,80 @@
 (in-package #:nervous-island.common)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Macros
+;;; Class definition
 
-;;; TODO somehow fix symbol capture in the macro in order to introduce custom
-;;; functions in the verifier
+(defun create-defclass-form (name superclasses slots options)
+  (flet ((process-slot-definition (slot-form)
+           (destructuring-bind (name . rest) slot-form
+             (declare (ignore rest))
+             (let ((slot-name (a:symbolicate :% name))
+                   (keyword (a:make-keyword name)))
+               `(,slot-name :reader ,name :initarg ,keyword))))
+         (process-default-initargs (slot-form)
+           (destructuring-bind (name &key (requiredp t) &allow-other-keys)
+               slot-form
+             (when requiredp
+               (let ((keyword (a:make-keyword name)))
+                 `(,keyword (a:required-argument ,keyword)))))))
+    (let* ((protocolp (car (a:assoc-value options :protocolp)))
+           (definition-symbol (if protocolp 'p:define-protocol-class 'defclass))
+           (slot-definitions (mapcar #'process-slot-definition slots))
+           (default-initargs (a:mappend #'process-default-initargs slots)))
+      `(,definition-symbol ,name ,superclasses ,slot-definitions
+                           (:default-initargs ,@default-initargs)))))
 
-(defun transform-slot-definition (name &key type requiredp)
-  (declare (ignore type requiredp))
-  (let ((slot-name (a:symbolicate :% name))
-        (keyword (a:make-keyword name)))
-    `(,slot-name :reader ,name :initarg ,keyword)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Constructor
 
-(defun transform-default-initargs (name &key type (requiredp t))
-  (declare (ignore type))
-  (when requiredp
-    (let ((keyword (a:make-keyword name)))
-      `(,keyword (a:required-argument ,keyword)))))
+(defun create-shared-initialize (name slots options)
+  (a:with-gensyms (args)
+    (labels ((decorate (slot-form)
+               (destructuring-bind (name &key type &allow-other-keys) slot-form
+                 (let ((keyword (a:make-keyword name)))
+                   (a:with-gensyms (var predicate)
+                     (list name var predicate type keyword)))))
+             (make-key (decorated-slot)
+               `(,(second decorated-slot) nil ,(third decorated-slot)))
+             (make-ignore (decorated-slot)
+               `(,(second decorated-slot) ,(third decorated-slot)))
+             (make-typecheck (decorated-slot)
+               (destructuring-bind (name var predicate type keyword)
+                   decorated-slot
+                 (declare (ignore name))
+                 `(when ,predicate
+                    (check-type ,var ,type)
+                    (nconc (list ,keyword ,var) ,args))))
+             (make-before ()
+               (a:when-let ((function (car (a:assoc-value options :before))))
+                 `((apply ,function ,name ,args))))
+             (make-after ()
+               (a:when-let ((function (car (a:assoc-value options :after))))
+                 `((apply ,function ,name ,args)))))
+      (let ((decorated-slots (mapcar #'decorate slots)))
+        (a:with-gensyms (slots)
+          (let ((keys (mapcar #'make-key decorated-slots))
+                (ignores (mapcar #'make-ignore decorated-slots))
+                (typechecks (mapcar #'make-typecheck decorated-slots))
+                (before (make-before))
+                (after (make-after)))
+            `(defmethod shared-initialize :around
+                 ((,name ,name) ,slots &rest ,args
+                  &key ,@keys)
+               (declare (ignorable ,@ignores))
+               ,@typechecks
+               ,@before
+               (apply #'call-next-method ,name ,slots ,args)
+               ,@after
+               ,name)))))))
 
-(defun transform-key-args (name &key type requiredp)
-  (declare (ignore type requiredp))
-  (let ((predicate-name (if (find #\- (symbol-name name))
-                            (a:symbolicate name :-p)
-                            (a:symbolicate name :p))))
-    `(,name nil ,predicate-name)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Macro interface
 
-(defun transform-ignorables (name &key type requiredp)
-  (declare (ignore type requiredp))
-  (let ((predicate-name (if (find #\- (symbol-name name))
-                            (a:symbolicate name :-p)
-                            (a:symbolicate name :p))))
-    `(,name ,predicate-name)))
-
-(defun transform-typechecks (args name &key (type nil typep) requiredp)
-  (declare (ignore requiredp))
-  (when typep
-    (let ((keyword (a:make-keyword name))
-          (predicate-name (if (find #\- (symbol-name name))
-                              (a:symbolicate name :-p)
-                              (a:symbolicate name :p))))
-      `(when ,predicate-name
-         (check-type ,name ,type)
-         (nconc (list ,keyword ,name) ,args)))))
-
-(defun %define-typechecked-class
-    (name superclasses slot-definitions options)
-  (let* ((slot-definitions (mapcar #'a:ensure-list slot-definitions))
-         (slots (gensym "SLOTS"))
-         (args (gensym "ARGS"))
-         (protocolp (getf options :protocolp)))
-    `(progn
-       (,(if protocolp 'p:define-protocol-class 'defclass)
-        ,name ,superclasses
-        ,(mapcar (a:curry #'apply #'transform-slot-definition)
-                 slot-definitions)
-        (:default-initargs
-         ,@(a:mappend (a:curry #'apply #'transform-default-initargs)
-                      slot-definitions)))
-       (defmethod shared-initialize :around
-           ((,name ,name) ,slots &rest ,args
-            &key ,@(mapcar (a:curry #'apply #'transform-key-args)
-                           slot-definitions))
-         (declare (ignorable
-                   ,@(a:mappend (a:curry #'apply #'transform-ignorables)
-                                slot-definitions)))
-         ,@(mapcar (a:curry #'apply #'transform-typechecks args)
-                   slot-definitions)
-         (apply #'call-next-method ,name ,slots ,args))
-       ',name)))
+(defun %define-typechecked-class (name superclasses slot-definitions options)
+  `(progn
+     ,(create-defclass-form name superclasses slot-definitions options)
+     ,(create-shared-initialize name slot-definitions options)
+     ',name))
 
 (defmacro define-typechecked-class
     (name (&rest superclasses) (&rest slot-definitions) &body options)
