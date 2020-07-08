@@ -10,7 +10,7 @@
    ;; Conditions
    #:nervous-island-condition #:nervous-island-error
    ;; Macros
-   #:define-typechecked-object))
+   #:define-typechecked-class))
 
 (in-package #:nervous-island.common)
 
@@ -76,7 +76,7 @@
            (check-type ,name ,type)
            (nconc (list ,keyword ,name) ,args)))))
 
-  (defun %define-typechecked-object
+  (defun %define-typechecked-class
       (name superclasses slot-definitions options)
     (let* ((slot-definitions (mapcar #'a:ensure-list slot-definitions))
            (slots (gensym "SLOTS"))
@@ -102,9 +102,9 @@
            (apply #'call-next-method ,name ,slots ,args))
          ',name))))
 
-(defmacro define-typechecked-object
+(defmacro define-typechecked-class
     (name (&rest superclasses) (&rest slot-definitions) &body options)
-  (%define-typechecked-object name superclasses slot-definitions options))
+  (%define-typechecked-class name superclasses slot-definitions options))
 
-(setf (trivial-indent:indentation 'define-typechecked-object)
+(setf (trivial-indent:indentation 'define-typechecked-class)
       '(4 &lambda &body))
