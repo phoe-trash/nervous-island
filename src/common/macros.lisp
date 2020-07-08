@@ -13,11 +13,13 @@
                    (keyword (a:make-keyword name)))
                `(,slot-name :reader ,name :initarg ,keyword))))
          (process-default-initargs (slot-form)
-           (destructuring-bind (name &key (requiredp t) &allow-other-keys)
+           (destructuring-bind (name &key (initform nil initformp)
+                                &allow-other-keys)
                slot-form
-             (when requiredp
-               (let ((keyword (a:make-keyword name)))
-                 `(,keyword (a:required-argument ,keyword)))))))
+             (let ((keyword (a:make-keyword name)))
+               `(,keyword ,(if initformp
+                               initform
+                               `(a:required-argument ,keyword)))))))
     (let* ((protocolp (car (a:assoc-value options :protocolp)))
            (definition-symbol (if protocolp 'p:define-protocol-class 'defclass))
            (slot-definitions (mapcar #'process-slot-definition slots))

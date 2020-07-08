@@ -23,6 +23,8 @@
                      :hq-tiles (a:required-argument :hq-tiles)
                      :tiles (a:required-argument :tiles)))
 
+;;; TODO make-army with conversion from tile designators to tiles
+
 (defmethod print-object ((object army) stream)
   (print-unreadable-object (object stream :type nil :identity t)
     (format stream "~A ~A" (name object) 'army)))

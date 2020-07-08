@@ -38,7 +38,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Steps - protocol
 
-(define-protocol-step step () ())
+(define-protocol-step step ()
+  ((dependent-steps :initform '())))
 
 (define-protocol-step step-with-tile (step)
   ((tile :type nt:tile)))
