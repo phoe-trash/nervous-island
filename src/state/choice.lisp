@@ -25,14 +25,14 @@
 (defmacro define-choice
     (name (&rest superclasses) (&rest slot-definitions) &body options)
   `(ncom:define-typechecked-class ,name ,superclasses
-     ,slot-definitions :protocolp nil ,@options))
+     ,slot-definitions (:protocolp nil) ,@options))
 
 (setf (trivial-indent:indentation 'define-choice) '(4 &lambda &body))
 
 (defmacro define-protocol-choice
     (name (&rest superclasses) (&rest slot-definitions) &body options)
   `(ncom:define-typechecked-class ,name ,superclasses
-     ,slot-definitions :protocolp t ,@options))
+     ,slot-definitions (:protocolp t) ,@options))
 
 (setf (trivial-indent:indentation 'define-protocol-choice) '(4 &lambda &body))
 

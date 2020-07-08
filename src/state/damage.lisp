@@ -20,7 +20,7 @@
 (ncom:define-typechecked-class damage ()
   ((target :type nt:tile)
    (value :type (or (integer 1) (eql t))))
-  :protocolp t)
+  (:protocolp t))
 
 (ncom:define-typechecked-class attack-damage (damage)
   ((source :type (or nt:warrior nt:hq))

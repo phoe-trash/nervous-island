@@ -55,7 +55,7 @@
       (let ((decorated-slots (mapcar #'decorate slots)))
         (a:with-gensyms (slots)
           (let ((keys (mapcar #'make-key decorated-slots))
-                (ignores (mapcar #'make-ignore decorated-slots))
+                (ignores (a:mappend #'make-ignore decorated-slots))
                 (typechecks (mapcar #'make-typecheck decorated-slots))
                 (before (make-before))
                 (after (make-after)))
