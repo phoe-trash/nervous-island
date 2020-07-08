@@ -30,28 +30,28 @@
 
 (defun create-shared-initialize (name slots options)
   (a:with-gensyms (args)
-    (labels ((decorate (slot-form)
-               (destructuring-bind (name &key type &allow-other-keys) slot-form
-                 (let ((keyword (a:make-keyword name)))
-                   (a:with-gensyms (var predicate)
-                     (list name var predicate type keyword)))))
-             (make-key (decorated-slot)
-               `(,(second decorated-slot) nil ,(third decorated-slot)))
-             (make-ignore (decorated-slot)
-               `(,(second decorated-slot) ,(third decorated-slot)))
-             (make-typecheck (decorated-slot)
-               (destructuring-bind (name var predicate type keyword)
-                   decorated-slot
-                 (declare (ignore name))
-                 `(when ,predicate
-                    (check-type ,var ,type)
-                    (nconc (list ,keyword ,var) ,args))))
-             (make-before ()
-               (a:when-let ((function (car (a:assoc-value options :before))))
-                 `((apply ,function ,name ,args))))
-             (make-after ()
-               (a:when-let ((function (car (a:assoc-value options :after))))
-                 `((apply ,function ,name ,args)))))
+    (flet ((decorate (slot-form)
+             (destructuring-bind (name &key type &allow-other-keys) slot-form
+               (let ((keyword (a:make-keyword name)))
+                 (a:with-gensyms (var predicate)
+                   (list name var predicate type keyword)))))
+           (make-key (decorated-slot)
+             `(,(second decorated-slot) nil ,(third decorated-slot)))
+           (make-ignore (decorated-slot)
+             `(,(second decorated-slot) ,(third decorated-slot)))
+           (make-typecheck (decorated-slot)
+             (destructuring-bind (name var predicate type keyword)
+                 decorated-slot
+               (declare (ignore name))
+               `(when ,predicate
+                  (check-type ,var ,type)
+                  (nconc (list ,keyword ,var) ,args))))
+           (make-before ()
+             (a:when-let ((function (car (a:assoc-value options :before))))
+               `((apply ,function ,name ,args))))
+           (make-after ()
+             (a:when-let ((function (car (a:assoc-value options :after))))
+               `((apply ,function ,name ,args)))))
       (let ((decorated-slots (mapcar #'decorate slots)))
         (a:with-gensyms (slots)
           (let ((keys (mapcar #'make-key decorated-slots))
@@ -60,8 +60,7 @@
                 (before (make-before))
                 (after (make-after)))
             `(defmethod shared-initialize :around
-                 ((,name ,name) ,slots &rest ,args
-                  &key ,@keys)
+                 ((,name ,name) ,slots &rest ,args &key ,@keys)
                (declare (ignorable ,@ignores))
                ,@typechecks
                ,@before
