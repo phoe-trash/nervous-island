@@ -10,19 +10,18 @@
 (defclass player-test-army (nr:army) ()
   (:default-initargs
    :name :test-army
-   :hq-tiles '(player-test-hq)
-   :tiles '((player-test-warrior 34))))
+   :designators '(player-test-hq (player-test-warrior 34))))
 
 (define-test player-instantiation
   (let* ((army (make-instance 'player-test-army))
-         (hq (first (nr:hq-tiles army)))
+         (hq (first (nr:hq-elements army)))
          (player (make-instance 'np:player :army army))
          (hit-points (np:hit-points player))
          (draw-pile (np:draw-pile player)))
     (is eq army (np:army player))
     (is eq 42 (gethash hq hit-points))
     (is eq '() (np:hand player))
-    (is a:set-equal (nr:tiles army) draw-pile)
+    (is a:set-equal (nr:elements army) draw-pile)
     (is eq '() (np:discard-pile player))))
 
 (define-test player-instantiation-negative
@@ -39,20 +38,20 @@
         'type-error))
   ;; HQ hit points over limit
   (let* ((army (make-instance 'player-test-army))
-         (hq (first (nr:hq-tiles army)))
+         (hq (first (nr:hq-elements army)))
          (hit-points (a:plist-hash-table (list hq 43) :test #'eq)))
     (fail (make-instance 'np:player :army army :hit-points hit-points)
         'np:hq-hit-points-over-limit))
   ;; Mismatched HQ tiles
   (let* ((army (make-instance 'player-test-army))
-         (hq-1 (first (nr:hq-tiles army)))
+         (hq-1 (first (nr:hq-elements army)))
          (hq-2 (make-instance 'player-test-hq))
          (hit-points (a:plist-hash-table (list hq-1 42 hq-2 42) :test #'eq)))
     (fail (make-instance 'np:player :army army :hit-points hit-points)
         'np:mismatched-hq-tiles))
   ;; Too many tiles in hand
   (let* ((army (make-instance 'player-test-army))
-         (tiles (nr:tiles army))
+         (tiles (nr:elements army))
          (discard-pile (subseq tiles 0 1))
          (hand (subseq tiles 1 4))
          (draw-pile (subseq tiles 3)))
@@ -62,8 +61,8 @@
 
 (define-test player-edit-player
   (let* ((army (make-instance 'player-test-army))
-         (hq (first (nr:hq-tiles army)))
-         (tiles (nr:tiles army))
+         (hq (first (nr:hq-elements army)))
+         (tiles (nr:elements army))
          (hit-points-1 (a:plist-hash-table (list hq 20)))
          (discard-pile-1 (subseq tiles 0 1))
          (hand-1 (subseq tiles 1 4))

@@ -84,7 +84,7 @@
   (let* ((army (army player))
          (hit-points (hit-points player))
          (actual (a:hash-table-keys hit-points))
-         (expected (nr:hq-tiles army)))
+         (expected (nr:hq-elements army)))
     (unless (a:set-equal actual expected)
       (error 'mismatched-hq-tiles :actual actual :expected expected))
     (dolist (hq actual)
@@ -112,8 +112,8 @@
          (draw-pile-size (length (draw-pile player)))
          (discard-pile-size (length (discard-pile player)))
          (army (army player))
-         (hq-tiles-size (length (nr:hq-tiles army)))
-         (tiles-size (length (nr:tiles army))))
+         (hq-tiles-size (length (nr:hq-elements army)))
+         (tiles-size (length (nr:elements army))))
     (let ((expected (+ hq-tiles-size tiles-size))
           (actual (+ hq-tiles-size hand-size
                      draw-pile-size discard-pile-size)))
@@ -126,13 +126,13 @@
   (declare (ignore hit-points draw-pile))
   (unless hit-points-p
     (let ((hit-points (make-hash-table :test #'eq)))
-      (dolist (hq (nr:hq-tiles (army player)))
+      (dolist (hq (nr:hq-elements (army player)))
         (setf (gethash hq hit-points) (nt:starting-hit-points hq)))
       (setf (slot-value player '%hit-points) hit-points)))
   (check-hit-points player)
   (unless draw-pile-p
     ;; TODO reproducible tile orders
-    (let ((draw-pile (a:shuffle (copy-list (nr:tiles (army player))))))
+    (let ((draw-pile (a:shuffle (copy-list (nr:elements (army player))))))
       (setf (slot-value player '%draw-pile) draw-pile)))
   (check-total-army-size player))
 

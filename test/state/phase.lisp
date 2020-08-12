@@ -9,8 +9,7 @@
 (defclass phase-test-army (nr:army) ()
   (:default-initargs
    :name :test-army
-   :hq-tiles '(phase-test-hq)
-   :tiles '((phase-test-warrior 34))))
+   :designators '(phase-test-hq (phase-test-warrior 34))))
 
 (defclass phase-test-player-phase (nph:player-phase) ())
 

@@ -11,15 +11,14 @@
 (defclass tile-test-army (nr:army) ()
   (:default-initargs
    :name :test-army
-   :hq-tiles '(tile-test-hq)
-   :tiles '((tile-test-warrior 34))))
+   :designators '(tile-test-hq (tile-test-warrior 34))))
 
 (define-test tile-instantiation
   (let ((tile (make-instance 'tile-test-tile)))
-    (is eq nil (nt:owner tile)))
+    (is eq nil (nr:owner tile)))
   (let* ((army (make-instance 'tile-test-army))
          (tile (make-instance 'tile-test-tile :owner army)))
-    (is eq army (nt:owner tile)))
+    (is eq army (nr:owner tile)))
   (fail (make-instance 'tile-test-tile :owner 42) type-error))
 
 (defclass tile-test-skill-having (nt:skill-having) ())

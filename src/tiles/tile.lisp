@@ -4,11 +4,12 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
+                    (#:ncom #:nervous-island.common)
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill))
   (:export
    ;; Tiles - protocol
-   #:tile #:owner #:tile= #:instant #:target #:board-tile #:skill-having
+   #:tile #:tile= #:instant #:target #:board-tile #:skill-having
    #:hq #:starting-hit-points #:unit #:skills #:foundation #:warrior #:module
    #:implant
    ;; Macros
@@ -19,26 +20,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - protocol
 
-(p:define-protocol-class tile ()
-  ((%owner :reader owner :initarg :owner))
-  (:default-initargs :owner nil))
-
-(defmethod shared-initialize :around
-    ((tile tile) slots &rest args &key (owner nil ownerp))
-  (when ownerp
-    (check-type owner (or null nr:army))
-    (nconc (list :owner owner) args))
-  (apply #'call-next-method tile slots args))
+(ncom:define-typechecked-class tile (nr:element) ()
+  (:protocolp t))
 
 (defmethod print-object ((object tile) stream)
   (print-unreadable-object (object stream :type nil :identity t)
-    (let ((owner (if (owner object) (nr:name (owner object)) 'unowned)))
-      (format stream "~A ~A" owner (type-of object)))))
+    (let* ((owner (nr:owner object))
+           (name (if owner (nr:name owner) 'unowned)))
+      (format stream "~A ~A" name (type-of object)))))
 
 (defgeneric tile= (tile-1 tile-2)
   (:method (tile-1 tile-2)
     (and (eq (class-name tile-1) (class-name tile-2))
-         (eq (owner tile-1) (owner tile-2)))))
+         (eq (nr:owner tile-1) (nr:owner tile-2)))))
 
 (p:define-protocol-class instant (tile) ())
 
@@ -58,7 +52,7 @@
     (nconc (list :skills skills) args))
   (apply #'call-next-method tile slots args))
 
-(p:define-protocol-class hq (skill-having board-tile)
+(p:define-protocol-class hq (nr:hq-element skill-having board-tile)
   ((%starting-hit-points :reader starting-hit-points
                          :initarg :starting-hit-points))
   (:default-initargs :starting-hit-points 20))
