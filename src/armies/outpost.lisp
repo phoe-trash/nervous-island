@@ -24,10 +24,11 @@
 (defclass army (nr:army) ()
   (:default-initargs
    :name :outpost
-   :hq-tiles (list (make-instance 'hq))
-   :tiles '((runner 2) hmg (commando 5) (annihilator 2) mobile-armor brawler
-            saboteur recon-center (medic 2) officer scoper (scout 2)
-            (battle 6) (move 7) sniper)))
+   :designators '(hq
+                  (runner 2) hmg (commando 5) (annihilator 2) mobile-armor
+                  brawler
+                  saboteur recon-center (medic 2) officer scoper (scout 2)
+                  (battle 6) (move 7) sniper)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; HQ

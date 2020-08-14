@@ -26,12 +26,12 @@
 (defclass army (nr:army) ()
   (:default-initargs
    :name :moloch
-   :hq-tiles (list (make-instance 'hq))
-   :tiles '((blocker 2) (hybrid 2) gauss-cannon juggernaut (hunter-killer 2)
-            clown (armored-hunter 2) armored-guard guard protector hornet
-            net-fighter stormtrooper
-            mother (medic 2) brain officer scout
-            air-strike (battle 4) move (push-back 5))))
+   :designators '(hq
+                  (blocker 2) (hybrid 2) gauss-cannon juggernaut
+                  (hunter-killer 2) clown (armored-hunter 2) armored-guard guard
+                  protector hornet net-fighter stormtrooper
+                  mother (medic 2) brain officer scout
+                  air-strike (battle 4) move (push-back 5))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; HQ

@@ -131,9 +131,7 @@
       (setf (slot-value player '%hit-points) hit-points)))
   (check-hit-points player)
   (unless draw-pile-p
-    ;; TODO reproducible tile orders
-    (let ((draw-pile (a:shuffle (copy-list (nr:elements (army player))))))
-      (setf (slot-value player '%draw-pile) draw-pile)))
+    (setf (slot-value player '%draw-pile) (nr:elements (army player))))
   (check-total-army-size player))
 
 (define-condition cannot-edit-army (ncom:nervous-island-error)

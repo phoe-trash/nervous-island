@@ -24,11 +24,11 @@
 (defclass army (nr:army) ()
   (:default-initargs
    :name :borgo
-   :hq-tiles (list (make-instance 'hq))
-   :tiles '((mutant 6) (claws 4) super-mutant (net-fighter 2) (brawler 2)
-            (assassin 2)
-            medic (officer 2) super-officer (scout 2)
-            (battle 6) (move 4) grenade)))
+   :designators '(hq
+                  (mutant 6) (claws 4) super-mutant (net-fighter 2) (brawler 2)
+                  (assassin 2)
+                  medic (officer 2) super-officer (scout 2)
+                  (battle 6) (move 4) grenade)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; HQ
