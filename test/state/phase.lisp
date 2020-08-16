@@ -28,12 +28,14 @@
                      nph:before-final-battle nph:after-final-battle)))
     (dotimes (n 10)
       (flet ((make (class)
-               (true (make-instance class :player player :number 1
-                                          :initiative n))))
+               (let ((initiative (make-instance 'nsk:initiative :value 1)))
+                 (true (make-instance class :player player :number 1
+                                            :initiative initiative)))))
         (mapc #'make
               '(nph:battle nph:final-full-board-battle nph:final-battle))))
     (true (make-instance 'nph:end))
-    (true (make-instance 'phase-test-with-initiatives :initiative 1))
+    (true (make-instance 'phase-test-with-initiatives
+                         :initiative (make-instance 'nsk:initiative :value 1)))
     (true (make-instance 'phase-test-player-phase :player player :number 1))))
 
 (define-test phase-instantiation-negative
@@ -49,7 +51,6 @@
   (let* ((army (make-instance 'phase-test-army))
          (player (make-instance 'np:player :army army)))
     (fail (make-instance 'phase-test-player-phase))
-    (fail (make-instance 'phase-test-player-phase :player player))
     (fail (make-instance 'phase-test-player-phase :number 1))
     (fail (make-instance 'phase-test-player-phase :player 42 :number 1)
         type-error)

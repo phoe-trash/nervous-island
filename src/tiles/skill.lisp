@@ -8,52 +8,39 @@
   (:export
    ;; Skills - protocol
    #:skill #:directed #:direction #:undirected
-   #:active #:activation-time #:passive
+   #:*activation-times* #:activation-time #:active #:activation-time #:passive
    #:active-directed #:active-undirected #:passive-directed #:passive-undirected
    ;; Skills - concrete classes
-   #:armor #:net #:mobility #:explosion #:toughness #:initiative #:value))
+   #:armor #:net #:mobility #:explosion #:toughness
+   #:*special-initiative-values* #:initiative-value #:initiative #:value))
 
 (in-package #:nervous-island.skill)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skills - protocol
 
-(p:define-protocol-class skill () ())
+(ncom:define-typechecked-class skill () ()
+  (:protocolp t))
 
-(deftype activation-time ()
-  '(member :initiative :initiative-player-choice :turn))
-
-(p:define-protocol-class active (skill)
-  ((%activation-time :reader activation-time :initarg :activation-time))
-  (:default-initargs :activation-time :initiative))
-
-(defmethod shared-initialize :around
-    ((skill active) slots &rest args
-     &key (activation-time nil activation-time-p))
-  (when activation-time-p
-    (check-type activation-time activation-time)
-    (nconc (list :activation-time activation-time) args))
-  (apply #'call-next-method skill slots args))
-
-(p:define-protocol-class passive (skill) ())
-
-(p:define-protocol-class directed (skill)
-  ((%direction :reader direction :initarg :direction))
-  (:default-initargs :direction (a:required-argument :direction)))
-
-(defmethod shared-initialize :around
-    ((skill directed) slots &rest args
-     &key (direction nil directionp))
-  (when directionp
-    (check-type direction (or ncom:direction ncom:diagonal))
-    (nconc (list :direction direction) args))
-  (apply #'call-next-method skill slots args))
+(ncom:define-typechecked-class directed (skill)
+  ((direction :type (or ncom:direction ncom:diagonal)))
+  (:protocolp t))
 
 (defmethod print-object ((object directed) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~A ~S" (type-of object) (direction object))))
 
-(p:define-protocol-class undirected (skill) ())
+(ncom:define-typechecked-class undirected (skill) () (:protocolp t))
+
+(defvar *activation-times* '(:initiative :initiative-player-choice :turn))
+(deftype activation-time ()
+  '(member :initiative :initiative-player-choice :turn))
+
+(ncom:define-typechecked-class active (skill)
+  ((activation-time :type activation-time :initform :initiative))
+  (:protocolp t))
+
+(ncom:define-typechecked-class passive (skill) () (:protocolp t))
 
 (defmethod print-object ((object undirected) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
@@ -84,9 +71,11 @@
 (defclass toughness (passive-undirected) ())
 (defun toughness () (make-instance 'toughness))
 
-(defclass initiative (passive-undirected)
-  ((%value :reader value :initarg :value))
-  (:default-initargs :value (a:required-argument :value)))
+(defvar *special-initiative-values* '(:before :after))
+(deftype initiative-value () '(or (member :before :after) (integer 0)))
+
+(ncom:define-typechecked-class initiative (passive-undirected)
+  ((value :type initiative-value)))
 (defun initiative (value) (make-instance 'initiative :value value))
 
 (defmethod print-object ((object initiative) stream)

@@ -19,14 +19,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Player
 
-(defclass player ()
-  ((%army :reader army :initarg :army)
-   (%hit-points :reader hit-points :initarg :hit-points)
-   (%hand :reader hand :initarg :hand)
-   (%draw-pile :reader draw-pile :initarg :draw-pile)
-   (%discard-pile :reader discard-pile :initarg :discard-pile))
-  (:default-initargs
-   :army (a:required-argument :army) :hand '() :discard-pile '()))
+(ncom:define-typechecked-class player ()
+  ((army :type nr:army)
+   (hit-points :type hash-table :requiredp nil)
+   ;; TODO check all other classes for REQUIREDP
+   (hand :type (φ:list-of nt:tile) :initform '())
+   (draw-pile :type (φ:list-of nt:tile) :requiredp nil)
+   (discard-pile :type (φ:list-of nt:tile) :initform '())))
 
 (define-condition mismatched-hq-tiles (ncom:nervous-island-error)
   ((%expected :reader expected :initarg :expected)
@@ -52,42 +51,16 @@
                      (current-hit-points condition) (hq condition)
                      (starting-hit-points condition)))))
 
-(defmethod shared-initialize :around
-    ((player player) slots &rest args
-     &key
-       (army nil armyp)
-       (hit-points nil hit-points-p)
-       (hand nil handp)
-       (draw-pile nil draw-pile-p)
-       (discard-pile nil discard-pile-p))
-  (when armyp
-    (check-type army nr:army)
-    (nconc (list :army army) args))
-  (when hit-points-p
-    (check-type hit-points hash-table)
-    (nconc (list :hit-points hit-points) args))
-  (flet ((check-list-of-tiles (list)
-           (check-type list list)
-           (loop for cons on list do (check-type (car cons) nt:tile))))
-    (when handp
-      (check-list-of-tiles hand)
-      (nconc (list :hand hand) args))
-    (when draw-pile-p
-      (check-list-of-tiles draw-pile)
-      (nconc (list :draw-pile draw-pile) args))
-    (when discard-pile-p
-      (check-list-of-tiles discard-pile)
-      (nconc (list :discard-pile discard-pile) args)))
-  (apply #'call-next-method player slots args))
+(defun check-no-mismatched-hq-tiles (player)
+  (let* ((actual (a:hash-table-keys (hit-points player)))
+         (expected (nr:hq-elements (army player))))
+    (unless (a:set-equal actual expected)
+      (error 'mismatched-hq-tiles :actual actual :expected expected))))
 
 (defun check-hit-points (player)
-  (let* ((army (army player))
-         (hit-points (hit-points player))
-         (actual (a:hash-table-keys hit-points))
-         (expected (nr:hq-elements army)))
-    (unless (a:set-equal actual expected)
-      (error 'mismatched-hq-tiles :actual actual :expected expected))
-    (dolist (hq actual)
+  (let* ((hit-points (hit-points player))
+         (hqs (a:hash-table-keys hit-points)))
+    (dolist (hq hqs)
       (check-type (gethash hq hit-points) unsigned-byte)
       (let ((starting (nt:starting-hit-points hq))
             (current (gethash hq hit-points)))
@@ -124,13 +97,14 @@
     ((player player) &key (hit-points nil hit-points-p)
                        (draw-pile nil draw-pile-p))
   (declare (ignore hit-points draw-pile))
-  (unless hit-points-p
+  (unless (or hit-points-p (slot-boundp player '%hit-points))
     (let ((hit-points (make-hash-table :test #'eq)))
       (dolist (hq (nr:hq-elements (army player)))
         (setf (gethash hq hit-points) (nt:starting-hit-points hq)))
       (setf (slot-value player '%hit-points) hit-points)))
+  (check-no-mismatched-hq-tiles player)
   (check-hit-points player)
-  (unless draw-pile-p
+  (unless (or draw-pile-p (slot-boundp player '%draw-pile))
     (setf (slot-value player '%draw-pile) (nr:elements (army player))))
   (check-total-army-size player))
 

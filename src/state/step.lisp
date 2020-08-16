@@ -63,4 +63,8 @@
 
 (define-step discard-tile (step-with-tile) ())
 
-(define-step start-full-board-battle (step) ())
+(define-step start-battle (step) ())
+
+(define-step start-final-battle (start-battle) ())
+
+(define-step start-full-board-battle (start-battle) ())

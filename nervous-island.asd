@@ -42,4 +42,5 @@
   :perform
   (test-op (o c)
            (symbol-call '#:parachute '#:test :nervous-island.test
-                        :report (find-symbol "INTERACTIVE" "PARACHUTE"))))
+                        :report (find-symbol "INTERACTIVE"
+                                             "PARACHUTE"))))

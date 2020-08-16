@@ -4,12 +4,13 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
+                    (#:φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common)
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill))
   (:export
    ;; Tiles - protocol
-   #:tile #:tile= #:instant #:target #:board-tile #:skill-having
+   #:tile #:tile= #:instant #:target #:board-tile #:skill-having #:skills
    #:hq #:starting-hit-points #:unit #:skills #:foundation #:warrior #:module
    #:implant
    ;; Macros
@@ -35,35 +36,16 @@
          (eq (nr:owner tile-1) (nr:owner tile-2)))))
 
 (p:define-protocol-class instant (tile) ())
-
 (p:define-protocol-class board-tile (tile) ())
-
 (p:define-protocol-class foundation (board-tile) ())
 
-(p:define-protocol-class skill-having (tile)
-  ((%skills :reader skills :initarg :skills))
-  (:default-initargs :skills '()))
+(ncom:define-typechecked-class skill-having (tile)
+  ((skills :type (φ:list-of nsk:skill) :initform '()))
+  (:protocolp t))
 
-(defmethod shared-initialize :around
-    ((tile skill-having) slots &rest args &key (skills nil skillsp))
-  (when skillsp
-    (check-type skills list)
-    (loop for cons on skills do (check-type (car cons) nsk:skill))
-    (nconc (list :skills skills) args))
-  (apply #'call-next-method tile slots args))
-
-(p:define-protocol-class hq (nr:hq-element skill-having board-tile)
-  ((%starting-hit-points :reader starting-hit-points
-                         :initarg :starting-hit-points))
-  (:default-initargs :starting-hit-points 20))
-
-(defmethod shared-initialize :around
-    ((tile hq) slots &rest args
-     &key (starting-hit-points nil starting-hit-points-p))
-  (when starting-hit-points-p
-    (check-type starting-hit-points (integer 1))
-    (nconc (list :starting-hit-points starting-hit-points) args))
-  (apply #'call-next-method tile slots args))
+(ncom:define-typechecked-class hq (nr:hq-element skill-having board-tile)
+  ((starting-hit-points :type (integer 1) :initform 20))
+  (:protocolp t))
 
 (p:define-protocol-class unit (skill-having board-tile) ())
 

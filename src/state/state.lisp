@@ -12,22 +12,35 @@
                     (#:np #:nervous-island.player)
                     (#:nph #:nervous-island.phase)
                     (#:ns #:nervous-island.step)
-                    (#:nsp #:nervous-island.space))
-  (:export #:state #:board #:players #:alliances #:spaces #:current-phase))
+                    (#:nsp #:nervous-island.space)
+                    (#:nt #:nervous-island.tile))
+  (:export #:state #:board #:players #:remaining-tiles #:alliances #:spaces
+           #:current-phase))
 
 (in-package #:nervous-island.state)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; State
 
+(deftype remaining-tiles-list ()
+  '(cons np:player (cons (φ:list-of nt:tile) null)))
+
+(deftype player-list ()
+  '(φ:list-of np:player))
+
 (ncom:define-typechecked-class state ()
   ((board :type nb:board)
    (players :type (φ:list-of np:player))
-   (alliances :type (φ:list-of list) :initform '())
-   (spaces :type hash-table :initform nil)
-   (current-phase :type nph:phase :initform (make-instance 'nph:start)))
-  (:after (lambda (state &key (spaces nil spacesp) &allow-other-keys)
-            (declare (ignore spaces))
-            (when (and (not spacesp) (not (spaces state)))
-              (setf (slot-value state '%spaces)
-                    (apply #'nsp:make-spaces (nb:axials (board state))))))))
+   (alliances :type (φ:list-of player-list) :initform '())
+   (spaces :type hash-table :requiredp nil)
+   (current-phase :type nph:phase))
+  (:after #'make-state-after))
+
+(defun make-state-after (state &key
+                                 (spaces nil spacesp)
+                         &allow-other-keys)
+  (declare (ignore spaces))
+  (when (and (not spacesp) (not (slot-boundp state '%spaces)))
+    (let ((axials (a:hash-table-keys (nb:axials (board state)))))
+      (setf (slot-value state '%spaces)
+            (apply #'nsp:make-spaces axials)))))

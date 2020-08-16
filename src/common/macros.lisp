@@ -15,13 +15,16 @@
                `(,slot-name :reader ,name :initarg ,keyword
                             ,@(when initformp `(:initform ,initform))))))
          (process-initform-initargs (slot-form)
-           (destructuring-bind (name &key (initform nil initformp)
+           (destructuring-bind (name &key
+                                       (initform nil initformp)
+                                       (requiredp nil requiredpp)
                                 &allow-other-keys)
                slot-form
              (declare (ignore initform))
-             (unless initformp
+             (unless (or initformp (and requiredpp (not requiredp)))
                (let ((keyword (a:make-keyword name))
-                     (default-initargs (a:assoc-value options :default-initargs)))
+                     (default-initargs (a:assoc-value options
+                                                      :default-initargs)))
                  (multiple-value-bind (foundp value)
                      (get-properties default-initargs (list keyword))
                    `(,keyword ,(cond (foundp value)
@@ -111,7 +114,7 @@
   '(:protocolp :before :after :extra-args :default-initargs))
 
 (defparameter *valid-slot-options*
-  '(:type :initform))
+  '(:type :initform :requiredp))
 
 (defun verify-options (options)
   (loop for option in options

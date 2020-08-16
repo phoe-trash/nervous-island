@@ -5,6 +5,8 @@
   (:shadow #:phase #:number)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
+                    (#:ncom #:nervous-island.common)
+                    (#:nsk #:nervous-island.skill)
                     (#:np #:nervous-island.player))
   (:export #:phase #:player-phase #:player #:number
            #:with-initiatives #:battle-part #:final #:final-full-board
@@ -23,34 +25,13 @@
 
 (p:define-protocol-class phase () ())
 
-(p:define-protocol-class player-phase (phase)
-  ((%player :reader player :initarg :player)
-   (%number :reader number :initarg :number))
-  (:default-initargs :player (a:required-argument :player)
-                     :number (a:required-argument :number)))
+(ncom:define-typechecked-class player-phase (phase)
+  ((player :type np:player)
+   (number :type (integer 1) :initform 1))
+  (:protocolp t))
 
-(defmethod shared-initialize :around
-    ((phase player-phase) slots &rest args
-     &key (player nil playerp) (number nil numberp))
-  (when playerp
-    (check-type player np:player)
-    (nconc (list :player player) args))
-  (when numberp
-    (check-type number (integer 1))
-    (nconc (list :number number) args))
-  (apply #'call-next-method phase slots args))
-
-(p:define-protocol-class with-initiatives (phase)
-  ((%initiative :reader initiative :initarg :initiative))
-  (:default-initargs :initiative (a:required-argument :initiative)))
-
-(defmethod shared-initialize :around
-    ((phase with-initiatives) slots &rest args
-     &key (initiative nil initiativep))
-  (when initiativep
-    (check-type initiative unsigned-byte)
-    (nconc (list :initiative initiative) args))
-  (apply #'call-next-method phase slots args))
+(ncom:define-typechecked-class with-initiatives (phase)
+  ((initiative :type nsk:initiative)))
 
 (p:define-protocol-class battle-part (phase) ())
 

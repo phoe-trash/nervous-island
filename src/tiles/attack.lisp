@@ -4,6 +4,7 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
+                    (#:ncom #:nervous-island.common)
                     (#:nsk #:nervous-island.skill))
   (:export #:attack #:strength #:melee #:ranged #:gauss-cannon))
 
@@ -12,16 +13,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - protocol
 
-(p:define-protocol-class attack (nsk:active-directed)
-  ((%strength :reader strength :initarg :strength))
-  (:default-initargs :strength 1))
-
-(defmethod shared-initialize :around
-    ((attack attack) slots &rest args &key (strength nil strengthp))
-  (when strengthp
-    (check-type strength (or (eql t) (integer 1)))
-    (nconc (list :strength strength) args))
-  (apply #'call-next-method attack slots args))
+(ncom:define-typechecked-class attack (nsk:active-directed)
+  ((strength :type (or (eql t) (integer 1)) :initform 1))
+  (:protocolp t))
 
 (defmethod print-object ((object attack) stream)
   (print-unreadable-object (object stream :type nil :identity nil)

@@ -4,10 +4,11 @@
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
+                    (#:ncom #:nervous-island.common)
                     (#:nsk #:nervous-island.skill))
   (:export
    ;; Module effects - protocol
-   #:effect #:directed-effect #:undirected-effect #:numeric-effect
+   #:effect #:directed-effect #:undirected-effect #:numeric-effect #:value
    #:melee-officer #:ranged-officer #:scout #:mother
    #:medic #:transport #:quartermaster #:recon-center #:scoper #:saboteur
    ;; Module effects - concrete classes
@@ -30,9 +31,9 @@
 (p:define-protocol-class directed-effect (nsk:directed effect) ())
 (p:define-protocol-class undirected-effect (nsk:undirected effect) ())
 
-(p:define-protocol-class numeric-effect (effect)
-  ((%strength :reader strength :initarg :strength))
-  (:default-initargs :strength 1))
+(ncom:define-typechecked-class numeric-effect (effect)
+  ((strength :type (integer 1) :initform 1))
+  (:protocolp t))
 
 (p:define-protocol-class melee-officer (numeric-effect) ())
 (p:define-protocol-class ranged-officer (numeric-effect) ())

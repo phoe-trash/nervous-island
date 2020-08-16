@@ -24,10 +24,14 @@
     (is a:set-equal (nr:elements army) draw-pile)
     (is eq '() (np:discard-pile player))))
 
+;;; TODO make it possible to instantiate PLAYER with :ARMY being the class name
+;;;      of the army
+
 (define-test player-instantiation-negative
   ;; Type errors
   (let* ((army (make-instance 'player-test-army)))
     (fail (make-instance 'np:player :army 42) 'type-error)
+    (fail (make-instance 'np:player :army army :hit-points '()) 'type-error)
     (fail (make-instance 'np:player :army army :hit-points :zero) 'type-error)
     (fail (make-instance 'np:player :army army :hand 42) 'type-error)
     (fail (make-instance 'np:player :army army :hand '(42)) 'type-error)
@@ -95,3 +99,5 @@
          (army-2 (make-instance 'player-test-army))
          (player (make-instance 'np:player :army army-1)))
     (fail (np:edit-player player :army army-2) np:cannot-edit-army)))
+
+;;; TODO test remaining-tiles
