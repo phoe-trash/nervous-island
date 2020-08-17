@@ -47,24 +47,29 @@
   (a:with-gensyms (args)
     (flet
         ((decorate-slot (slot-form)
-           (destructuring-bind (name &key type &allow-other-keys) slot-form
+           (destructuring-bind (name &key type transform &allow-other-keys)
+               slot-form
              (let* ((keyword (a:make-keyword name))
                     (var (a:make-gensym name))
                     (suffix (if (find #\- (string name)) "-P" "P"))
                     (predicate (a:make-gensym (format nil "~A~A" name suffix))))
-               (list name var predicate type keyword))))
+               (list name var predicate type keyword transform))))
          (make-key (decorated)
-           (destructuring-bind (name var predicate type keyword) decorated
-             (declare (ignore name type))
+           (destructuring-bind (name var predicate type keyword transform)
+               decorated
+             (declare (ignore name type transform))
              `((,keyword ,var) nil ,predicate)))
          (make-ignore (decorated)
            `(,(second decorated) ,(third decorated)))
          (make-typecheck (decorated)
-           (destructuring-bind (name var predicate type keyword) decorated
+           (destructuring-bind (name var predicate type keyword transform)
+               decorated
              (declare (ignore name))
              `(when ,predicate
+                ,@(when transform
+                    `((setf ,var (funcall ,transform ,var))))
                 (check-type ,var ,type)
-                (nconc (list ,keyword ,var) ,args))))
+                (setf ,args (nconc (list ,keyword ,var) ,args)))))
          (make-before ()
            (a:when-let ((function (car (a:assoc-value options :before))))
              `((apply ,function ,name ,args))))
@@ -114,7 +119,7 @@
   '(:protocolp :before :after :extra-args :default-initargs))
 
 (defparameter *valid-slot-options*
-  '(:type :initform :requiredp))
+  '(:type :initform :requiredp :transform))
 
 (defun verify-options (options)
   (loop for option in options

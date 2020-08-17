@@ -15,7 +15,7 @@
                     (#:nsp #:nervous-island.space)
                     (#:nt #:nervous-island.tile))
   (:export #:state #:board #:players #:remaining-tiles #:alliances #:spaces
-           #:current-phase))
+           #:current-phase #:previous-steps))
 
 (in-package #:nervous-island.state)
 
@@ -30,12 +30,11 @@
    (players :type (φ:list-of np:player))
    (alliances :type (φ:list-of player-list) :initform '())
    (spaces :type hash-table :requiredp nil)
-   (current-phase :type nph:phase))
+   (current-phase :type nph:phase)
+   (previous-steps :type (φ:list-of ns:step) :initform '()))
   (:after #'make-state-after))
 
-(defun make-state-after (state &key
-                                 (spaces nil spacesp)
-                         &allow-other-keys)
+(defun make-state-after (state &key (spaces nil spacesp) &allow-other-keys)
   (declare (ignore spaces))
   (when (and (not spacesp) (not (slot-boundp state '%spaces)))
     (let ((axials (a:hash-table-keys (nb:axials (board state)))))

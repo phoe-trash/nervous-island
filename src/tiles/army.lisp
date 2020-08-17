@@ -9,7 +9,7 @@
   (:export #:element-container
            #:element #:owner #:hq-element #:copy-element #:element-designator
            #:army #:name #:element-count #:hq-elements #:elements
-           #:element-count-error))
+           #:element-count-error #:ensure-army))
 
 (in-package #:nervous-island.army)
 
@@ -130,3 +130,9 @@
          (ensure-element-owner army)))
   (let ((element-count (element-count army)))
     (check-element-count army element-count)))
+
+(defgeneric ensure-army (thing)
+  (:method ((army army)) army)
+  (:method ((symbol symbol)) (ensure-army (make-instance symbol)))
+  (:method (thing)
+    (error 'simple-type-error :datum thing :expected-type '(or army symbol))))

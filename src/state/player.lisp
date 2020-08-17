@@ -20,12 +20,13 @@
 ;;; Player
 
 (ncom:define-typechecked-class player ()
-  ((army :type nr:army)
+  ((army :type nr:army :transform #'nr:ensure-army)
    (hit-points :type hash-table :requiredp nil)
    ;; TODO check all other classes for REQUIREDP
    (hand :type (φ:list-of nt:tile) :initform '())
    (draw-pile :type (φ:list-of nt:tile) :requiredp nil)
-   (discard-pile :type (φ:list-of nt:tile) :initform '())))
+   (discard-pile :type (φ:list-of nt:tile) :initform '()))
+  (:after #'make-player-after))
 
 (define-condition mismatched-hq-tiles (ncom:nervous-island-error)
   ((%expected :reader expected :initarg :expected)
@@ -93,9 +94,10 @@
       (unless (<= actual expected)
         (error 'too-many-tiles :actual actual :expected expected)))))
 
-(defmethod initialize-instance :after
-    ((player player) &key (hit-points nil hit-points-p)
-                       (draw-pile nil draw-pile-p))
+(defun make-player-after (player &key
+                                   (hit-points nil hit-points-p)
+                                   (draw-pile nil draw-pile-p)
+                          &allow-other-keys)
   (declare (ignore hit-points draw-pile))
   (unless (or hit-points-p (slot-boundp player '%hit-points))
     (let ((hit-points (make-hash-table :test #'eq)))

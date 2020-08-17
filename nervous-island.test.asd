@@ -25,7 +25,7 @@
                              (:file "phase")
                              (:file "step")
                              (:file "choice")
-                             ;; (:file "state")
+                             (:file "state")
                              )))
   :depends-on (#:alexandria
                #:parachute

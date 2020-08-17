@@ -23,16 +23,13 @@
       (mapc #'make '(nph:start nph:draw-tiles nph:discard-tile nph:turn
                      nph:before-battle nph:after-battle
                      nph:final-draw-tiles nph:final-discard-tile nph:final-turn
-                     nph:before-final-full-board-battle
-                     nph:after-final-full-board-battle
                      nph:before-final-battle nph:after-final-battle)))
     (dotimes (n 10)
       (flet ((make (class)
                (let ((initiative (make-instance 'nsk:initiative :value 1)))
                  (true (make-instance class :player player :number 1
                                             :initiative initiative)))))
-        (mapc #'make
-              '(nph:battle nph:final-full-board-battle nph:final-battle))))
+        (mapc #'make '(nph:battle nph:final-battle))))
     (true (make-instance 'nph:end))
     (true (make-instance 'phase-test-with-initiatives
                          :initiative (make-instance 'nsk:initiative :value 1)))
