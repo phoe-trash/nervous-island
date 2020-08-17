@@ -13,10 +13,7 @@
            #:start #:draw-tiles #:discard-tile #:turn
            #:before-battle #:battle #:after-battle
            #:final-draw-tiles #:final-discard-tile #:final-turn
-           #:before-final-full-board-battle #:final-full-board-battle
-           #:after-final-full-board-battle
-           #:before-final-battle #:final-battle #:after-final-battle #:end
-           #:possible-phases))
+           #:before-final-battle #:final-battle #:after-final-battle #:end))
 
 (in-package #:nervous-island.phase)
 
@@ -55,10 +52,6 @@
 (defclass final-draw-tiles (final player-phase) ())
 (defclass final-discard-tile (final player-phase) ())
 (defclass final-turn (final player-phase) ())
-
-(defclass before-final-full-board-battle (final-full-board before-battle) ())
-(defclass final-full-board-battle (final-full-board battle) ())
-(defclass after-final-full-board-battle (final-full-board after-battle) ())
 
 (defclass before-final-battle (final before-battle) ())
 (defclass final-battle (final battle) ())

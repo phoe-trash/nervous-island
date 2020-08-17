@@ -22,9 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; State
 
-(deftype remaining-tiles-list ()
-  '(cons np:player (cons (φ:list-of nt:tile) null)))
-
 (deftype player-list ()
   '(φ:list-of np:player))
 
