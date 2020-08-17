@@ -34,8 +34,24 @@
    (previous-steps :type (φ:list-of ns:step) :initform '()))
   (:after #'make-state-after))
 
+(define-condition duplicated-player (ncom:nervous-island-error)
+  ((%player :reader duplicated-player-player :initarg :player))
+  (:default-initargs :player (a:required-argument :player))
+  (:report (lambda (condition stream)
+             (format stream "Duplicated player ~S"
+                     (duplicated-player-player condition)))))
+
+(defun check-no-duplicated-players (state)
+  (let ((players (players state))
+        (hash-table (make-hash-table)))
+    (dolist (player players)
+      (if (gethash player hash-table)
+          (error 'duplicated-player :player player)
+          (setf (gethash player hash-table) player)))))
+
 (defun make-state-after (state &key (spaces nil spacesp) &allow-other-keys)
   (declare (ignore spaces))
+  (check-no-duplicated-players state)
   (when (and (not spacesp) (not (slot-boundp state '%spaces)))
     (let ((axials (a:hash-table-keys (nb:axials (board state)))))
       (setf (slot-value state '%spaces)

@@ -28,6 +28,10 @@
    (discard-pile :type (φ:list-of nt:tile) :initform '()))
   (:after #'make-player-after))
 
+(defmethod print-object ((object player) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (format stream "~A" (nr:name (army object)))))
+
 (define-condition mismatched-hq-tiles (ncom:nervous-island-error)
   ((%expected :reader expected :initarg :expected)
    (%actual :reader actual :initarg :actual))
