@@ -13,19 +13,19 @@
    :designators '(player-test-hq (player-test-warrior 34))))
 
 (define-test player-instantiation
-  (let* ((army (make-instance 'player-test-army))
-         (hq (first (nr:hq-elements army)))
-         (player (make-instance 'np:player :army army))
-         (hit-points (np:hit-points player))
-         (draw-pile (np:draw-pile player)))
-    (is eq army (np:army player))
-    (is eq 42 (gethash hq hit-points))
-    (is eq '() (np:hand player))
-    (is a:set-equal (nr:elements army) draw-pile)
-    (is eq '() (np:discard-pile player))))
-
-;;; TODO make it possible to instantiate PLAYER with :ARMY being the class name
-;;;      of the army
+  (flet ((test (army-designator)
+           (let* ((player (make-instance 'np:player :army army-designator))
+                  (army (np:army player))
+                  (hq (first (nr:hq-elements army)))
+                  (hit-points (np:hit-points player))
+                  (draw-pile (np:draw-pile player)))
+             (is eq army (np:army player))
+             (is eq 42 (gethash hq hit-points))
+             (is eq '() (np:hand player))
+             (is a:set-equal (nr:elements army) draw-pile)
+             (is eq '() (np:discard-pile player)))))
+    (test (make-instance 'player-test-army))
+    (test 'player-test-army)))
 
 (define-test player-instantiation-negative
   ;; Type errors
