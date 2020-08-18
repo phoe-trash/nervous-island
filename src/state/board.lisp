@@ -6,8 +6,8 @@
                     (#:nc #:nervous-island.coord)
                     (#:ncom #:nervous-island.common))
   (:export
-   #:board #:axials #:duplicated-axial #:make-board #:axial-present-p
-   #:only-present-axials
+   #:board #:axials #:duplicated-axial #:make-board #:make-standard-board
+   #:axial-present-p #:only-present-axials
    #:neighbors #:neighbor #:diagonals #:diagonal #:range #:distance
    #:range-intersection #:rotate #:ring #:spiral-ring #:pathfind))
 
@@ -43,6 +43,9 @@
 (defun make-board (&rest axial-designators)
   (let ((axials (mapcar #'nc:ensure-axial axial-designators)))
     (make-instance 'board :axials axials)))
+
+(defun make-standard-board ()
+  (apply #'make-board (nc:range (nc:make-axial 0 0) 2)))
 
 (defgeneric axial-present-p (board axial)
   (:method ((board board) (axial nc:axial))

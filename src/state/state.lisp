@@ -22,11 +22,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; State
 
+(defun transform-board (thing)
+  (etypecase thing
+    (nb:board thing)
+    ((eql :standard) (nb:make-standard-board))))
+
 (deftype player-list ()
   '(φ:list-of np:player))
 
 (ncom:define-typechecked-class state ()
-  ((board :type nb:board)
+  ((board :type nb:board :initform (nb:make-standard-board)
+          :transform #'transform-board)
    (players :type (φ:list-of np:player))
    (alliances :type (φ:list-of player-list) :initform '())
    (spaces :type hash-table :requiredp nil)
