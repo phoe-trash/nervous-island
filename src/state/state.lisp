@@ -27,13 +27,20 @@
     (nb:board thing)
     ((eql :standard) (nb:make-standard-board))))
 
+(defun transform-player (thing)
+  (etypecase thing
+    (np:player thing)
+    (keyword (let* ((name (symbol-name thing))
+                    (army (find-symbol "ARMY" name)))
+               (make-instance 'np:player :army army)))))
+
 (deftype player-list ()
   '(φ:list-of np:player))
 
 (ncom:define-typechecked-class state ()
   ((board :type nb:board :initform (nb:make-standard-board)
           :transform #'transform-board)
-   (players :type (φ:list-of np:player))
+   (players :type (φ:list-of np:player) :transform #'transform-player)
    (alliances :type (φ:list-of player-list) :initform '())
    (spaces :type hash-table :requiredp nil)
    (current-phase :type nph:phase)
@@ -48,9 +55,8 @@
                      (duplicated-player-player condition)))))
 
 (defun check-no-duplicated-players (state)
-  (let ((players (players state))
-        (hash-table (make-hash-table)))
-    (dolist (player players)
+  (let ((hash-table (make-hash-table)))
+    (dolist (player (players state))
       (if (gethash player hash-table)
           (error 'duplicated-player :player player)
           (setf (gethash player hash-table) player)))))

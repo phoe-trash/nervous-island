@@ -53,7 +53,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Steps - concrete classes
 
-(define-step draw-tile (step-with-tile) ())
+(define-step draw-tile (step) ())
 
 (define-step create-damage (step-with-damage) ())
 

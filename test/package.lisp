@@ -18,6 +18,7 @@
                     (#:np #:nervous-island.player)
                     (#:nph #:nervous-island.phase)
                     (#:nr #:nervous-island.army)
+                    (#:ns #:nervous-island.step)
                     (#:nsk #:nervous-island.skill)
                     (#:nsp #:nervous-island.space)
                     (#:nst #:nervous-island.state)

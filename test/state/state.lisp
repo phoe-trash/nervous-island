@@ -6,10 +6,11 @@
   (flet ((test (&rest args)
            (let* ((player-1 (make-instance 'np:player :army 'hegemony:army))
                   (player-2 (make-instance 'np:player :army 'outpost:army))
-                  (phase (make-instance 'nph:start :player player-1))
+                  (phase (make-instance 'nph:start :player player-1 :number 1))
                   (state (apply #'make-instance 'nst:state
-                                :players (list player-1 player-2)
+                                :players (list player-1 player-2) ;; TODO keywords
                                 :current-phase phase args)))
+             (true (typep (nst:board state) 'nb:board))
              (let ((players (nst:players state)))
                (is = 2 (length players))
                (true (member player-1 players))

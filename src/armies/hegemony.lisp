@@ -56,7 +56,8 @@
 
 (nt:define-unit gladiator (nt:warrior)
   (na:melee :q 2) (na:melee :w 2) (na:melee :e 2)
-  (nsk:armor :q) (nsk:armor :w) (nsk:armor :e)  (nsk:initiative 1) (nsk:toughness))
+  (nsk:armor :q) (nsk:armor :w) (nsk:armor :e)
+  (nsk:initiative 1) (nsk:toughness))
 
 (nt:define-unit net-fighter (nt:warrior)
   (nsk:net :e))
