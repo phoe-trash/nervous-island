@@ -33,11 +33,18 @@
                              (:file "step")
                              (:file "choice")
                              (:file "state")))
+               (:module "tilemaker"
+                :components ((:file "shapes")))
                (:file "user"))
   :depends-on (#:alexandria
                #:phoe-toolbox
                #:trivial-indent
-               #:protest/base)
+               #:protest/base
+               ;; Tilemaker dependencies
+               #:vecto
+               #:imago
+               #:vecto-imago
+               )
   :in-order-to ((test-op (load-op :nervous-island.test)))
   :perform
   (test-op (o c)

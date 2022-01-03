@@ -99,7 +99,7 @@ keyword-value pairs."
          (slots (c2mop:class-slots class))
          (slot-names (mapcar #'c2mop:slot-definition-name slots)))
     (dolist (slot slot-names)
-      (unless (slot-transient-p class slot-name)
+      (unless (slot-transient-p class slot)
         (when (slot-boundp original slot)
           (setf (slot-value copy slot) (slot-value original slot)))))
     (apply #'reinitialize-instance copy initargs)))
