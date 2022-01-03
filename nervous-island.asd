@@ -34,7 +34,12 @@
                              (:file "choice")
                              (:file "state")))
                (:module "tilemaker"
-                :components ((:file "shapes")))
+                :components ((:module "shapes"
+                              :components ((:file "package")
+                                           (:file "basics")
+                                           (:file "attacks")
+                                           (:file "net")))
+                             (:file "tilemaker")))
                (:file "user"))
   :depends-on (#:alexandria
                #:phoe-toolbox
