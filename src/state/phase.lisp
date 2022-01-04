@@ -21,7 +21,8 @@
 ;;; Phase - protocol
 
 (ncom:define-typechecked-class phase ()
-  ((number :type (integer 1))))
+  ((number :type (integer 1)))
+  (:protocolp t))
 
 (ncom:define-typechecked-class player-phase (phase)
   ((player :type np:player))
@@ -37,12 +38,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Phase - concrete classes
 
-(defclass start (phase) ())
+(defclass start (player-phase) ())
 
 (defclass place-hq-tiles (player-phase) ())
 
 (defclass draw-tiles (player-phase) ())
 (defclass turn (player-phase) ())
+(defclass discard-tile (player-phase) ())
 
 (defclass before-battle (battle-part player-phase) ())
 (defclass battle (battle-part player-phase with-initiatives) ())

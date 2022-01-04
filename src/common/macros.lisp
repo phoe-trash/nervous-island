@@ -137,7 +137,7 @@
   (verify-options options)
   (dolist (slot-definition slot-definitions)
     (verify-slot-options (cdr slot-definition)))
-  `(progn
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
      ,(create-defclass-form name superclasses slot-definitions options)
      ,(create-shared-initialize name slot-definitions options)
      ',name))

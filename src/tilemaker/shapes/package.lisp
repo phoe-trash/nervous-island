@@ -7,4 +7,5 @@
    (#:z #:zpng))
   (:export #:*side* #:with-hex-tile
            #:melee #:ranged #:gauss
-           #:net))
+           #:net
+           #:ability-circle))

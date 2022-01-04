@@ -127,7 +127,7 @@
     (if (equalp start end)
         0
         (let ((visited (make-hash-table :test #'equalp))
-              (fringes (make-array 0 :adjustable t)))
+              (fringes (make-array 0 :fill-pointer 0)))
           (setf (gethash start visited) t)
           (vector-push-extend (list start) fringes)
           (loop for k from 1 to max-depth do
@@ -149,7 +149,7 @@
         (list start)
         (let ((visited (make-hash-table :test #'equalp))
               (previous (make-hash-table :test #'equalp))
-              (fringes (make-array 0 :adjustable t)))
+              (fringes (make-array 0 :fill-pointer 0)))
           (setf (gethash start visited) t)
           (vector-push-extend (list start) fringes)
           (loop for k from 1 to max-depth do

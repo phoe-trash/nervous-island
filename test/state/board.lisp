@@ -52,8 +52,8 @@
     (is equalp (nc:ensure-axial '(-1 -1)) (nb:diagonal board *center-axial* :qw))
     (is equalp (nc:ensure-axial '(1 -2)) (nb:diagonal board *center-axial* :we))
     (is equalp (nc:ensure-axial '(2 -1)) (nb:diagonal board *center-axial* :ed))
-    (true (null (nb:diagonal board *center-axial* :qa)))
-    (true (null (nb:diagonal board *center-axial* :sd)))
+    (true (null (nb:diagonal board *center-axial* :ds)))
+    (true (null (nb:diagonal board *center-axial* :sa)))
     (true (null (nb:diagonal board *center-axial* :aq)))))
 
 (define-test board-range

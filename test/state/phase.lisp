@@ -30,16 +30,19 @@
                  (true (make-instance class :player player :number 1
                                             :initiative initiative)))))
         (mapc #'make '(nph:battle nph:final-battle))))
-    (true (make-instance 'nph:end))
+    (true (make-instance 'nph:end :number 42))
     (true (make-instance 'phase-test-with-initiatives
+                         :number 42
                          :initiative (make-instance 'nsk:initiative :value 1)))
     (true (make-instance 'phase-test-player-phase :player player :number 1))))
 
 (define-test phase-instantiation-negative
-  (fail (make-instance 'nph:phase) p:protocol-object-instantiation)
-  (fail (make-instance 'nph:battle-part) p:protocol-object-instantiation)
-  (fail (make-instance 'nph:final) p:protocol-object-instantiation)
-  (fail (make-instance 'nph:final-full-board) p:protocol-object-instantiation)
+  (fail (make-instance 'nph:phase :number 1)
+      p:protocol-object-instantiation)
+  (fail (make-instance 'nph:battle-part :number 1)
+      p:protocol-object-instantiation)
+  (fail (make-instance 'nph:final :number 1)
+      p:protocol-object-instantiation)
   (let* ((army (make-instance 'phase-test-army))
          (player (make-instance 'np:player :army army)))
     (fail (make-instance 'nph:player-phase :player player
@@ -54,5 +57,5 @@
     (fail (make-instance 'phase-test-player-phase :player player :number '())
         type-error))
   (fail (make-instance 'phase-test-with-initiatives))
-  (fail (make-instance 'phase-test-with-initiatives :initiative '())
+  (fail (make-instance 'phase-test-with-initiatives :number 1 :initiative '())
       type-error))

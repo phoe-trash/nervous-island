@@ -26,11 +26,11 @@
 
 (deftype direction () '(member :q :w :e :d :s :a))
 
-(deftype diagonal () '(member :qw :wq :we :ew :ed :de :ds :sd :as :sa :aq :qa))
+(deftype diagonal () '(member :aq :qw :we :ed :ds :sa))
 
 (defparameter *directions* '(:q :w :e :d :s :a))
 
-(defparameter *diagonals* '(:qw :wq :we :ew :ed :de :ds :sd :as :sa :aq :qa))
+(defparameter *diagonals* '(:aq :qw :we :ed :ds :sa))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Conditions

@@ -27,12 +27,14 @@
     (nb:board thing)
     ((eql :standard) (nb:make-standard-board))))
 
-(defun transform-player (thing)
-  (etypecase thing
-    (np:player thing)
-    (keyword (let* ((name (symbol-name thing))
-                    (army (find-symbol "ARMY" name)))
-               (make-instance 'np:player :army army)))))
+(defun transform-players (list)
+  (check-type list (φ:list-of np:player))
+  (loop for thing in list
+        collect (etypecase thing
+                  (np:player thing)
+                  (keyword (let* ((name (symbol-name thing))
+                                  (army (find-symbol "ARMY" name)))
+                             (make-instance 'np:player :army army))))))
 
 (deftype player-list ()
   '(φ:list-of np:player))
@@ -40,7 +42,7 @@
 (ncom:define-typechecked-class state ()
   ((board :type nb:board :initform (nb:make-standard-board)
           :transform #'transform-board)
-   (players :type (φ:list-of np:player) :transform #'transform-player)
+   (players :type (φ:list-of np:player) :transform #'transform-players)
    (alliances :type (φ:list-of player-list) :initform '())
    (spaces :type hash-table :requiredp nil)
    (current-phase :type nph:phase)

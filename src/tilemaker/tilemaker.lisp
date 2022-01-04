@@ -31,9 +31,12 @@
 ;;; DRAWING-STATE
 
 (defclass drawing-state ()
-  ((%occupied-corners :accessor occupied-corners
+  ((%tile :accessor tile
+          :initarg :tile)
+   (%occupied-corners :accessor occupied-corners
                       :initarg :occupied-corners))
-  (:default-initargs :occupied-corners '()))
+  (:default-initargs :occupied-corners '()
+                     :tile (a:required-argument :tile)))
 
 (defun occupied-corner-p (state corner)
   (let ((occupied-corners (occupied-corners state)))
@@ -74,6 +77,13 @@
 ;;; DRAW-SKILLS
 
 (defgeneric draw-skills (state skill &rest skills))
+
+(defun compute-best-corners (state)
+  (let ()))
+
+(defmethod draw-skills (state (skill nsk:initiative) &rest skills)
+  ;; TODO
+  (declare (ignore skills)))
 
 (defmethod draw-skills (state skill &rest skills)
   (declare (ignore state))
@@ -130,7 +140,7 @@
 (defmethod draw-tile ((tile nt:warrior)
                       &key height background-color save-path
                         bg-image bg-x-offset bg-y-offset)
-  (let ((state (make-instance 'drawing-state))
+  (let ((state (make-instance 'drawing-state :tile tile))
         (remaining-skills (copy-list (nt:skills tile))))
     (flet ((fetch-skills-if (predicate)
              (multiple-value-bind (skills remaining)
@@ -153,9 +163,10 @@
           ;; Attacks
           (dolist (direction ncom:*directions*)
             (process (x) (and (typep x 'na:attack)
-                              (eq direction (nsk:direction x))))))
-        ;; More drawing logic goes here
-        )
+                              (eq direction (nsk:direction x)))))
+          (process (x) (typep x 'nsk:initiative))
+          ;; More drawing logic goes here
+          ))
       (when remaining-skills
         (dolist (skill remaining-skills)
           (warn 'remaining-skill-after-drawing :skill skill)
