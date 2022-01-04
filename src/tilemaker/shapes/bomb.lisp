@@ -2,12 +2,12 @@
 
 (defun bomb-body (&optional (side *side*))
   (v:arc (* -0.02 side) (* -0.02 side)
-         (* 0.06 side) 0 (* 2 pi))
+         (* 0.05 side) 0 (* 2 pi))
   (v:fill-path))
 
 (defun bomb-fuse (&optional (side *side*))
   (v:with-graphics-state
-    (v:translate (* 0.02 side) (* 0.02 side))
+    (v:translate (* 0.01 side) (* 0.01 side))
     (v:move-to 0 0)
     (v:set-line-width (* 0.01 side))
     (v:curve-to (* 0.03 side) 0
@@ -25,7 +25,7 @@
     (bomb-body)
     (bomb-fuse)
     (v:with-graphics-state
-      (v:translate (* 0.045 side) (* 0.06 side))
+      (v:translate (* 0.035 side) (* 0.05 side))
       (v:rotate (* pi -5/8))
       (dotimes (i 5)
         (v:with-graphics-state
