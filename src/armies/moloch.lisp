@@ -58,7 +58,7 @@
 
 (nt:define-unit juggernaut (nt:warrior)
   (na:melee :w 2) (na:ranged :e) (nsk:toughness)
-  (nsk:armor :w) (nsk:armor :a) (nsk:armor :d))
+  (nsk:initiative 1) (nsk:armor :w) (nsk:armor :a) (nsk:armor :d))
 
 (nt:define-unit hunter-killer (nt:warrior)
   (na:melee :q) (na:melee :w) (na:melee :e) (na:melee :s) (nsk:initiative 3))
