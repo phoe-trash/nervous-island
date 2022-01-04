@@ -8,4 +8,5 @@
   (:export #:*side* #:with-hex-tile
            #:melee #:ranged #:gauss
            #:net
-           #:ability-circle))
+           #:ability-circle
+           #:initiative))

@@ -73,17 +73,34 @@
 
 (defmethod draw-skill ((attack na:gauss-cannon) &key) (shapes:gauss))
 
+(defmethod draw-skill ((initiative nsk:initiative) &key corner)
+  (let* ((rotation (position corner ncom:*diagonals*)))
+    (v:with-graphics-state
+      (v:rotate (* rotation pi -1/3))
+      (shapes:ability-circle)
+      (shapes:initiative (nsk:value initiative) rotation)
+      ;; TODO draw initiative here
+      )))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; DRAW-SKILLS
 
 (defgeneric draw-skills (state skill &rest skills))
 
 (defun compute-best-corners (state)
-  (let ()))
+  (let* ((all-corners (copy-list ncom:*diagonals*))
+         (skills (remove-if-not (a:rcurry #'typep 'nsk:directed)
+                                (nt:skills (tile state)))))
+    ;; TODO implement this
+    (print skills)
+    all-corners))
 
 (defmethod draw-skills (state (skill nsk:initiative) &rest skills)
-  ;; TODO
-  (declare (ignore skills)))
+  (loop with corners = (compute-best-corners state)
+        for corner in corners
+        for skill in (cons skill skills)
+        do (push corner (occupied-corners state))
+           (draw-skill skill :corner corner)))
 
 (defmethod draw-skills (state skill &rest skills)
   (declare (ignore state))

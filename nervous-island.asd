@@ -38,7 +38,9 @@
                               :components ((:file "package")
                                            (:file "basics")
                                            (:file "attacks")
-                                           (:file "net")))
+                                           (:file "net")
+                                           (:file "circle")
+                                           (:file "initiative")))
                              (:file "tilemaker")))
                (:file "user"))
   :depends-on (#:alexandria

@@ -8,7 +8,7 @@
                     (#:p #:protest/base))
   (:export
    ;; Types and constants
-   #:direction #:diagonal #:*directions* #:diagonals
+   #:direction #:diagonal #:*directions* #:*diagonals*
    ;; Conditions
    #:nervous-island-condition #:nervous-island-error
    ;; Macros
