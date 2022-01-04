@@ -13,21 +13,30 @@
 (let ((skills (list (na:melee :s) (nsk:net :a) (nsk:net :d))))
   (draw-tile (make-instance 'nt:warrior :skills skills)))
 
+(defparameter *armies*
+  (alexandria:alist-hash-table
+   '((:borgo 0.0 0.6 0.8)
+     (:moloch 0.8 0.0 0.0)
+     (:outpost 0.0 0.9 0.2)
+     (:hegemony 0.8 0.7 0.0))))
+
+(defun keyword-army (keyword)
+  (let* ((prefix '#:nervous-island.armies)
+         (package-name (format nil "~A.~A" prefix keyword))
+         (package (uiop:find-package* package-name))
+         (symbol-name (symbol-name '#:army))
+         (symbol (find-symbol symbol-name package)))
+    (make-instance symbol)))
+
 (defun save-warriors (&optional (printp t))
-  (let ((armies (mapcar #'make-instance '(nervous-island.armies.borgo:army
-                                          nervous-island.armies.moloch:army
-                                          nervous-island.armies.outpost:army
-                                          nervous-island.armies.hegemony:army)))
-        (colors '((0.0 0.6 0.8)
-                  (0.8 0.0 0.0)
-                  (0.0 0.9 0.2)
-                  (0.8 0.7 0.0)))
-        (done '())
-        (directory #p"/tmp/ni-warriors/"))
+  (let* ((army-names (a:hash-table-keys *armies*))
+         (directory #p"/tmp/ni-warriors/"))
     (ensure-directories-exist directory)
     (loop
-      for army in armies
-      for color in colors
+      with done = '()
+      for army-name in army-names
+      for army = (keyword-army army-name)
+      for color = (gethash army-name *armies*)
       do (dolist (tile (nervous-island.army:elements army))
            (when (typep tile 'nt:warrior)
              (let* ((symbol (class-name (class-of tile)))

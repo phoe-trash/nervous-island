@@ -179,7 +179,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; DRAW-TILE
 
-(defparameter *save-path* #p"/tmp/vecto.png")
+(defparameter *default-save-path* #p"/tmp/vecto.png")
 
 (defgeneric draw-tile (tile &key
                               height background-color save-path bg-image
@@ -189,7 +189,7 @@
 (defparameter *draw-tile-defaults*
   (list :height 800
         :background-color '(0.5 0.5 0.5)
-        :save-path *save-path*
+        :save-path *default-save-path*
         :bg-x-offset 0
         :bg-y-offset 0))
 
