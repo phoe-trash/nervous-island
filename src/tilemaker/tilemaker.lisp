@@ -192,7 +192,6 @@
 (defmethod draw-tile :around (tile &rest args)
   (apply #'call-next-method tile (append args *draw-tile-defaults*)))
 
-;; TODO get rid of counter-clockwise diagonals in COMMON
 (defmethod draw-tile ((tile nt:warrior)
                       &key height background-color save-path
                         bg-image bg-x-offset bg-y-offset)
@@ -217,15 +216,11 @@
              :save-path save-path
              :bg-image bg-image
              :bg-x-offset bg-x-offset :bg-y-offset bg-y-offset)
-          ;; Nets
           (process (x) (typep x 'nsk:net))
-          ;; Attacks
           (dolist (direction ncom:*directions*)
             (process (x) (and (typep x 'na:attack)
                               (eq direction (nsk:direction x)))))
-          ;; Armors
           (process (x) (typep x 'nsk:armor))
-          ;; Undirected skills
           (process (x) (typep x 'nsk:undirected))))
       (when remaining-skills
         (dolist (skill remaining-skills)
