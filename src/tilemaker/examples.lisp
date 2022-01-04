@@ -2,6 +2,7 @@
 
 (draw-tile (make-instance 'nervous-island.armies.outpost:mobile-armor))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:gladiator))
+(draw-tile (make-instance 'nervous-island.armies.hegemony:guard))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:net-master))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:universal-soldier))
 (draw-tile (make-instance 'nt:warrior :skills (list (na:melee :q 6))))

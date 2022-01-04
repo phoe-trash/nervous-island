@@ -8,5 +8,6 @@
   (:export #:*side* #:with-hex-tile
            #:melee #:ranged #:gauss
            #:net
+           #:armor-shadow #:armor
            #:ability-circle
            #:text #:mobility #:toughness))

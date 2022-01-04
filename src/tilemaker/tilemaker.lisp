@@ -93,6 +93,15 @@
       (v:rotate (* rotation pi -1/3))
       (shapes:net))))
 
+(defmethod draw-skill ((skill nsk:armor) &key shadowp)
+  (let* ((direction (nsk:direction skill))
+         (rotation (1- (position direction ncom:*directions*))))
+    (v:with-graphics-state
+      (v:rotate (* rotation pi -1/3))
+      (if shadowp
+          (shapes:armor-shadow)
+          (shapes:armor)))))
+
 (defmethod draw-skill ((attack na:melee) &key) (shapes:melee))
 
 (defmethod draw-skill ((attack na:ranged) &key) (shapes:ranged))
@@ -106,13 +115,13 @@
       (shapes:ability-circle)
       (apply #'call-next-method skill :rotation rotation args))))
 
-(defmethod draw-skill ((initiative nsk:initiative) &key rotation)
-  (shapes:text (nsk:value initiative) rotation))
+(defmethod draw-skill ((skill nsk:initiative) &key rotation)
+  (shapes:text (nsk:value skill) rotation))
 
-(defmethod draw-skill ((initiative nsk:mobility) &key rotation)
+(defmethod draw-skill ((skill nsk:mobility) &key rotation)
   (shapes:mobility rotation))
 
-(defmethod draw-skill ((initiative nsk:toughness) &key rotation)
+(defmethod draw-skill ((skill nsk:toughness) &key rotation)
   (shapes:toughness rotation))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -127,6 +136,12 @@
 
 (defmethod draw-skills (state skill &rest skills)
   (declare (ignore state))
+  (dolist (skill (cons skill skills))
+    (draw-skill skill)))
+
+(defmethod draw-skills (state (skill nsk:armor) &rest skills)
+  (dolist (skill (cons skill skills))
+    (draw-skill skill :shadowp t))
   (dolist (skill (cons skill skills))
     (draw-skill skill)))
 
@@ -208,10 +223,10 @@
           (dolist (direction ncom:*directions*)
             (process (x) (and (typep x 'na:attack)
                               (eq direction (nsk:direction x)))))
-          ;; Draw undirected skills here
-          (process (x) (typep x 'nsk:undirected))
-          ;; More drawing logic goes here
-          ))
+          ;; Armors
+          (process (x) (typep x 'nsk:armor))
+          ;; Undirected skills
+          (process (x) (typep x 'nsk:undirected))))
       (when remaining-skills
         (dolist (skill remaining-skills)
           (warn 'remaining-skill-after-drawing :skill skill)
