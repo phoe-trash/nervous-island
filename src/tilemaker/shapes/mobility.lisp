@@ -9,7 +9,7 @@
     (v:line-to (* 0.08 side) (* 0.08 side))
     (v:line-to (* -0.01 side) (* 0.03 side))
     (v:fill-path)
-    ;; Arrow botton
+    ;; Arrow bottom
     (v:move-to (* 0.01 side) (* 0.03 side))
     (v:quadratic-to (* -0.03 side) (* -0.07 side)
                     (* 0.06 side) (* -0.09 side))

@@ -10,4 +10,4 @@
            #:net
            #:armor-shadow #:armor
            #:ability-circle
-           #:text #:mobility #:toughness))
+           #:text #:mobility #:toughness #:bomb))

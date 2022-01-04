@@ -125,6 +125,9 @@
 (defmethod draw-skill ((skill nsk:toughness) &key)
   (shapes:toughness))
 
+(defmethod draw-skill ((skill nsk:explosion) &key)
+  (shapes:bomb))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; DRAW-SKILLS
 
