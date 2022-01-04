@@ -9,7 +9,7 @@
   (v:with-graphics-state
     (v:translate (* 0.02 side) (* 0.02 side))
     (v:move-to 0 0)
-    (v:set-line-width (* 0.008 side))
+    (v:set-line-width (* 0.01 side))
     (v:curve-to (* 0.03 side) 0
                 0 (* 0.03 side)
                 (* 0.03 side) (* 0.04 side))
@@ -30,6 +30,6 @@
       (dotimes (i 5)
         (v:with-graphics-state
           (v:rotate (* i pi 1/4))
-          (v:rectangle (* -0.004 side) (* 0.015 side)
-                       (* 0.008 side) (* 0.015 side))
+          (v:rectangle (* -0.005 side) (* 0.02 side)
+                       (* 0.010 side) (* 0.015 side))
           (v:fill-path))))))
