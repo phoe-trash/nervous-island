@@ -9,4 +9,4 @@
            #:melee #:ranged #:gauss
            #:net
            #:ability-circle
-           #:initiative))
+           #:text))

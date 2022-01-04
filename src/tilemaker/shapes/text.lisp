@@ -2,7 +2,7 @@
 
 (defparameter *font-directory* #p"~/.local/share/fonts/")
 
-(defun initiative (n rotation &optional (side *side*))
+(defun text (n rotation &optional (side *side*))
   (v:with-graphics-state
     (v:translate (* -0.55 side) 0)
     (v:rotate (* rotation pi 1/3))

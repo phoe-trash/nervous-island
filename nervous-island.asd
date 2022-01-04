@@ -40,7 +40,7 @@
                                            (:file "attacks")
                                            (:file "net")
                                            (:file "circle")
-                                           (:file "initiative")))
+                                           (:file "text")))
                              (:file "tilemaker")))
                (:file "user"))
   :depends-on (#:alexandria
