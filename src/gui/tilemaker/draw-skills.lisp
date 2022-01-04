@@ -28,7 +28,7 @@
            (direction (nsk:direction attack))
            (allocated-left-p (allocated-left-p state direction))
            (allocated-right-p (allocated-right-p state direction))
-           (margin (* 0.1 shapes:*side*))
+           (margin (* 0.15 shapes:*side*))
            (initial-offset (* 0.25 shapes:*side*))
            (begin (- initial-offset (if allocated-right-p margin 0)))
            (end (+ (- initial-offset) (if allocated-left-p margin 0)))

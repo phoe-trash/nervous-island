@@ -44,7 +44,8 @@
                                (:file "circle")
                                (:file "text")
                                (:file "mobility")
-                               (:file "toughness")))
+                               (:file "toughness")
+                               (:file "bomb")))
                  (:module "tilemaker"
                   :components ((:file "package")
                                (:file "conditions")

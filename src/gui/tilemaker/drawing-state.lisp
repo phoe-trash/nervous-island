@@ -8,6 +8,9 @@
   (:default-initargs :allocated-corners '()
                      :tile (a:required-argument :tile)))
 
+(defun allocated-corner-p (state corner)
+  (member corner (allocated-corners state) :key #'cdr))
+
 (defun allocated-left-p (state direction)
   (allocated-corner-p state (case direction
                               (:q :aq) (:w :qw) (:e :we)
