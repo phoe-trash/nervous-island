@@ -9,4 +9,4 @@
            #:melee #:ranged #:gauss
            #:net
            #:ability-circle
-           #:text #:mobility))
+           #:text #:mobility #:toughness))

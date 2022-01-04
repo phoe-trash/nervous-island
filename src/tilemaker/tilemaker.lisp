@@ -112,6 +112,9 @@
 (defmethod draw-skill ((initiative nsk:mobility) &key rotation)
   (shapes:mobility rotation))
 
+(defmethod draw-skill ((initiative nsk:toughness) &key rotation)
+  (shapes:toughness rotation))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; DRAW-SKILLS
 
