@@ -110,7 +110,7 @@
   (shapes:text (nsk:value initiative) rotation))
 
 (defmethod draw-skill ((initiative nsk:mobility) &key rotation)
-  (shapes:text "m" rotation))
+  (shapes:mobility rotation))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; DRAW-SKILLS
