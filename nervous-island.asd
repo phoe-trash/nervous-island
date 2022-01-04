@@ -39,8 +39,11 @@
                                            (:file "basics")
                                            (:file "attacks")
                                            (:file "net")
+                                           (:file "armor")
                                            (:file "circle")
-                                           (:file "text")))
+                                           (:file "text")
+                                           (:file "mobility")
+                                           (:file "toughness")))
                              (:file "tilemaker")))
                (:file "user"))
   :depends-on (#:alexandria

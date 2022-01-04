@@ -62,16 +62,15 @@
         (v:fill-path)))))
 
 (defun ability-circle (&optional (side *side*))
-  (v:with-graphics-state
-    (v:translate (* -0.55 side) 0)
-    (flet ()
-      (circle-shadow)
-      (circle-outer)
-      (circle-inner)
-      (dotimes (i 8)
-        (v:with-graphics-state
-          (v:rotate (* i 1/8 2 pi))
-          (circle-decoration-square)))
-      (circle-main-line)
-      (dolist (y (list 1 -1))
-        (circle-helper-line y)))))
+  (v:translate (* -0.55 side) 0)
+  (flet ()
+    (circle-shadow)
+    (circle-outer)
+    (circle-inner)
+    (dotimes (i 8)
+      (v:with-graphics-state
+        (v:rotate (* i 1/8 2 pi))
+        (circle-decoration-square)))
+    (circle-main-line)
+    (dolist (y (list 1 -1))
+      (circle-helper-line y))))

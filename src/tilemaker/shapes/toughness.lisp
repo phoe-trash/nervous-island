@@ -1,9 +1,7 @@
 (in-package #:nervous-island.tilemaker.shapes)
 
-(defun toughness (rotation &optional (side *side*))
+(defun toughness (&optional (side *side*))
   (v:with-graphics-state
-    (v:translate (* -0.55 side) 0)
-    (v:rotate (* rotation pi 1/3))
     (v:set-rgba-fill 1 1 1 1)
     (v:translate 0 (* -0.01 side))
     (v:scale 1.6 1.2)

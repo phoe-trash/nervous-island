@@ -113,16 +113,17 @@
     (v:with-graphics-state
       (v:rotate (* rotation pi -1/3))
       (shapes:ability-circle)
-      (apply #'call-next-method skill :rotation rotation args))))
+      (v:rotate (* rotation pi 1/3))
+      (call-next-method))))
 
-(defmethod draw-skill ((skill nsk:initiative) &key rotation)
-  (shapes:text (nsk:value skill) rotation))
+(defmethod draw-skill ((skill nsk:initiative) &key)
+  (shapes:text (nsk:value skill)))
 
-(defmethod draw-skill ((skill nsk:mobility) &key rotation)
-  (shapes:mobility rotation))
+(defmethod draw-skill ((skill nsk:mobility) &key)
+  (shapes:mobility))
 
-(defmethod draw-skill ((skill nsk:toughness) &key rotation)
-  (shapes:toughness rotation))
+(defmethod draw-skill ((skill nsk:toughness) &key)
+  (shapes:toughness))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; DRAW-SKILLS
