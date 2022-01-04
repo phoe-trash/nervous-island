@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defun attack-decoration (&optional (side *side*))
   (let ((height (* side (sqrt 3))))

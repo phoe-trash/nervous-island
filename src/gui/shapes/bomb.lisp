@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defun bomb-body (&optional (side *side*))
   (v:arc (* -0.02 side) (* -0.02 side)

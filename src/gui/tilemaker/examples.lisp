@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker)
+(in-package #:nervous-island.gui.tilemaker)
 
 (draw-tile (make-instance 'nervous-island.armies.outpost:mobile-armor))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:gladiator))
@@ -12,6 +12,8 @@
   (draw-tile (make-instance 'nt:warrior :skills skills)))
 (let ((skills (list (na:melee :s) (nsk:net :a) (nsk:net :d))))
   (draw-tile (make-instance 'nt:warrior :skills skills)))
+
+(draw-tile (make-instance 'nervous-island.armies.hegemony:boss))
 
 (defparameter *armies*
   (alexandria:alist-hash-table

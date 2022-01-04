@@ -33,28 +33,34 @@
                              (:file "step")
                              (:file "choice")
                              (:file "state")))
-               (:module "tilemaker"
-                :components ((:module "shapes"
-                              :components ((:file "package")
-                                           (:file "basics")
-                                           (:file "attacks")
-                                           (:file "net")
-                                           (:file "armor")
-                                           (:file "circle")
-                                           (:file "text")
-                                           (:file "mobility")
-                                           (:file "toughness")))
-                             (:file "tilemaker")))
+               (:module "gui"
+                :components
+                ((:module "shapes"
+                  :components ((:file "package")
+                               (:file "basics")
+                               (:file "attacks")
+                               (:file "net")
+                               (:file "armor")
+                               (:file "circle")
+                               (:file "text")
+                               (:file "mobility")
+                               (:file "toughness")))
+                 (:module "tilemaker"
+                  :components ((:file "package")
+                               (:file "conditions")
+                               (:file "drawing-state")
+                               (:file "draw-skill")
+                               (:file "draw-skills")
+                               (:file "draw-tile")))))
                (:file "user"))
   :depends-on (#:alexandria
                #:phoe-toolbox
                #:trivial-indent
                #:protest/base
-               ;; Tilemaker dependencies
+               ;; GUI dependencies
                #:vecto
                #:imago
-               #:vecto-imago
-               )
+               #:vecto-imago)
   :in-order-to ((test-op (load-op :nervous-island.test)))
   :perform
   (test-op (o c)

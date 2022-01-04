@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defparameter *font-directory* #p"~/.local/share/fonts/")
 

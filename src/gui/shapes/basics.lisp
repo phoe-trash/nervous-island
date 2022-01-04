@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defvar *side*)
 

@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defun circle-shadow (&optional (side *side*))
   (flet ((fn (x) (vecto:linear-domain (sin (* (- x) pi)))))

@@ -1,4 +1,4 @@
-(uiop:define-package #:nervous-island.tilemaker.shapes
+(uiop:define-package #:nervous-island.gui.shapes
   (:use #:cl)
   (:local-nicknames
    (#:a #:alexandria)

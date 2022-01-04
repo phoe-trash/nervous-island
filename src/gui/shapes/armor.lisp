@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defun armor-path (&optional (side *side*))
   (let ((x (* 0.5 side)))

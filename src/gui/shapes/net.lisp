@@ -1,4 +1,4 @@
-(in-package #:nervous-island.tilemaker.shapes)
+(in-package #:nervous-island.gui.shapes)
 
 (defun net-lines (offset &optional (side *side*))
   (dotimes (i 9)
