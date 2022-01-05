@@ -16,9 +16,16 @@
               do (error "Unable to reconcile ranges in ~S" clusters)
             finally (setf (module-range-directions state) ranges-1)))))
 
+(defun check-directed-undirected-effects (skills)
+  (when (and (find-if (a:rcurry #'typep 'ne:directed-effect) skills)
+             (find-if (a:rcurry #'typep 'ne:undirected-effect) skills))
+    (error "Unable to draw a module with both directed and ~
+                undirected effects ~S." skills)))
+
 (defmethod draw-tile ((tile nt:module) &key height background-color save-path)
   (let ((state (make-instance 'drawing-state :tile tile))
         (remaining-skills (copy-list (nt:skills tile))))
+    (check-directed-undirected-effects remaining-skills)
     (flet ((fetch-skills-if (predicate &key (removep t))
              (multiple-value-bind (skills remaining)
                  (φ:split predicate remaining-skills)
@@ -28,8 +35,8 @@
              (directed (fetch-skills-if predicate :removep nil))
              (clusters (partition-by-class directed)))
         (reconcile-effect-ranges state clusters))
-      (let* ((predicate (a:rcurry #'typep `(and nsk:undirected
-                                                (not ne:effect))))
+      (let* ((predicate (a:rcurry #'typep
+                                  '(and nsk:undirected (not ne:effect))))
              (undirected (fetch-skills-if predicate :removep nil)))
         (allocate-undirected-skills state undirected))
       (shapes:with-hex-tile (side height width)
@@ -51,8 +58,7 @@
                        `(a:when-let ((,skills (fetch-skills-if
                                                (lambda (,name) ,@body))))
                           (apply #'draw-skills state ,skills)))))
-          (process (x) (typep x `(and nsk:undirected
-                                      (not ne:effect)))))
+          (process (x) (typep x '(and nsk:undirected (not ne:effect)))))
         (when remaining-skills
           (dolist (skill remaining-skills)
             (warn 'remaining-skill-after-drawing :skill skill)

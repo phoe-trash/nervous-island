@@ -1,7 +1,5 @@
 (in-package #:nervous-island.gui.shapes)
 
-(defun )
-
 (defun circle-shadow (&optional (side *side*))
   (v:set-gradient-fill
    0 0 0 0 0 1
