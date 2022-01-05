@@ -14,15 +14,14 @@
   (v:with-graphics-state
     (v:translate 0 (* 0.7 side))
     (v:scale 1 0.1)
-    (flet ((fn (x) (vecto:linear-domain (sin (* (- x) pi)))))
-      (v:set-gradient-fill
-       0 0 0 0 0 1
-       0 (* -0.9 side) 0 0 0 0
-       :domain-function #'fn
-       :coordinates-function 'vecto:polar-coordinates)
-      (armor-path)
-      (v:arc 0 0 (* 1.4 side) 0 (* 2 pi))
-      (v:fill-path))))
+    (v:set-gradient-fill
+     0 0 0 0 0 1
+     0 (* -0.9 side) 0 0 0 0
+     :domain-function #'inverse-sin-domain
+     :coordinates-function 'vecto:polar-coordinates)
+    (armor-path)
+    (v:arc 0 0 (* 1.4 side) 0 (* 2 pi))
+    (v:fill-path)))
 
 (defun armor (&optional (side *side*))
   (v:with-graphics-state

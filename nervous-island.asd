@@ -37,7 +37,7 @@
                 :components
                 ((:module "shapes"
                   :components ((:file "package")
-                               (:file "basics")
+                               (:file "common")
                                (:file "attacks")
                                (:file "net")
                                (:file "armor")
@@ -45,14 +45,18 @@
                                (:file "text")
                                (:file "mobility")
                                (:file "toughness")
-                               (:file "bomb")))
+                               (:file "bomb")
+                               (:file "module")))
                  (:module "tilemaker"
                   :components ((:file "package")
                                (:file "conditions")
                                (:file "drawing-state")
                                (:file "draw-skill")
                                (:file "draw-skills")
-                               (:file "draw-tile")))))
+                               (:module "draw-tile"
+                                :components ((:file "common")
+                                             (:file "warrior")
+                                             (:file "module")))))))
                (:file "user"))
   :depends-on (#:alexandria
                #:phoe-toolbox

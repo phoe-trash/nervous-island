@@ -64,6 +64,9 @@
         (hexagon (* 0.02 side))
         (v:fill-path)))))
 
+(defun inverse-sin-domain (x)
+  (vecto:linear-domain (sin (* (- x) pi))))
+
 (defmacro with-hex-tile
     ((side-var height-var width-var)
      (&key
