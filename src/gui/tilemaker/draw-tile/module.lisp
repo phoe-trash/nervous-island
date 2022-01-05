@@ -39,6 +39,10 @@
         (shapes:module-background)
         (dolist (direction (module-range-directions state))
           (let ((rotation (position direction ncom:*directions*)))
+            (shapes:module-range-shadow rotation)))
+        (shapes:module-ring)
+        (dolist (direction (module-range-directions state))
+          (let ((rotation (position direction ncom:*directions*)))
             (shapes:module-range rotation)))
         (shapes:module-circle)
         state

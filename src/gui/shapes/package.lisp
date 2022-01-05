@@ -6,7 +6,8 @@
    (#:i #:imago)
    (#:z #:zpng))
   (:export #:*side* #:with-hex-tile
-           #:module-background #:module-range #:module-circle
+           #:module-background #:module-ring #:module-circle
+           #:module-range-shadow #:module-range
            #:melee #:ranged #:gauss
            #:net
            #:armor-shadow #:armor
