@@ -5,6 +5,7 @@
                     (#:φ #:phoe-toolbox)
                     (#:na #:nervous-island.attack)
                     (#:ncom #:nervous-island.common)
+                    (#:ne #:nervous-island.effect)
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile)
                     (#:shapes #:nervous-island.gui.shapes))

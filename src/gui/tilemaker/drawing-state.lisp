@@ -4,8 +4,11 @@
   ((%tile :accessor tile
           :initarg :tile)
    (%allocated-corners :accessor allocated-corners
-                       :initarg :allocated-corners))
+                       :initarg :allocated-corners)
+   (%module-range-directions :accessor module-range-directions
+                             :initarg :module-range-directions))
   (:default-initargs :allocated-corners '()
+                     :module-range-directions '()
                      :tile (a:required-argument :tile)))
 
 (defun allocated-corner-p (state corner)
