@@ -13,17 +13,17 @@
       (let ((undirected (fetch-skills-if (a:rcurry #'typep 'nsk:undirected)
                                          :removep nil)))
         (allocate-undirected-skills state undirected))
-      (macrolet ((process ((name) &body body)
-                   (a:with-gensyms (skills)
-                     `(a:when-let ((,skills (fetch-skills-if
-                                             (lambda (,name) ,@body))))
-                        (apply #'draw-skills state ,skills)))))
-        (shapes:with-hex-tile (side height width)
-            (:height height
-             :background-color background-color
-             :save-path save-path
-             :bg-image bg-image
-             :bg-x-offset bg-x-offset :bg-y-offset bg-y-offset)
+      (shapes:with-hex-tile (side height width)
+          (:height height
+           :background-color background-color
+           :save-path save-path
+           :bg-image bg-image
+           :bg-x-offset bg-x-offset :bg-y-offset bg-y-offset)
+        (macrolet ((process ((name) &body body)
+                     (a:with-gensyms (skills)
+                       `(a:when-let ((,skills (fetch-skills-if
+                                               (lambda (,name) ,@body))))
+                          (apply #'draw-skills state ,skills)))))
           (process (x) (typep x 'nsk:net))
           (dolist (direction ncom:*directions*)
             (process (x) (and (typep x 'na:attack)

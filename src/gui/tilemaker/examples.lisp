@@ -15,6 +15,7 @@
   (draw-tile (make-instance 'nt:warrior :skills skills)))
 
 (draw-tile (make-instance 'nervous-island.armies.hegemony:boss))
+(draw-tile (make-instance 'nervous-island.armies.borgo:super-officer))
 
 (defparameter *armies*
   (alexandria:alist-hash-table

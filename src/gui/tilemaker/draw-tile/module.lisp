@@ -28,8 +28,8 @@
              (directed (fetch-skills-if predicate :removep nil))
              (clusters (partition-by-class directed)))
         (reconcile-effect-ranges state clusters))
-      (let* ((predicate (a:rcurry #'typep '(and nsk:undirected
-                                            (not ne:effect))))
+      (let* ((predicate (a:rcurry #'typep `(and nsk:undirected
+                                                (not ne:effect))))
              (undirected (fetch-skills-if predicate :removep nil)))
         (allocate-undirected-skills state undirected))
       (shapes:with-hex-tile (side height width)
@@ -46,6 +46,13 @@
             (let ((rotation (position direction ncom:*directions*)))
               (shapes:module-range rotation)))
           (shapes:module-circle))
+        (macrolet ((process ((name) &body body)
+                     (a:with-gensyms (skills)
+                       `(a:when-let ((,skills (fetch-skills-if
+                                               (lambda (,name) ,@body))))
+                          (apply #'draw-skills state ,skills)))))
+          (process (x) (typep x `(and nsk:undirected
+                                      (not ne:effect)))))
         (when remaining-skills
           (dolist (skill remaining-skills)
             (warn 'remaining-skill-after-drawing :skill skill)

@@ -28,6 +28,7 @@
 (defmethod draw-skill ((attack na:gauss-cannon) &key) (shapes:gauss))
 
 (defmethod draw-skill :around ((skill nsk:undirected) &key corner)
+  (check-type corner ncom:diagonal)
   (let* ((rotation (position corner ncom:*diagonals*)))
     (v:with-graphics-state
       (v:rotate (* rotation pi -1/3))
