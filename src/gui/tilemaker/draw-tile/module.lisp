@@ -36,16 +36,16 @@
           (:height height
            :background-color background-color
            :save-path save-path)
-        (shapes:module-background)
-        (dolist (direction (module-range-directions state))
-          (let ((rotation (position direction ncom:*directions*)))
-            (shapes:module-range-shadow rotation)))
-        (shapes:module-ring)
-        (dolist (direction (module-range-directions state))
-          (let ((rotation (position direction ncom:*directions*)))
-            (shapes:module-range rotation)))
-        (shapes:module-circle)
-        state
+        (let ((range-directions (module-range-directions state)))
+          (shapes:module-background)
+          (dolist (direction range-directions)
+            (let ((rotation (position direction ncom:*directions*)))
+              (shapes:module-range-shadow rotation)))
+          (shapes:module-ring)
+          (dolist (direction range-directions)
+            (let ((rotation (position direction ncom:*directions*)))
+              (shapes:module-range rotation)))
+          (shapes:module-circle))
         (when remaining-skills
           (dolist (skill remaining-skills)
             (warn 'remaining-skill-after-drawing :skill skill)
