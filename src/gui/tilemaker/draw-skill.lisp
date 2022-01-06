@@ -32,6 +32,7 @@
   (let* ((rotation (position corner ncom:*diagonals*)))
     (v:with-graphics-state
       (v:rotate (* rotation pi -1/3))
+      (v:translate (* -0.55 shapes:*side*) 0)
       (shapes:ability-circle)
       (v:rotate (* rotation pi 1/3))
       (call-next-method))))

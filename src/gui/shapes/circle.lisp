@@ -64,7 +64,7 @@
 
 (defun ability-circle
     (&optional (side *side*) (linesp t))
-  (v:translate (* -0.55 side) 0)
+  (declare (ignore side))
   (circle-shadow)
   (circle-outer)
   (circle-inner)
