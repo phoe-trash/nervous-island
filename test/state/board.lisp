@@ -1,6 +1,6 @@
 ;;;; test/state/board.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (define-test board-instantiation
   (let ((board (nb:make-board)))

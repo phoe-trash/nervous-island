@@ -1,6 +1,6 @@
 ;;;; test/tiles/skill.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defclass skill-test-directed (nsk:directed) ())
 

@@ -1,6 +1,6 @@
 ;;;; test/tiles/tile.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defclass tile-test-tile (nt:tile) ())
 

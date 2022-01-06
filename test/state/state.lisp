@@ -1,6 +1,6 @@
 ;;;; test/state/space.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (define-test state-instantiation
   (flet ((test (&rest args)

@@ -1,6 +1,6 @@
 ;;;; test/tiles/attack.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defclass attack-test-attack (na:attack) ())
 

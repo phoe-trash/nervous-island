@@ -1,6 +1,6 @@
 ;;;; test/state/phase.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defclass phase-test-hq (nt:hq) ())
 

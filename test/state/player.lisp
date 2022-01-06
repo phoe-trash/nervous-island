@@ -1,6 +1,6 @@
 ;;;; test/state/player.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defclass player-test-hq (nt:hq) ()
   (:default-initargs :starting-hit-points 42))

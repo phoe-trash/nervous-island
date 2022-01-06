@@ -1,6 +1,6 @@
 ;;;; test/tiles/effect.lisp
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defclass effect-test-effect (ne:effect) ())
 

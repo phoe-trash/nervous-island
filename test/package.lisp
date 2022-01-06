@@ -1,6 +1,6 @@
 ;;;; test/package.lisp
 
-(defpackage #:nervous-island.test
+(defpackage #:nervous-island/test
   (:use #:cl
         #:parachute)
   ;; External packages
@@ -30,7 +30,7 @@
                     (#:borgo #:nervous-island.armies.borgo)
                     (#:hegemony #:nervous-island.armies.hegemony)))
 
-(in-package #:nervous-island.test)
+(in-package #:nervous-island/test)
 
 (defvar *center-axial* (nc:ensure-axial '(0 0)))
 
