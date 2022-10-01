@@ -13,7 +13,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - protocol
 
-(ncom:define-typechecked-class attack (nsk:active-directed)
+(ncom:define-class attack (nsk:active-directed)
   ((strength :type (or (eql t) (integer 1)) :initform 1))
   (:protocolp t))
 

@@ -16,14 +16,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element
 
-(ncom:define-typechecked-class element-container () ()
+(ncom:define-class element-container () ()
   (:protocolp t))
 
-(ncom:define-typechecked-class element ()
+(ncom:define-class element ()
   ((owner :type (or null element-container) :initform nil))
   (:protocolp t))
 
-(p:define-protocol-class hq-element (element) ())
+(ncom:define-class hq-element (element) ()
+  (:protocolp t))
 
 (defgeneric copy-element (element &rest initargs)
   (:method ((element element) &rest initargs)
@@ -42,7 +43,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
-(ncom:define-typechecked-class army (element-container)
+(ncom:define-class army (element-container)
   ((name :type symbol)
    (element-count :type (integer 1) :initform 35)
    (hq-elements :type (φ:list-of hq-element) :initform '())

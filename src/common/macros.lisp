@@ -3,16 +3,55 @@
 (in-package #:nervous-island.common)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Macro interface
+
+(defparameter *valid-options*
+  '(:protocolp :before :after :extra-args :default-initargs))
+
+(defparameter *valid-slot-options*
+  '(:type :initform :requiredp :transform))
+
+(defun verify-options (options)
+  (loop for option in options
+        for (keyword . nil) = option
+        unless (member keyword *valid-options*)
+          do (error "Unknown option ~S." option)))
+
+(defun verify-slot-options (slot-options)
+  (loop for option on slot-options by #'cddr
+        for (keyword . nil) = option
+        unless (member keyword *valid-slot-options*)
+          do (error "Unknown slot option ~S." option)))
+
+(defun %define-class (name superclasses slot-definitions options)
+  (verify-options options)
+  (dolist (slot-definition slot-definitions)
+    (verify-slot-options (cdr slot-definition)))
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
+     ,(create-defclass-form name superclasses slot-definitions options)
+     ,(create-shared-initialize name slot-definitions options)
+     ',name))
+
+(defmacro define-class
+    (name (&rest superclasses) (&rest slot-definitions) &body options)
+  (%define-class name superclasses slot-definitions options))
+
+(setf (trivial-indent:indentation 'define-class)
+      '(4 &lambda &body))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Class definition
 
 (defun create-defclass-form (name superclasses slots options)
   (flet ((process-slot-definition (slot-form)
-           (destructuring-bind (name &key (initform nil initformp)
-                                &allow-other-keys)
+           (destructuring-bind
+               (name &key (initform nil initformp) (type t typep)
+                &allow-other-keys)
                slot-form
              (let ((slot-name (a:symbolicate :% name))
                    (keyword (a:make-keyword name)))
                `(,slot-name :reader ,name :initarg ,keyword
+                            ,@(when typep `(:type ,type))
                             ,@(when initformp `(:initform ,initform))))))
          (process-initform-initargs (slot-form)
            (destructuring-bind (name &key
@@ -36,9 +75,11 @@
            (slot-definitions (mapcar #'process-slot-definition slots))
            (initform-initargs (a:mappend #'process-initform-initargs slots))
            (default-initargs (process-default-initargs)))
-      `(,definition-symbol ,name ,superclasses ,slot-definitions
-                           (:default-initargs ,@initform-initargs
-                                              ,@default-initargs)))))
+      `(,definition-symbol
+        ,name ,superclasses ,slot-definitions
+        (:default-initargs ,@initform-initargs
+                           ,@default-initargs)
+        (:metaclass v:class-with-value-semantics)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Constructor
@@ -47,29 +88,20 @@
   (a:with-gensyms (args)
     (flet
         ((decorate-slot (slot-form)
-           (destructuring-bind (name &key type transform &allow-other-keys)
+           (destructuring-bind (name &key transform &allow-other-keys)
                slot-form
              (let* ((keyword (a:make-keyword name))
                     (var (a:make-gensym name))
                     (suffix (if (find #\- (string name)) "-P" "P"))
                     (predicate (a:make-gensym (format nil "~A~A" name suffix))))
-               (list name var predicate type keyword transform))))
+               (list name var predicate keyword transform))))
          (make-key (decorated)
-           (destructuring-bind (name var predicate type keyword transform)
+           (destructuring-bind (name var predicate keyword transform)
                decorated
-             (declare (ignore name type transform))
+             (declare (ignore name transform))
              `((,keyword ,var) nil ,predicate)))
          (make-ignore (decorated)
            `(,(second decorated) ,(third decorated)))
-         (make-typecheck (decorated)
-           (destructuring-bind (name var predicate type keyword transform)
-               decorated
-             (declare (ignore name))
-             `(when ,predicate
-                ,@(when transform
-                    `((setf ,var (funcall ,transform ,var))))
-                (check-type ,var ,type)
-                (setf ,args (nconc (list ,keyword ,var) ,args)))))
          (make-before ()
            (a:when-let ((function (car (a:assoc-value options :before))))
              `((apply ,function ,name ,args))))
@@ -99,52 +131,13 @@
                 (extra-keys (mapcar #'make-extra-key decorated-extra-args))
                 (extra-ignores (mapcar #'make-extra-ignore
                                        decorated-extra-args))
-                (typechecks (mapcar #'make-typecheck decorated-slots))
                 (before (make-before))
                 (after (make-after))
                 (new-args (remove-extra-args args)))
             `(defmethod shared-initialize :around
                  ((,name ,name) ,slots &rest ,args &key ,@keys ,@extra-keys)
                (declare (ignorable ,@ignores ,@extra-ignores))
-               ,@typechecks
                ,@before
                (apply #'call-next-method ,name ,slots ,new-args)
                ,@after
                ,name)))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Macro interface
-
-(defparameter *valid-options*
-  '(:protocolp :before :after :extra-args :default-initargs))
-
-(defparameter *valid-slot-options*
-  '(:type :initform :requiredp :transform))
-
-(defun verify-options (options)
-  (loop for option in options
-        for (keyword . nil) = option
-        unless (member keyword *valid-options*)
-          do (error "Unknown option ~S" option)))
-
-(defun verify-slot-options (slot-options)
-  (loop for option on slot-options by #'cddr
-        for (keyword . nil) = option
-        unless (member keyword *valid-slot-options*)
-          do (error "Unknown slot option ~S" option)))
-
-(defun %define-typechecked-class (name superclasses slot-definitions options)
-  (verify-options options)
-  (dolist (slot-definition slot-definitions)
-    (verify-slot-options (cdr slot-definition)))
-  `(eval-when (:compile-toplevel :load-toplevel :execute)
-     ,(create-defclass-form name superclasses slot-definitions options)
-     ,(create-shared-initialize name slot-definitions options)
-     ',name))
-
-(defmacro define-typechecked-class
-    (name (&rest superclasses) (&rest slot-definitions) &body options)
-  (%define-typechecked-class name superclasses slot-definitions options))
-
-(setf (trivial-indent:indentation 'define-typechecked-class)
-      '(4 &lambda &body))

@@ -5,14 +5,15 @@
   (:shadow #:set)
   (:local-nicknames (#:a #:alexandria)
                     (#:φ #:phoe-toolbox)
-                    (#:p #:protest/base))
+                    (#:p #:protest/base)
+                    (#:v #:value-semantics-utils))
   (:export
    ;; Types and constants
    #:direction #:diagonal #:*directions* #:*diagonals*
    ;; Conditions
    #:nervous-island-condition #:nervous-island-error
    ;; Macros
-   #:define-typechecked-class
+   #:define-class
    ;; Set
    #:set #:set-test-function #:set-contents
    #:set= #:copy-set #:set-insert #:set-remove #:set-find
@@ -90,20 +91,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Dataclass
 
-(defun shallow-copy-object (original &rest initargs)
-  "Creates a shallow copy of a standard object, copying the values of all
-slots, before calling REINITIALIZE-INSTANCE on it with the provided
-keyword-value pairs."
-  (let* ((class (class-of original))
-         (copy (allocate-instance class))
-         (slots (c2mop:class-slots class))
-         (slot-names (mapcar #'c2mop:slot-definition-name slots)))
-    (dolist (slot slot-names)
-      (unless (slot-transient-p class slot)
-        (when (slot-boundp original slot)
-          (setf (slot-value copy slot) (slot-value original slot)))))
-    (apply #'reinitialize-instance copy initargs)))
-
 (p:define-protocol-class dataclass () ())
 
 (defgeneric slot-transient-p (class slot-name)
@@ -117,15 +104,3 @@ keyword-value pairs."
 ;;; TODO implement a dataclass
 ;;; TODO copy copying mechanism here
 ;;; TODO implement transient slots
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Functions
-
-(defgeneric eqv (x y)
-  (:method (x y) (error "EQV default method called; possible type error?"))
-  (:method ((x list) (y list)) (error "NIY"))
-  (:method ((x function) (y function)) (eq x y))
-  (:method ((x set) (y set)) (set= x y))
-  (:method ((x number) (y number)) (= x y))
-  (:method ((x symbol) (y symbol)) (eq x y))
-  (:method ((x string) (y string)) (string= x y)))

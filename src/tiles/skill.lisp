@@ -19,10 +19,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skills - protocol
 
-(ncom:define-typechecked-class skill () ()
+(ncom:define-class skill () ()
   (:protocolp t))
 
-(ncom:define-typechecked-class directed (skill)
+(ncom:define-class directed (skill)
   ((direction :type (or ncom:direction ncom:diagonal)))
   (:protocolp t))
 
@@ -30,17 +30,17 @@
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~A ~S" (type-of object) (direction object))))
 
-(ncom:define-typechecked-class undirected (skill) () (:protocolp t))
+(ncom:define-class undirected (skill) () (:protocolp t))
 
 (defvar *activation-times* '(:initiative :initiative-player-choice :turn))
 (deftype activation-time ()
   '(member :initiative :initiative-player-choice :turn))
 
-(ncom:define-typechecked-class active (skill)
+(ncom:define-class active (skill)
   ((activation-time :type activation-time :initform :initiative))
   (:protocolp t))
 
-(ncom:define-typechecked-class passive (skill) () (:protocolp t))
+(ncom:define-class passive (skill) () (:protocolp t))
 
 (defmethod print-object ((object undirected) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
@@ -74,7 +74,7 @@
 (defvar *special-initiative-values* '(:before :after))
 (deftype initiative-value () '(or (member :before :after) (integer 0)))
 
-(ncom:define-typechecked-class initiative (passive-undirected)
+(ncom:define-class initiative (passive-undirected)
   ((value :type initiative-value)))
 (defun initiative (value) (make-instance 'initiative :value value))
 

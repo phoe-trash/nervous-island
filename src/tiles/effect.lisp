@@ -31,7 +31,7 @@
 (p:define-protocol-class directed-effect (nsk:directed effect) ())
 (p:define-protocol-class undirected-effect (nsk:undirected effect) ())
 
-(ncom:define-typechecked-class numeric-effect (effect)
+(ncom:define-class numeric-effect (effect)
   ((strength :type (integer 1) :initform 1))
   (:protocolp t))
 

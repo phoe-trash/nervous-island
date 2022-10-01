@@ -21,7 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - protocol
 
-(ncom:define-typechecked-class tile (nr:element) ()
+(ncom:define-class tile (nr:element) ()
   (:protocolp t))
 
 (defmethod print-object ((object tile) stream)
@@ -39,11 +39,11 @@
 (p:define-protocol-class board-tile (tile) ())
 (p:define-protocol-class foundation (board-tile) ())
 
-(ncom:define-typechecked-class skill-having (tile)
+(ncom:define-class skill-having (tile)
   ((skills :type (φ:list-of nsk:skill) :initform '()))
   (:protocolp t))
 
-(ncom:define-typechecked-class hq (nr:hq-element skill-having board-tile)
+(ncom:define-class hq (nr:hq-element skill-having board-tile)
   ((starting-hit-points :type (integer 1) :initform 20))
   (:protocolp t))
 

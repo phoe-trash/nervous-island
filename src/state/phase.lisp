@@ -20,15 +20,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Phase - protocol
 
-(ncom:define-typechecked-class phase ()
+(ncom:define-class phase ()
   ((number :type (integer 1)))
   (:protocolp t))
 
-(ncom:define-typechecked-class player-phase (phase)
+(ncom:define-class player-phase (phase)
   ((player :type np:player))
   (:protocolp t))
 
-(ncom:define-typechecked-class with-initiatives (phase)
+(ncom:define-class with-initiatives (phase)
   ((initiative :type nsk:initiative)))
 
 (p:define-protocol-class battle-part (phase) ())

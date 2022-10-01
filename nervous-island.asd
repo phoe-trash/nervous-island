@@ -62,6 +62,7 @@
                #:phoe-toolbox
                #:trivial-indent
                #:protest/base
+               #:value-semantics-utils
                ;; GUI dependencies
                #:vecto
                #:imago
@@ -69,9 +70,9 @@
   :in-order-to ((test-op (load-op :nervous-island/test)))
   :perform
   (test-op (o c)
-           (symbol-call '#:parachute '#:test '#:nervous-island/test
-                        :report (find-symbol "INTERACTIVE"
-                                             "PARACHUTE"))))
+    (symbol-call '#:parachute '#:test '#:nervous-island/test
+                 :report (find-symbol "INTERACTIVE"
+                                      "PARACHUTE"))))
 
 (asdf:defsystem #:nervous-island/test
   :description "Test suite for Nervous Island"

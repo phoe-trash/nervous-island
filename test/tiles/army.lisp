@@ -108,6 +108,8 @@
                 :element-count 36)
         'nr:element-count-error)))
 
+;; TODO add a second R-I call in all other tests, one that actually makes use of
+;;      kwargs to be passed around
 (define-test army-reinitialize
   (let* ((army (make-instance
                 'army-test-army
