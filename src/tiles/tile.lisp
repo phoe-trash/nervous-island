@@ -49,10 +49,10 @@
 
 (p:define-protocol-class unit (skill-having board-tile) ())
 
-(defclass warrior (unit) ())
-(defclass module (unit) ())
-(defclass implant (unit) ())
+(ncom:define-class warrior (unit) ())
+(ncom:define-class module (unit) ())
+(ncom:define-class implant (unit) ())
 
 (defmacro define-unit (name (&rest superclasses) &body skills)
-  `(defclass ,name ,superclasses ()
+  `(ncom:define-class ,name ,superclasses ()
      (:default-initargs :skills (list ,@skills))))

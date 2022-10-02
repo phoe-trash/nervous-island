@@ -2,18 +2,18 @@
 
 (in-package #:nervous-island/test)
 
-(defclass phase-test-hq (nt:hq) ())
+(ncom:define-class phase-test-hq (nt:hq) ())
 
-(defclass phase-test-warrior (nt:warrior) ())
+(ncom:define-class phase-test-warrior (nt:warrior) ())
 
-(defclass phase-test-army (nr:army) ()
+(ncom:define-class phase-test-army (nr:army) ()
   (:default-initargs
    :name :test-army
    :designators '(phase-test-hq (phase-test-warrior 34))))
 
-(defclass phase-test-player-phase (nph:player-phase) ())
+(ncom:define-class phase-test-player-phase (nph:player-phase) ())
 
-(defclass phase-test-with-initiatives (nph:with-initiatives) ())
+(ncom:define-class phase-test-with-initiatives (nph:with-initiatives) ())
 
 (define-test phase-instantiation
   (let* ((army (make-instance 'phase-test-army))

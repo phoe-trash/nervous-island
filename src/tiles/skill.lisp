@@ -54,21 +54,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skills - concrete classes
 
-(defclass armor (passive-directed) ())
+(ncom:define-class armor (passive-directed) ())
 (defun armor (direction) (make-instance 'armor :direction direction))
 
-(defclass net (passive-directed) ())
+(ncom:define-class net (passive-directed) ())
 (defun net (direction) (make-instance 'net :direction direction))
 
-(defclass mobility (active-undirected) ()
+(ncom:define-class mobility (active-undirected) ()
   (:default-initargs :activation-time :turn))
 (defun mobility () (make-instance 'mobility))
 
-(defclass explosion (active-undirected) ()
+(ncom:define-class explosion (active-undirected) ()
   (:default-initargs :activation-time :initiative-player-choice))
 (defun explosion () (make-instance 'explosion))
 
-(defclass toughness (passive-undirected) ())
+(ncom:define-class toughness (passive-undirected) ())
 (defun toughness () (make-instance 'toughness))
 
 (defvar *special-initiative-values* '(:before :after))

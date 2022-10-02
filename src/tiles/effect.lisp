@@ -51,83 +51,83 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - concrete classes, directed
 
-(defclass directed-melee-officer (melee-officer directed-effect) ())
+(ncom:define-class directed-melee-officer (melee-officer directed-effect) ())
 (defun directed-melee-officer (direction &optional (strength 1))
   (make-instance 'directed-melee-officer :direction direction
                                          :strength strength))
 
-(defclass directed-ranged-officer (ranged-officer directed-effect) ())
+(ncom:define-class directed-ranged-officer (ranged-officer directed-effect) ())
 (defun directed-ranged-officer (direction &optional (strength 1))
   (make-instance 'directed-ranged-officer :direction direction
                                           :strength strength))
 
-(defclass directed-scout (scout directed-effect) ())
+(ncom:define-class directed-scout (scout directed-effect) ())
 (defun directed-scout (direction &optional (strength 1))
   (make-instance 'directed-scout :direction direction
                                  :strength strength))
 
-(defclass directed-mother (mother directed-effect) ())
+(ncom:define-class directed-mother (mother directed-effect) ())
 (defun directed-mother (direction &optional (strength 1))
   (make-instance 'directed-mother :direction direction
                                   :strength strength))
 
-(defclass directed-medic (medic directed-effect) ())
+(ncom:define-class directed-medic (medic directed-effect) ())
 (defun directed-medic (direction)
   (make-instance 'directed-medic :direction direction))
 
-(defclass directed-transport (transport directed-effect) ())
+(ncom:define-class directed-transport (transport directed-effect) ())
 (defun directed-transport (direction)
   (make-instance 'directed-transport :direction direction))
 
-(defclass directed-quartermaster (directed-effect quartermaster) ())
+(ncom:define-class directed-quartermaster (directed-effect quartermaster) ())
 (defun directed-quartermaster (direction)
   (make-instance 'directed-quartermaster :direction direction))
 
-(defclass directed-recon-center (directed-effect recon-center) ())
+(ncom:define-class directed-recon-center (directed-effect recon-center) ())
 (defun directed-recon-center (direction)
   (make-instance 'directed-recon-center :direction direction))
 
-(defclass directed-scoper (directed-effect scoper) ())
+(ncom:define-class directed-scoper (directed-effect scoper) ())
 (defun directed-scoper (direction)
   (make-instance 'directed-scoper :direction direction))
 
-(defclass directed-saboteur (directed-effect saboteur) ())
+(ncom:define-class directed-saboteur (directed-effect saboteur) ())
 (defun directed-saboteur (direction)
   (make-instance 'directed-saboteur :direction direction))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - concrete classes, undirected
 
-(defclass undirected-melee-officer (undirected-effect melee-officer) ())
+(ncom:define-class undirected-melee-officer (undirected-effect melee-officer) ())
 (defun undirected-melee-officer (&optional (strength 1))
   (make-instance 'undirected-melee-officer :strength strength))
 
-(defclass undirected-ranged-officer (undirected-effect ranged-officer) ())
+(ncom:define-class undirected-ranged-officer (undirected-effect ranged-officer) ())
 (defun undirected-ranged-officer (&optional (strength 1))
   (make-instance 'undirected-ranged-officer :strength strength))
 
-(defclass undirected-scout (undirected-effect scout) ())
+(ncom:define-class undirected-scout (undirected-effect scout) ())
 (defun undirected-scout (&optional (strength 1))
   (make-instance 'undirected-scout :strength strength))
 
-(defclass undirected-mother (undirected-effect mother) ())
+(ncom:define-class undirected-mother (undirected-effect mother) ())
 (defun undirected-mother (&optional (strength 1))
   (make-instance 'undirected-mother :strength strength))
 
-(defclass undirected-medic (undirected-effect medic) ())
+(ncom:define-class undirected-medic (undirected-effect medic) ())
 (defun undirected-medic () (make-instance 'undirected-medic))
 
-(defclass undirected-transport (undirected-effect transport) ())
+(ncom:define-class undirected-transport (undirected-effect transport) ())
 (defun undirected-transport () (make-instance 'undirected-transport))
 
-(defclass undirected-quartermaster (undirected-effect quartermaster) ())
+(ncom:define-class undirected-quartermaster (undirected-effect quartermaster) ())
 (defun undirected-quartermaster () (make-instance 'undirected-quartermaster))
 
-(defclass undirected-recon-center (undirected-effect recon-center) ())
+(ncom:define-class undirected-recon-center (undirected-effect recon-center) ())
 (defun undirected-recon-center () (make-instance 'undirected-recon-center))
 
-(defclass undirected-scoper (undirected-effect scoper) ())
+(ncom:define-class undirected-scoper (undirected-effect scoper) ())
 (defun undirected-scoper () (make-instance 'undirected-scoper))
 
-(defclass undirected-saboteur (undirected-effect saboteur) ())
+(ncom:define-class undirected-saboteur (undirected-effect saboteur) ())
 (defun undirected-saboteur ()  (make-instance 'undirected-saboteur))

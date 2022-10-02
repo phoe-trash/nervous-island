@@ -4,17 +4,17 @@
 
 ;;; TODO
 
-(defclass damage-test-tile (nt:tile) ())
+(ncom:define-class damage-test-tile (nt:tile) ())
 
-(defclass damage-test-warrior (nt:warrior) ())
+(ncom:define-class damage-test-warrior (nt:warrior) ())
 
-(defclass damage-test-attack (na:attack) ())
+(ncom:define-class damage-test-attack (na:attack) ())
 
-(defclass damage-test-instant (nt:instant) ())
+(ncom:define-class damage-test-instant (nt:instant) ())
 
-(defclass damage-test-foundation (nt:foundation) ())
+(ncom:define-class damage-test-foundation (nt:foundation) ())
 
-(defclass damage-test-token (nto:token) ())
+(ncom:define-class damage-test-token (nto:token) ())
 
 (define-test damage-instantiation
   ;; Damage protocol class

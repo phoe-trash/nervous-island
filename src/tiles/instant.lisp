@@ -12,20 +12,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Instant tiles
 
-(defclass battle (nt:instant) ())
+(ncom:define-class battle (nt:instant) ())
 (defun battle () (make-instance 'battle))
 
-(defclass move (nt:instant) ())
+(ncom:define-class move (nt:instant) ())
 (defun move () (make-instance 'move))
 
-(defclass push-back (nt:instant) ())
+(ncom:define-class push-back (nt:instant) ())
 (defun push-back () (make-instance 'push-back))
 
-(defclass sniper (nt:instant) ())
+(ncom:define-class sniper (nt:instant) ())
 (defun sniper () (make-instance 'sniper))
 
-(defclass grenade (nt:instant) ())
+(ncom:define-class grenade (nt:instant) ())
 (defun grenade () (make-instance 'grenade))
 
-(defclass air-strike (nt:instant) ())
+(ncom:define-class air-strike (nt:instant) ())
 (defun air-strike () (make-instance 'air-strike))

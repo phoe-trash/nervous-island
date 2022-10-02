@@ -8,60 +8,62 @@
   :serial t
   :pathname "src"
   :components ((:module "common"
-                :components ((:file "common")
-                             (:file "macros")))
+                :components ((:file "common")))
                (:module "tiles"
                 :components ((:file "army")
-                             (:file "skill")
-                             (:file "attack")
-                             (:file "effect")
-                             (:file "tile")
-                             (:file "instant")
-                             (:file "token")))
-               (:module "armies"
-                :components ((:file "moloch")
-                             (:file "outpost")
-                             (:file "borgo")
-                             (:file "hegemony")))
-               (:module "state"
-                :components ((:file "coord")
-                             (:file "board")
-                             (:file "space")
-                             (:file "player")
-                             (:file "damage")
-                             (:file "phase")
-                             (:file "step")
-                             (:file "choice")
-                             (:file "state")))
-               (:module "gui"
-                :components
-                ((:module "shapes"
-                  :components ((:file "package")
-                               (:file "common")
-                               (:file "attacks")
-                               (:file "net")
-                               (:file "armor")
-                               (:file "circle")
-                               (:file "text")
-                               (:file "mobility")
-                               (:file "toughness")
-                               (:file "bomb")
-                               (:file "module")))
-                 (:module "tilemaker"
-                  :components ((:file "package")
-                               (:file "conditions")
-                               (:file "drawing-state")
-                               (:file "draw-skill")
-                               (:file "draw-skills")
-                               (:module "draw-tile"
-                                :components ((:file "common")
-                                             (:file "warrior")
-                                             (:file "module")))))))
-               (:file "user"))
+                             ;; (:file "skill")
+                             ;; (:file "attack")
+                             ;; (:file "effect")
+                             ;; (:file "tile")
+                             ;; (:file "instant")
+                             ;; (:file "token")
+                             ))
+               ;; (:module "armies"
+               ;;  :components ((:file "moloch")
+               ;;               (:file "outpost")
+               ;;               (:file "borgo")
+               ;;               (:file "hegemony")))
+               ;; (:module "state"
+               ;;  :components ((:file "coord")
+               ;;               (:file "board")
+               ;;               (:file "space")
+               ;;               (:file "player")
+               ;;               (:file "damage")
+               ;;               (:file "phase")
+               ;;               (:file "step")
+               ;;               (:file "choice")
+               ;;               (:file "state")))
+               ;; (:module "gui"
+               ;;  :components
+               ;;  ((:module "shapes"
+               ;;    :components ((:file "package")
+               ;;                 (:file "common")
+               ;;                 (:file "attacks")
+               ;;                 (:file "net")
+               ;;                 (:file "armor")
+               ;;                 (:file "circle")
+               ;;                 (:file "text")
+               ;;                 (:file "mobility")
+               ;;                 (:file "toughness")
+               ;;                 (:file "bomb")
+               ;;                 (:file "module")))
+               ;;   (:module "tilemaker"
+               ;;    :components ((:file "package")
+               ;;                 (:file "conditions")
+               ;;                 (:file "drawing-state")
+               ;;                 (:file "draw-skill")
+               ;;                 (:file "draw-skills")
+               ;;                 (:module "draw-tile"
+               ;;                  :components ((:file "common")
+               ;;                               (:file "warrior")
+               ;;                               (:file "module")))))))
+               ;; (:file "user")
+               )
   :depends-on (#:alexandria
                #:phoe-toolbox
                #:trivial-indent
                #:protest/base
+               #:closer-mop
                #:value-semantics-utils
                ;; GUI dependencies
                #:vecto
@@ -84,22 +86,24 @@
   :components ((:file "package")
                (:module "tiles"
                 :components ((:file "army")
-                             (:file "skill")
-                             (:file "attack")
-                             (:file "effect")
-                             (:file "tile")
-                             (:file "instant")
-                             (:file "token")))
-               (:module "state"
-                :components ((:file "coord")
-                             (:file "board")
-                             (:file "space")
-                             (:file "player")
-                             (:file "damage")
-                             (:file "phase")
-                             (:file "step")
-                             (:file "choice")
-                             (:file "state"))))
+                             ;; (:file "skill")
+                             ;; (:file "attack")
+                             ;; (:file "effect")
+                             ;; (:file "tile")
+                             ;; (:file "instant")
+                             ;; (:file "token")
+                             ))
+               ;; (:module "state"
+               ;;  :components ((:file "coord")
+               ;;               (:file "board")
+               ;;               (:file "space")
+               ;;               (:file "player")
+               ;;               (:file "damage")
+               ;;               (:file "phase")
+               ;;               (:file "step")
+               ;;               (:file "choice")
+               ;;               (:file "state")))
+               )
   :depends-on (#:alexandria
                #:parachute
                #:named-readtables

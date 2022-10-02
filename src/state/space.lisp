@@ -19,7 +19,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Space
 
-(defclass space ()
+(ncom:define-class space ()
   ((%axial :reader axial :initarg :axial)
    (%tokens :reader tokens :initarg :tokens)
    (%tile :reader tile :initarg :tile)
@@ -76,7 +76,7 @@
 
 (defgeneric edit-space (space &rest initargs)
   (:method ((space space) &rest initargs)
-    (apply #'φ:shallow-copy-object space initargs)))
+    (apply #'φ:copy-object space initargs)))
 
 (define-condition cannot-edit-axial (ncom:nervous-island-error)
   ((%space :reader cannot-edit-axial-space :initarg :space)

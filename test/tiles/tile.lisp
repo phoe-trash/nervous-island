@@ -2,13 +2,13 @@
 
 (in-package #:nervous-island/test)
 
-(defclass tile-test-tile (nt:tile) ())
+(ncom:define-class tile-test-tile (nt:tile) ())
 
-(defclass tile-test-hq (nt:hq) ())
+(ncom:define-class tile-test-hq (nt:hq) ())
 
-(defclass tile-test-warrior (nt:warrior) ())
+(ncom:define-class tile-test-warrior (nt:warrior) ())
 
-(defclass tile-test-army (nr:army) ()
+(ncom:define-class tile-test-army (nr:army) ()
   (:default-initargs
    :name :test-army
    :designators '(tile-test-hq (tile-test-warrior 34))))
@@ -21,9 +21,9 @@
     (is eq army (nr:owner tile)))
   (fail (make-instance 'tile-test-tile :owner 42) type-error))
 
-(defclass tile-test-skill (nsk:skill) ())
+(ncom:define-class tile-test-skill (nsk:skill) ())
 
-(defclass tile-test-skill-having (nt:skill-having) ())
+(ncom:define-class tile-test-skill-having (nt:skill-having) ())
 
 (define-test tile-skill-having
   (fail (make-instance 'tile-test-skill-having :skills 42) type-error)
@@ -36,7 +36,7 @@
     (is = 1 (length (nt:skills skill-having)))
     (is eq skill (first (nt:skills skill-having)))))
 
-(defclass tile-test-hq (nt:hq) ())
+(ncom:define-class tile-test-hq (nt:hq) ())
 
 (define-test tile-hq
   (fail (make-instance 'tile-test-hq :starting-hit-points nil) type-error)

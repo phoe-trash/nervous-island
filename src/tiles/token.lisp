@@ -12,6 +12,6 @@
 
 (p:define-protocol-class token () ())
 
-(defclass damage (token) ())
+(ncom:define-class damage (token) ())
 
-(defclass net (token) ())
+(ncom:define-class net (token) ())

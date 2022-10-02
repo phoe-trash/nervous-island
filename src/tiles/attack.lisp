@@ -25,14 +25,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - concrete classes
 
-(defclass melee (attack) ())
+(ncom:define-class melee (attack) ())
 (defun melee (direction &optional (strength 1))
   (make-instance 'melee :strength strength :direction direction))
 
-(defclass ranged (attack) ())
+(ncom:define-class ranged (attack) ())
 (defun ranged (direction &optional (strength 1))
   (make-instance 'ranged :strength strength :direction direction))
 
-(defclass gauss-cannon (attack) ())
+(ncom:define-class gauss-cannon (attack) ())
 (defun gauss-cannon (direction &optional (strength 1))
   (make-instance 'gauss-cannon :strength strength :direction direction))

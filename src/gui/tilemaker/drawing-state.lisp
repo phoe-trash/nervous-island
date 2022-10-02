@@ -1,6 +1,6 @@
 (in-package #:nervous-island.gui.tilemaker)
 
-(defclass drawing-state ()
+(ncom:define-class drawing-state ()
   ((%tile :accessor tile
           :initarg :tile)
    (%allocated-corners :accessor allocated-corners

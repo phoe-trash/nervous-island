@@ -2,7 +2,7 @@
 
 (in-package #:nervous-island/test)
 
-(defclass effect-test-effect (ne:effect) ())
+(ncom:define-class effect-test-effect (ne:effect) ())
 
 (define-test effect-instantiation
   (flet ((test (class)

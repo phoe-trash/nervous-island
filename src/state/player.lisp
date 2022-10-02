@@ -127,4 +127,4 @@
             &key (army nil armyp) &allow-other-keys)
     (declare (ignore army))
     (when armyp (error 'cannot-edit-army :player player))
-    (apply #'φ:shallow-copy-object player initargs)))
+    (apply #'φ:copy-object player initargs)))

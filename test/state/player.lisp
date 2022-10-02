@@ -2,12 +2,12 @@
 
 (in-package #:nervous-island/test)
 
-(defclass player-test-hq (nt:hq) ()
+(ncom:define-class player-test-hq (nt:hq) ()
   (:default-initargs :starting-hit-points 42))
 
-(defclass player-test-warrior (nt:warrior) ())
+(ncom:define-class player-test-warrior (nt:warrior) ())
 
-(defclass player-test-army (nr:army) ()
+(ncom:define-class player-test-army (nr:army) ()
   (:default-initargs
    :name :test-army
    :designators '(player-test-hq (player-test-warrior 34))))

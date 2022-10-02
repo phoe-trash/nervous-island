@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
-(defclass army (nr:army) ()
+(ncom:define-class army (nr:army) ()
   (:default-initargs
    :name :hegemony
    :designators '(hq

@@ -2,9 +2,9 @@
 
 (in-package #:nervous-island/test)
 
-(defclass skill-test-directed (nsk:directed) ())
+(ncom:define-class skill-test-directed (nsk:directed) ())
 
-(defclass skill-test-active (nsk:active) ())
+(ncom:define-class skill-test-active (nsk:active) ())
 
 (define-test skill-instantiation
   (flet ((test (class)

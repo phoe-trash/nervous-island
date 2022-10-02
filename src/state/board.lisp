@@ -16,7 +16,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Board
 
-(defclass board ()
+(ncom:define-class board ()
   ((%axials :reader axials :initform (make-hash-table :test #'equalp))))
 
 (defmethod print-object ((object board) stream)

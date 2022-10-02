@@ -22,7 +22,7 @@
   (flet ((preprocess (attacks)
            (loop for attack in attacks
                  for strength = (na:strength attack)
-                 for copy = (φ::shallow-copy-object attack :strength 1)
+                 for copy = (φ::copy-object attack :strength 1)
                  nconc (make-list strength :initial-element copy))))
     (let* ((attacks (preprocess (cons attack attacks)))
            (direction (nsk:direction attack))

@@ -38,24 +38,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Phase - concrete classes
 
-(defclass start (player-phase) ())
+(ncom:define-class start (player-phase) ())
 
-(defclass place-hq-tiles (player-phase) ())
+(ncom:define-class place-hq-tiles (player-phase) ())
 
-(defclass draw-tiles (player-phase) ())
-(defclass turn (player-phase) ())
-(defclass discard-tile (player-phase) ())
+(ncom:define-class draw-tiles (player-phase) ())
+(ncom:define-class turn (player-phase) ())
+(ncom:define-class discard-tile (player-phase) ())
 
-(defclass before-battle (battle-part player-phase) ())
-(defclass battle (battle-part player-phase with-initiatives) ())
-(defclass after-battle (battle-part player-phase) ())
+(ncom:define-class before-battle (battle-part player-phase) ())
+(ncom:define-class battle (battle-part player-phase with-initiatives) ())
+(ncom:define-class after-battle (battle-part player-phase) ())
 
-(defclass final-draw-tiles (final player-phase) ())
-(defclass final-discard-tile (final player-phase) ())
-(defclass final-turn (final player-phase) ())
+(ncom:define-class final-draw-tiles (final player-phase) ())
+(ncom:define-class final-discard-tile (final player-phase) ())
+(ncom:define-class final-turn (final player-phase) ())
 
-(defclass before-final-battle (final before-battle) ())
-(defclass final-battle (final battle) ())
-(defclass after-final-battle (final after-battle) ())
+(ncom:define-class before-final-battle (final before-battle) ())
+(ncom:define-class final-battle (final battle) ())
+(ncom:define-class after-final-battle (final after-battle) ())
 
-(defclass end (final) ())
+(ncom:define-class end (final) ())
