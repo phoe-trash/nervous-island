@@ -16,8 +16,8 @@
                              (:file "attack")
                              (:file "effect")
                              (:file "tile")
-                             ;; (:file "instant")
-                             ;; (:file "token")
+                             (:file "instant")
+                             (:file "token")
                              ))
                ;; (:module "armies"
                ;;  :components ((:file "moloch")
@@ -92,8 +92,8 @@
                              (:file "attack")
                              (:file "effect")
                              (:file "tile")
-                             ;; (:file "instant")
-                             ;; (:file "token")
+                             (:file "instant")
+                             (:file "token")
                              ))
                ;; (:module "state"
                ;;  :components ((:file "coord")

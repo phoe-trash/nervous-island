@@ -38,7 +38,7 @@
   (:protocolp t))
 
 (define-class skill-having (tile)
-  ((skills :type (φ:list-of nsk:skill) :initform '()))
+  ((skills :type set :initform (set)))
   (:protocolp t))
 
 (define-class hq (nel:hq-element skill-having board-tile)
@@ -53,4 +53,4 @@
 
 (defmacro define-unit (name (&rest superclasses) &body skills)
   `(define-class ,name ,superclasses ()
-     (:default-initargs :skills (list ,@skills))))
+     (:default-initargs :skills (set ,@skills))))

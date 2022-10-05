@@ -2,12 +2,16 @@
 
 (uiop:define-package #:nervous-island.common
   (:use #:cl)
-  (:shadow #:set)
   (:local-nicknames (#:a #:alexandria)
                     (#:φ #:phoe-toolbox)
                     (#:p #:protest/base)
                     (#:v #:value-semantics-utils))
-  (:import-from #:value-semantics-utils #:eqv #:generic-eqv #:copy)
+  (:shadowing-import-from #:value-semantics-utils
+                          #:eqv #:generic-eqv #:copy
+                          #:set #:set-test #:set-contents #:set-count
+                          #:set-insert #:set-remove #:set-find
+                          #:set-difference #:set-union #:set-intersection
+                          #:set-exclusive-or)
   (:export
    ;; Types and constants
    #:direction #:diagonal #:*directions* #:*diagonals*
@@ -17,33 +21,37 @@
    #:define-class
    ;; EQV and SHALLOW-COPY
    ;; TODO try to not use EQ/EQL/EQUAL/EQUALP anywhere in the codebase
+   ;; TODO get rid of Φ:LIST-OF everywhere we actually mean a set
    #:eqv #:generic-eqv #:copy
    ;; Set
-   #:set #:set-test-function #:set-contents
-   #:set= #:copy-set #:set-insert #:set-remove #:set-find))
+   #:set #:set-test #:set-contents #:set-count
+   #:set-insert #:set-remove #:set-find
+   #:set-difference #:set-union #:set-intersection #:set-exclusive-or))
 
 (macrolet
     ((create-ncl-package ()
        (flet ((c2cl-symbols ()
                 (let ((symbols (loop for symbol being each symbol of :c2cl
                                      collect symbol))
-                      (banned-symbols '(;; We use EQV as an equality predicate
-                                        ;; and explicitly qualify
-                                        ;; the CL:EQL specializer.
-                                        cl:eq cl:eql cl:equal cl:equalp
-                                        ;; SET is going to mean a data structure
-                                        ;; rather than an assignment operator.
-                                        cl:set
-                                        ;; DEFINE-CLASS is used instead of
-                                        ;; DEFCLASS.
-                                        cl:defclass)))
-                  (sort (set-difference symbols banned-symbols) #'string<)))
+                      (banned-symbols
+                        '(;; We use EQV as an equality predicate
+                          ;; and explicitly qualify
+                          ;; the CL:EQL specializer.
+                          cl:eq cl:eql cl:equal cl:equalp
+                          ;; SET is going to mean a data structure
+                          ;; rather than an assignment operator.
+                          cl:set cl:set-difference cl:set-exclusive-or
+                          ;; DEFINE-CLASS is used instead of
+                          ;; DEFCLASS.
+                          cl:defclass)))
+                  (sort (cl:set-difference symbols banned-symbols) #'string<)))
               (ncom-symbols ()
                 '(#:eqv #:generic-eqv #:copy
-                  ;; TODO uncomment this
-                  ;; #:set #:set-test-function #:set-contents
-                  ;; #:set= #:copy-set #:set-insert #:set-remove #:set-find
-                  #:define-class)))
+                  #:define-class
+                  #:set #:set-test #:set-contents #:set-count
+                  #:set-insert #:set-remove #:set-find
+                  #:set-difference #:set-union #:set-intersection
+                  #:set-exclusive-or)))
          `(uiop:define-package #:nervous-island.cl
             (:use)
             (:import-from #:c2cl ,@(c2cl-symbols))
@@ -71,54 +79,6 @@
 (define-condition nervous-island-condition () ())
 
 (define-condition nervous-island-error (nervous-island-condition error) ())
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Set
-
-;; (defclass set ()
-;;   ((test-function :initarg :test-function :reader set-test-function)
-;;    (contents :reader set-contents))
-;;   (:default-initargs :test-function #'eql :contents '()))
-
-;; (defmethod shared-initialize :after ((set set) slots &key)
-;;   (let* ((test-function (set-test-function set))
-;;          (contents-1 (set-contents set))
-;;          (contents-2 (remove-duplicates contents-1 :test test-function)))
-;;     (unless (= (length contents-1) (length contents-2))
-;;       (setf (slot-value set 'contents) contents-2))))
-
-;; (defgeneric set= (set-1 set-2)
-;;   (:method ((set-1 set) (set-2 set))
-;;     (and (eq (set-test-function set-1) (set-test-function set-2))
-;;          (a:set-equal (set-contents set-1) (set-contents set-2)
-;;                       :test (set-test-function set-1)))))
-
-;; (defgeneric copy-set (set &rest args)
-;;   (:method ((set set) &rest args)
-;;     (apply #'φ:copy-object set args)))
-
-;; (defgeneric set-insert (set thing)
-;;   (:method ((set set) thing)
-;;     (let* ((contents (set-contents set))
-;;            (foundp (member thing contents :test (set-test-function set))))
-;;       (if foundp set (copy-set set :contents (cons thing contents))))))
-
-;; (defgeneric set-remove (set thing)
-;;   (:method ((set set) thing)
-;;     (let* ((contents (set-contents set))
-;;            (foundp (member thing contents :test (set-test-function set))))
-;;       (if (not foundp)
-;;           set
-;;           (copy-set set :contents (remove thing contents
-;;                                           :test (set-test-function set)))))))
-
-;; (defgeneric set-find (set thing)
-;;   (:method ((set set) thing)
-;;     (let* ((contents (set-contents set))
-;;            (foundp (member thing contents :test (set-test-function set))))
-;;       (if foundp
-;;           (values thing t)
-;;           (values nil nil)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Dataclass

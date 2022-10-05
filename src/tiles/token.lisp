@@ -1,17 +1,19 @@
 ;;;; src/tokens/token.lisp
 
 (uiop:define-package #:nervous-island.token
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:p #:protest/base))
   (:export #:token #:damage #:net))
 
 (in-package #:nervous-island.token)
 
+(define-class token () () (:protocolp t))
+
+(defmacro define-token (name)
+  `(define-class ,name (token) ()))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Tokens - protocol
+;;; Tokens - concrete classes
 
-(p:define-protocol-class token () ())
-
-(define-class damage (token) ())
-
-(define-class net (token) ())
+(define-token damage)
+(define-token net)
