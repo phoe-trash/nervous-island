@@ -55,7 +55,7 @@
 
 (defun process-element-designators (designators army)
   (let ((result '()))
-    (dolist (designator designators result)
+    (dolist (designator designators (nreverse result))
       (check-type designator nel:element-designator)
       (let ((class (a:ensure-car designator))
             (count (if (consp designator) (second designator) 1)))
