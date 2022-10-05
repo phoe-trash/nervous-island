@@ -81,23 +81,6 @@
 (define-condition nervous-island-error (nervous-island-condition error) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Dataclass
-
-;; (p:define-protocol-class dataclass () ())
-
-;; (defgeneric slot-transient-p (class slot-name)
-;;   (:method (class slot-name) nil))
-
-;; (defgeneric dataclass= (dataclass-1 dataclass-2)
-;;   (:method ((dataclass-1 dataclass) (dataclass-2 dataclass))
-;;     (when (eq (class-of dataclass-1) (class-of dataclass-2))
-;;       )))
-
-;;; TODO implement a dataclass
-;;; TODO copy copying mechanism here
-;;; TODO implement transient slots
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Macro interface
 
 (defparameter *valid-options*
