@@ -1,29 +1,34 @@
 ;;;; test/package.lisp
 
-(defpackage #:nervous-island/test
+(uiop:define-package #:nervous-island/test
   (:use #:nervous-island.cl
         #:parachute)
-  ;; External packages
-  (:local-nicknames (#:a #:alexandria)
-                    (#:p #:protest/base))
-  ;; Nervous Island packages
   (:local-nicknames
-   ;; (#:na #:nervous-island.attack)
+   ;; External packages
+   (#:a #:alexandria)
+   (#:p #:protest/base)
+   ;; common/
+   (#:ncom #:nervous-island.common)
+   ;; tiles/
+   (#:nel #:nervous-island.element)
+   (#:nr #:nervous-island.army)
+   (#:nsk #:nervous-island.skill)
+   (#:na #:nervous-island.attack)
+   (#:ne #:nervous-island.effect)
+   (#:nt #:nervous-island.tile)
+   )
+  ;; state/
+  (:local-nicknames
    ;; (#:nb #:nervous-island.board)
    ;; (#:nc #:nervous-island.coord)
    ;; (#:nd #:nervous-island.damage)
    ;; (#:nch #:nervous-island.choice)
-   (#:ncom #:nervous-island.common)
-   ;; (#:ne #:nervous-island.effect)
    ;; (#:ni #:nervous-island.instant)
    ;; (#:np #:nervous-island.player)
    ;; (#:nph #:nervous-island.phase)
-   (#:nr #:nervous-island.army)
    ;; (#:ns #:nervous-island.step)
-   ;; (#:nsk #:nervous-island.skill)
    ;; (#:nsp #:nervous-island.space)
    ;; (#:nst #:nervous-island.state)
-   ;; (#:nt #:nervous-island.tile)
    ;; (#:nto #:nervous-island.token)
    )
   ;; Nervous Island armies

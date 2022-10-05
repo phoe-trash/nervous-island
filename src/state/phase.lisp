@@ -20,15 +20,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Phase - protocol
 
-(ncom:define-class phase ()
+(define-class phase ()
   ((number :type (integer 1)))
   (:protocolp t))
 
-(ncom:define-class player-phase (phase)
+(define-class player-phase (phase)
   ((player :type np:player))
   (:protocolp t))
 
-(ncom:define-class with-initiatives (phase)
+(define-class with-initiatives (phase)
   ((initiative :type nsk:initiative)))
 
 (p:define-protocol-class battle-part (phase) ())
@@ -38,24 +38,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Phase - concrete classes
 
-(ncom:define-class start (player-phase) ())
+(define-class start (player-phase) ())
 
-(ncom:define-class place-hq-tiles (player-phase) ())
+(define-class place-hq-tiles (player-phase) ())
 
-(ncom:define-class draw-tiles (player-phase) ())
-(ncom:define-class turn (player-phase) ())
-(ncom:define-class discard-tile (player-phase) ())
+(define-class draw-tiles (player-phase) ())
+(define-class turn (player-phase) ())
+(define-class discard-tile (player-phase) ())
 
-(ncom:define-class before-battle (battle-part player-phase) ())
-(ncom:define-class battle (battle-part player-phase with-initiatives) ())
-(ncom:define-class after-battle (battle-part player-phase) ())
+(define-class before-battle (battle-part player-phase) ())
+(define-class battle (battle-part player-phase with-initiatives) ())
+(define-class after-battle (battle-part player-phase) ())
 
-(ncom:define-class final-draw-tiles (final player-phase) ())
-(ncom:define-class final-discard-tile (final player-phase) ())
-(ncom:define-class final-turn (final player-phase) ())
+(define-class final-draw-tiles (final player-phase) ())
+(define-class final-discard-tile (final player-phase) ())
+(define-class final-turn (final player-phase) ())
 
-(ncom:define-class before-final-battle (final before-battle) ())
-(ncom:define-class final-battle (final battle) ())
-(ncom:define-class after-final-battle (final after-battle) ())
+(define-class before-final-battle (final before-battle) ())
+(define-class final-battle (final battle) ())
+(define-class after-final-battle (final after-battle) ())
 
-(ncom:define-class end (final) ())
+(define-class end (final) ())

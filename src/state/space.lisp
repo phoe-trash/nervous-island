@@ -19,7 +19,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Space
 
-(ncom:define-class space ()
+(define-class space ()
   ((%axial :reader axial :initarg :axial)
    (%tokens :reader tokens :initarg :tokens)
    (%tile :reader tile :initarg :tile)

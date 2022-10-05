@@ -1,18 +1,18 @@
 ;;;; src/tiles/tile.lisp
 
 (uiop:define-package #:nervous-island.tile
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
+                    (#:nel #:nervous-island.element)
                     (#:ncom #:nervous-island.common)
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill))
   (:export
    ;; Tiles - protocol
-   #:tile #:tile= #:instant #:target #:board-tile #:skill-having #:skills
+   #:tile #:instant #:target #:board-tile #:skill-having #:skills
    #:hq #:starting-hit-points #:unit #:skills #:foundation #:warrior #:module
-   #:implant
    ;; Macros
    #:define-unit))
 
@@ -21,38 +21,36 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - protocol
 
-(ncom:define-class tile (nr:element) ()
+(define-class tile (nel:element) ()
   (:protocolp t))
 
 (defmethod print-object ((object tile) stream)
   (print-unreadable-object (object stream :type nil :identity t)
-    (let* ((owner (nr:owner object))
+    (let* ((owner (nel:owner object))
            (name (if owner (nr:name owner) 'unowned)))
       (format stream "~A ~A" name (type-of object)))))
 
-(defgeneric tile= (tile-1 tile-2)
-  (:method (tile-1 tile-2)
-    (and (eq (class-name tile-1) (class-name tile-2))
-         (eq (nr:owner tile-1) (nr:owner tile-2)))))
+(define-class instant (tile) ()
+  (:protocolp t))
+(define-class board-tile (tile) ()
+  (:protocolp t))
+(define-class foundation (board-tile) ()
+  (:protocolp t))
 
-(p:define-protocol-class instant (tile) ())
-(p:define-protocol-class board-tile (tile) ())
-(p:define-protocol-class foundation (board-tile) ())
-
-(ncom:define-class skill-having (tile)
+(define-class skill-having (tile)
   ((skills :type (φ:list-of nsk:skill) :initform '()))
   (:protocolp t))
 
-(ncom:define-class hq (nr:hq-element skill-having board-tile)
+(define-class hq (nel:hq-element skill-having board-tile)
   ((starting-hit-points :type (integer 1) :initform 20))
   (:protocolp t))
 
-(p:define-protocol-class unit (skill-having board-tile) ())
+(define-class unit (skill-having board-tile) ()
+  (:protocolp t))
 
-(ncom:define-class warrior (unit) ())
-(ncom:define-class module (unit) ())
-(ncom:define-class implant (unit) ())
+(define-class warrior (unit) () (:protocolp t))
+(define-class module (unit) () (:protocolp t))
 
 (defmacro define-unit (name (&rest superclasses) &body skills)
-  `(ncom:define-class ,name ,superclasses ()
+  `(define-class ,name ,superclasses ()
      (:default-initargs :skills (list ,@skills))))

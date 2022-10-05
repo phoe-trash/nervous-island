@@ -39,7 +39,7 @@
 (deftype player-list ()
   '(φ:list-of np:player))
 
-(ncom:define-class state ()
+(define-class state ()
   ((board :type nb:board :initform (nb:make-standard-board)
           :transform #'transform-board)
    (players :type (φ:list-of np:player) :transform #'transform-players)

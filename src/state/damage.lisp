@@ -17,15 +17,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Damage - protocol
 
-(ncom:define-class damage ()
+(define-class damage ()
   ((target :type nt:tile)
    (value :type (or (integer 1) (eql t))))
   (:protocolp t))
 
-(ncom:define-class attack-damage (damage)
+(define-class attack-damage (damage)
   ((source :type (or nt:warrior nt:hq))
    (attack :type na:attack)
    (direction :type ncom:direction)))
 
-(ncom:define-class non-attack-damage (damage)
+(define-class non-attack-damage (damage)
   ((source :type (or nt:instant nt:foundation nto:token))))

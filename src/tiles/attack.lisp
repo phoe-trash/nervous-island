@@ -1,7 +1,7 @@
 ;;;; src/tiles/attack.lisp
 
 (uiop:define-package #:nervous-island.attack
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:ncom #:nervous-island.common)
@@ -13,26 +13,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - protocol
 
-(ncom:define-class attack (nsk:active-directed)
-  ((strength :type (or (eql t) (integer 1)) :initform 1))
+(define-class attack (nsk:active nsk:directed)
+  ((strength :type (or (member t) (integer 1)) :initform 1))
   (:protocolp t))
 
-(defmethod print-object ((object attack) stream)
-  (print-unreadable-object (object stream :type nil :identity nil)
-    (format stream "~A ~A ~S ~A" (type-of object) 'attack
-            (nsk:direction object) (strength object))))
+(defmethod nsk:skill-printables append ((attack attack))
+  (list (strength attack)))
+
+(defmacro define-attack (name)
+  `(progn
+     (define-class ,name (attack) ())
+     (defun ,name (direction &optional (strength 1))
+       (make-instance ',name :direction direction :strength strength))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - concrete classes
 
-(ncom:define-class melee (attack) ())
-(defun melee (direction &optional (strength 1))
-  (make-instance 'melee :strength strength :direction direction))
-
-(ncom:define-class ranged (attack) ())
-(defun ranged (direction &optional (strength 1))
-  (make-instance 'ranged :strength strength :direction direction))
-
-(ncom:define-class gauss-cannon (attack) ())
-(defun gauss-cannon (direction &optional (strength 1))
-  (make-instance 'gauss-cannon :strength strength :direction direction))
+(define-attack melee)
+(define-attack ranged)
+(define-attack gauss-cannon)

@@ -2,7 +2,7 @@
 
 (in-package #:nervous-island/test)
 
-(ncom:define-class attack-test-attack (na:attack) ())
+(define-class attack-test-attack (na:attack) ())
 
 (define-test attack-instantiation
   (fail (make-instance 'na:attack :direction :w)

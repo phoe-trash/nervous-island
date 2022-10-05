@@ -23,14 +23,14 @@
 
 (defmacro define-step
     (name (&rest superclasses) (&rest slot-definitions) &body options)
-  `(ncom:define-class ,name ,superclasses
+  `(define-class ,name ,superclasses
      ,slot-definitions (:protocolp nil) ,@options))
 
 (setf (trivial-indent:indentation 'define-step) '(4 &lambda &body))
 
 (defmacro define-protocol-step
     (name (&rest superclasses) (&rest slot-definitions) &body options)
-  `(ncom:define-class ,name ,superclasses
+  `(define-class ,name ,superclasses
      ,slot-definitions (:protocolp t) ,@options))
 
 (setf (trivial-indent:indentation 'define-protocol-step) '(4 &lambda &body))

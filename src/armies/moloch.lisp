@@ -23,7 +23,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
-(ncom:define-class army (nr:army) ()
+(define-class army (nr:army) ()
   (:default-initargs
    :name :moloch
    :designators '(hq

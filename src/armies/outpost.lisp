@@ -21,7 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
-(ncom:define-class army (nr:army) ()
+(define-class army (nr:army) ()
   (:default-initargs
    :name :outpost
    :designators '(hq

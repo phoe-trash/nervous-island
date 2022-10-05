@@ -19,7 +19,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Player
 
-(ncom:define-class player ()
+(define-class player ()
   ((army :type nr:army :transform #'nr:ensure-army)
    (hit-points :type hash-table :requiredp nil)
    ;; TODO check all other classes for REQUIREDP

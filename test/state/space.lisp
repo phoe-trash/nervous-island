@@ -2,11 +2,11 @@
 
 (in-package #:nervous-island/test)
 
-(ncom:define-class space-test-tile (nt:tile) ())
+(define-class space-test-tile (nt:tile) ())
 
-(ncom:define-class space-test-foundation (nt:foundation) ())
+(define-class space-test-foundation (nt:foundation) ())
 
-(ncom:define-class space-test-token (nto:token) ())
+(define-class space-test-token (nto:token) ())
 
 (define-test space-instantiation
   (let ((axial (nc:make-axial 0 0))

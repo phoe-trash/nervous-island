@@ -5,52 +5,21 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
-                    (#:ncom #:nervous-island.common))
-  (:export #:element-container
-           #:element #:owner #:hq-element #:element-designator
-           #:army #:name #:element-count #:hq-elements #:elements
+                    (#:ncom #:nervous-island.common)
+                    (#:nel #:nervous-island.element))
+  (:export #:army #:name #:element-count #:hq-elements #:elements
            #:element-count-error #:ensure-army))
 
 (in-package #:nervous-island.army)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Element
-
-(ncom:define-class element-container () ()
-  (:protocolp t))
-
-(deftype owner () '(or null element-container))
-
-(defmethod generic-eqv ((x element-container) (y null)) nil)
-
-(defmethod generic-eqv ((x null) (y element-container)) nil)
-
-(ncom:define-class element ()
-  ((owner :type owner :initform nil))
-  (:protocolp t))
-
-(ncom:define-class hq-element (element) ()
-  (:protocolp t))
-
-(defun element-designator-p (thing)
-  (flet ((test (thing) (a:when-let ((class (find-class thing nil)))
-                         (subclassp class (find-class 'element)))))
-    (typecase thing
-      (symbol (test thing))
-      ((cons symbol) (test (car thing))))))
-
-(deftype element-designator ()
-  `(and (or symbol (cons symbol (cons (integer 1) null)))
-        (satisfies element-designator-p)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
-(ncom:define-class army (element-container)
+(define-class army (nel:element-container)
   ((name :type symbol :requiredp t)
    (element-count :type (integer 1) :initform 35)
-   (hq-elements :type (φ:list-of hq-element) :initform '())
-   (elements :type (φ:list-of element) :initform '()))
+   (hq-elements :type (φ:list-of nel:hq-element) :initform '())
+   (elements :type (φ:list-of nel:element) :initform '()))
   (:protocolp t)
   (:extra-args :designators)
   (:before #'make-army-before)
@@ -87,7 +56,7 @@
 (defun process-element-designators (designators army)
   (let ((result '()))
     (dolist (designator designators result)
-      (check-type designator element-designator)
+      (check-type designator nel:element-designator)
       (let ((class (a:ensure-car designator))
             (count (if (consp designator) (second designator) 1)))
         (dotimes (i count)
@@ -96,13 +65,13 @@
 (defun set-elements-from-designators (army designators)
   (let ((all-elements (process-element-designators designators army)))
     (multiple-value-bind (hq-elements elements)
-        (φ:split (a:rcurry #'typep 'hq-element) all-elements)
+        (φ:split (a:rcurry #'typep 'nel:hq-element) all-elements)
       (setf (slot-value army '%hq-elements) hq-elements
             (slot-value army '%elements) elements))))
 
 (defun ensure-element-owner (army)
   (flet ((frob (element)
-           (if (eqv army (owner element))
+           (if (eqv army (nel:owner element))
                element
                (copy element :owner army))))
     (setf (slot-value army '%hq-elements) (mapcar #'frob (hq-elements army))
@@ -129,12 +98,14 @@
 
 (defun make-army-after (army &key (designators nil designatorsp)
                         &allow-other-keys)
-  (cond (designatorsp
-         (set-elements-from-designators army designators))
-        ((or (find-if-not (a:curry #'eqv army) (hq-elements army) :key #'owner)
-             (find-if-not (a:curry #'eqv army) (elements army) :key #'owner))
-         ;; TODO document the reparenting behavior.
-         (ensure-element-owner army)))
+  (flet ((foreign-elements-p (elements)
+           (find-if-not (a:curry #'eqv army) elements :key #'nel:owner)))
+    (cond (designatorsp
+           (set-elements-from-designators army designators))
+          ((or (foreign-elements-p (hq-elements army))
+               (foreign-elements-p (elements army)))
+           ;; TODO document the reparenting behavior.
+           (ensure-element-owner army))))
   (let ((element-count (element-count army)))
     (check-element-count army element-count)))
 
