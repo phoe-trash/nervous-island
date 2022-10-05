@@ -17,8 +17,10 @@
   ((strength :type (or (member t) (integer 1)) :initform 1))
   (:protocolp t))
 
-(defmethod nsk:skill-printables append ((attack attack))
-  (list (strength attack)))
+(defmethod print-object ((object attack) stream)
+  (print-unreadable-object (object stream :type nil :identity nil)
+    (format stream "~A ~A ~A" (type-of object) (nsk:direction object)
+            (strength object))))
 
 (defmacro define-attack (name)
   `(progn
