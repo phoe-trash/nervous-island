@@ -23,7 +23,9 @@
                 :components ((:file "moloch")
                              (:file "outpost")
                              (:file "borgo")
-                             (:file "hegemony")))
+                             (:file "hegemony")
+                             (:file "doomsday-machine")
+                             (:file "doomsday-machine-old")))
                ;; (:module "state"
                ;;  :components ((:file "coord")
                ;;               (:file "board")
