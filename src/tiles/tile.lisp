@@ -25,7 +25,7 @@
   (:protocolp t))
 
 (defmethod print-object ((object tile) stream)
-  (print-unreadable-object (object stream :type nil :identity t)
+  (print-unreadable-object (object stream :type nil :identity nil)
     (let* ((owner (nel:owner object))
            (name (if owner (nr:name owner) 'unowned)))
       (format stream "~A ~A" name (type-of object)))))

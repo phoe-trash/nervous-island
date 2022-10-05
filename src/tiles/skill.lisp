@@ -10,8 +10,10 @@
    #:skill #:skill-printables #:directed #:direction #:undirected
    #:*activation-times* #:activation-time #:active #:activation-time #:passive
    ;; Skills - concrete classes
-   #:armor #:net #:mobility #:explosion #:toughness
-   #:*special-initiative-values* #:initiative-value #:initiative #:value))
+   #:*special-initiative-values* #:initiative-value
+   #:armor #:net #:redirection-input #:redirection-output
+   #:toughness #:initiative #:value
+   #:mobility #:push-back #:grab #:explosion))
 
 (in-package #:nervous-island.skill)
 
@@ -82,13 +84,21 @@
 
 (define-skill armor (passive directed) ())
 (define-skill net (passive directed) ())
+(define-skill redirection-input (passive directed) ())
+(define-skill redirection-output (passive directed) ())
+
 (define-skill toughness (passive undirected) ())
+(define-skill initiative (passive undirected)
+  ((value :type initiative-value)))
+
 (define-skill mobility (active undirected) ()
+  (:default-initargs :activation-time :turn))
+(define-skill push-back (active undirected) ()
+  (:default-initargs :activation-time :turn))
+(define-skill grab (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill explosion (active undirected) ()
   (:default-initargs :activation-time :initiative))
-(define-skill initiative (passive undirected)
-  ((value :type initiative-value)))
 
 (defmethod skill-printables append ((skill initiative))
   (list (value skill)))

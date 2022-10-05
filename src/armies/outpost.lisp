@@ -1,7 +1,7 @@
 ;;;; src/armies/outpost.lisp
 
 (uiop:define-package #:nervous-island.armies.outpost
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:na #:nervous-island.attack)
                     (#:ne #:nervous-island.effect)

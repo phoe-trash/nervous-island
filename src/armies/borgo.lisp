@@ -1,7 +1,7 @@
 ;;;; src/armies/borgo.lisp
 
 (uiop:define-package #:nervous-island.armies.borgo
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:na #:nervous-island.attack)
                     (#:ne #:nervous-island.effect)

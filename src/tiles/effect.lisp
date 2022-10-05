@@ -1,6 +1,20 @@
 ;;;; src/tiles/effect.lisp
 
-(uiop:define-package #:nervous-island.effect
+(in-package #:nervous-island.common)
+
+(defmacro define-effect-package (name &body clauses)
+  (flet ((make-effect-names (effect)
+           (loop for prefix in '(#:|| #:undirected- #:directed-
+                                 #:long-range-directed-)
+                 for name = (format nil "~A~A" prefix effect)
+                 collect (make-symbol name))))
+    (let* ((effects (a:assoc-value clauses :export-effects))
+           (effect-names (mapcan #'make-effect-names effects)))
+      `(uiop:define-package ,name
+         ,@(remove :export-effects clauses :key #'car)
+         (:export ,@effect-names)))))
+
+(define-effect-package #:nervous-island.effect
   (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
@@ -8,19 +22,14 @@
                     (#:nsk #:nervous-island.skill))
   (:export
    ;; Module effects - protocol
-   #:effect #:directed-effect #:undirected-effect #:numeric-effect #:strength
-   ;; Module effects - definitions
+   #:effect #:undirected-effect #:directed-effect :long-range-directed-effect
+   #:numeric-effect #:strength
+   ;; Module effects - trap (DDM)
+   #:trap #:directed-trap)
+  (:export-effects
    #:melee-officer #:ranged-officer #:scout #:mother
-   #:medic #:transport #:quartermaster #:recon-center #:scoper #:saboteur
-   ;; Module effects - concrete classes
-   #:directed-melee-officer #:directed-ranged-officer #:directed-scout
-   #:directed-mother #:directed-medic #:directed-transport
-   #:directed-quartermaster #:directed-recon-center #:directed-scoper
-   #:directed-saboteur
-   #:undirected-melee-officer #:undirected-ranged-officer #:undirected-scout
-   #:undirected-mother #:undirected-medic #:undirected-transport
-   #:undirected-quartermaster #:undirected-recon-center #:undirected-scoper
-   #:undirected-saboteur))
+   #:medic #:transport #:rotation #:quartermaster #:recon-center
+   #:scoper #:saboteur))
 
 (in-package #:nervous-island.effect)
 
@@ -30,10 +39,11 @@
 (define-class effect (nsk:passive) ()
   (:protocolp t))
 
+(define-class undirected-effect (nsk:undirected effect) ()
+  (:protocolp t))
 (define-class directed-effect (nsk:directed effect) ()
   (:protocolp t))
-
-(define-class undirected-effect (nsk:undirected effect) ()
+(define-class long-range-directed-effect (nsk:directed effect) ()
   (:protocolp t))
 
 (define-class numeric-effect (effect)
@@ -41,20 +51,26 @@
   (:protocolp t))
 
 (defmacro define-effect (name (&key numericp))
-  (let ((directed-name (a:symbolicate '#:directed- name))
-        (undirected-name (a:symbolicate '#:undirected- name))
+  (let ((undirected-name (a:symbolicate '#:undirected- name))
+        (directed-name (a:symbolicate '#:directed- name))
+        (long-range-directed-name (a:symbolicate '#:long-range-directed- name))
         (superclass (if numericp 'numeric-effect 'effect))
         (lambda-list (if numericp '(&optional (strength 1)) '()))
         (initargs (if numericp '(:strength strength) '())))
     `(progn
        (define-class ,name (,superclass) ()
          (:protocolp t))
+       (define-class ,undirected-name (,name undirected-effect) ())
+       (defun ,undirected-name (,@lambda-list)
+         (make-instance ',undirected-name ,@initargs))
        (define-class ,directed-name (,name directed-effect) ())
        (defun ,directed-name (direction ,@lambda-list)
          (make-instance ',directed-name :direction direction ,@initargs))
-       (define-class ,undirected-name (,name undirected-effect) ())
-       (defun ,undirected-name (,@lambda-list)
-         (make-instance ',undirected-name ,@initargs)))))
+       (define-class ,long-range-directed-name
+           (,name long-range-directed-effect) ())
+       (defun ,long-range-directed-name (direction ,@lambda-list)
+         (make-instance ',long-range-directed-name :direction direction
+                        ,@initargs)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - concrete classes
@@ -66,8 +82,17 @@
 
 (define-effect medic ())
 (define-effect transport ())
+(define-effect rotation ())
 (define-effect quartermaster ())
 (define-effect recon-center ())
 
 (define-effect scoper ())
 (define-effect saboteur ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Module effects - trap (DDM)
+
+(define-class trap (nsk:active) ())
+(define-class directed-trap (trap nsk:directed) ())
+(defun directed-trap (direction)
+  (make-instance 'directed-trap :direction direction))
