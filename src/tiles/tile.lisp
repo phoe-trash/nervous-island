@@ -14,7 +14,13 @@
    #:tile #:instant #:target #:board-tile #:skill-having #:skills
    #:hq #:starting-hit-points #:unit #:skills #:foundation #:warrior #:module
    ;; Macros
-   #:define-unit))
+   #:define-unit
+   ;; Tiles - foundation
+   #:roots #:mine
+   ;; Tiles - instant
+   #:battle
+   #:move #:push-back #:grab #:reposition #:castling
+   #:sniper #:grenade #:air-strike #:small-bomb))
 
 (in-package #:nervous-island.tile)
 
@@ -23,12 +29,6 @@
 
 (define-class tile (nel:element) ()
   (:protocolp t))
-
-(defmethod print-object ((object tile) stream)
-  (print-unreadable-object (object stream :type nil :identity nil)
-    (let* ((owner (nel:owner object))
-           (name (if owner (nr:name owner) 'unowned)))
-      (format stream "~A ~A" name (type-of object)))))
 
 (define-class instant (tile) ()
   (:protocolp t))
@@ -54,3 +54,30 @@
 (defmacro define-unit (name (&rest superclasses) &body skills)
   `(define-class ,name ,superclasses ()
      (:default-initargs :skills (set ,@skills))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Tiles - foundation
+
+(define-class roots (foundation) ())
+(define-class mine (foundation) ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Tiles - instant
+
+(defmacro define-instant (name)
+  `(progn
+     (define-class ,name (instant) ())
+     (defun ,name () (make-instance ',name))))
+
+(define-instant battle)
+
+(define-instant move)
+(define-instant push-back)
+(define-instant grab)
+(define-instant reposition)
+(define-instant castling)
+
+(define-instant sniper)
+(define-instant grenade)
+(define-instant air-strike)
+(define-instant small-bomb)

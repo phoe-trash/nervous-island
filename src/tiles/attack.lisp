@@ -6,7 +6,8 @@
                     (#:p #:protest/base)
                     (#:ncom #:nervous-island.common)
                     (#:nsk #:nervous-island.skill))
-  (:export #:attack #:strength #:melee #:ranged #:gauss-cannon))
+  (:export #:attack #:strength
+           #:melee #:ranged #:gauss-cannon #:shotgun #:rocket-launcher))
 
 (in-package #:nervous-island.attack)
 
@@ -34,3 +35,5 @@
 (define-attack melee)
 (define-attack ranged)
 (define-attack gauss-cannon)
+(define-attack shotgun)
+(define-attack rocket-launcher)

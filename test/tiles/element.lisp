@@ -14,8 +14,9 @@
 (define-test element-instantiation
   (let ((element (make-instance 'element-test-element)))
     (true (typep element 'nel:element)))
-  (let ((container (make-instance 'element-test-element-container)))
+  (let ((container (make-instance 'element-test-element-container :name 'test)))
     (true (typep container 'nel:element-container))
+    (is eqv 'test (nel:name container))
     (let ((element-1 (make-instance 'element-test-element))
           (hq-element-1 (make-instance 'element-test-hq-element))
           (element-2 (make-instance 'element-test-element :owner container))
@@ -27,11 +28,11 @@
       (is eqv container (nel:owner hq-element-2)))))
 
 (define-test element-copy
-  (let* ((container-1 (make-instance 'element-test-element-container))
+  (let* ((container-1 (make-instance 'element-test-element-container :name 'a))
          (element-1 (make-instance 'element-test-element :owner container-1))
          (hq-element-1 (make-instance 'element-test-hq-element
                                       :owner container-1))
-         (container-2 (make-instance 'element-test-element-container))
+         (container-2 (make-instance 'element-test-element-container :name 'a))
          (element-2 (ncom:copy element-1 :owner container-2))
          (hq-element-2 (ncom:copy hq-element-1 :owner container-2)))
     (is eqv container-1 container-2)

@@ -8,7 +8,7 @@
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile))
-  (:import-from #:nervous-island.instant
+  (:import-from #:nervous-island.tile
                 #:battle #:move #:push-back #:sniper)
   (:export
    #:army #:hq

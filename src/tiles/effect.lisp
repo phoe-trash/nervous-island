@@ -29,7 +29,8 @@
   (:export-effects
    #:melee-officer #:ranged-officer #:scout #:mother
    #:medic #:transport #:rotation #:quartermaster #:recon-center
-   #:scoper #:saboteur))
+   #:scoper #:saboteur
+   #:motherland))
 
 (in-package #:nervous-island.effect)
 
@@ -46,6 +47,7 @@
 (define-class long-range-directed-effect (nsk:directed effect) ()
   (:protocolp t))
 
+;; TODO rename to just NUMERIC
 (define-class numeric-effect (effect)
   ((strength :type (integer 1) :initform 1))
   (:protocolp t))
@@ -88,6 +90,8 @@
 
 (define-effect scoper ())
 (define-effect saboteur ())
+
+(define-effect motherland ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - trap (DDM)

@@ -16,9 +16,7 @@
    (#:na #:nervous-island.attack)
    (#:ne #:nervous-island.effect)
    (#:nt #:nervous-island.tile)
-   (#:ni #:nervous-island.instant)
-   (#:nto #:nervous-island.token)
-   )
+   (#:nto #:nervous-island.token))
   ;; state/
   (:local-nicknames
    ;; (#:nb #:nervous-island.board)

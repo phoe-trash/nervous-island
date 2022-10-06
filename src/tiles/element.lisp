@@ -6,7 +6,7 @@
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common))
-  (:export #:element-container
+  (:export #:element-container #:name
            #:element #:owner #:hq-element #:element-designator))
 
 (in-package #:nervous-island.element)
@@ -14,7 +14,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element
 
-(define-class element-container () ()
+(defgeneric name (owner)
+  (:method ((owner null)) 'unowned))
+
+(define-class element-container ()
+  ((name :type symbol))
   (:protocolp t))
 
 (deftype owner () '(or null element-container))
@@ -26,6 +30,12 @@
 (define-class element ()
   ((owner :type owner :initform nil))
   (:protocolp t))
+
+(defmethod print-object ((object element) stream)
+  (print-unreadable-object (object stream :type nil :identity nil)
+    (let* ((owner (owner object))
+           (name (if owner (name owner) 'unowned)))
+      (format stream "~A ~A" name (type-of object)))))
 
 (define-class hq-element (element) ()
   (:protocolp t))

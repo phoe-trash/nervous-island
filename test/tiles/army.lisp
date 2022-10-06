@@ -16,7 +16,7 @@
 
 (define-test army-instantiation
   (flet ((test (army &optional (nelements 35))
-           (is eqv :test-army (nr:name army))
+           (is eqv :test-army (nel:name army))
            (is = nelements (nr:element-count army))
            (let ((hq-elements (nr:hq-elements army)))
              (is = 1 (length hq-elements))
@@ -76,12 +76,12 @@
                 :elements (loop repeat 34
                                 collect (make-instance
                                          'element-test-element))))
-         (name (nr:name army))
+         (name (nel:name army))
          (element-count (nr:element-count army))
          (hq-elements (nr:hq-elements army))
          (elements (nr:elements army)))
     (is eqv army (reinitialize-instance army))
-    (is eqv name (nr:name army))
+    (is eqv name (nel:name army))
     (is eqv element-count (nr:element-count army))
     (is eqv hq-elements (nr:hq-elements army))
     (is eqv elements (nr:elements army))
@@ -93,7 +93,7 @@
       ;;      use of kwargs to be passed around - like below
       (is eqv army (reinitialize-instance army :hq-elements hq-elements
                                                :elements elements))
-      (is eqv name (nr:name army))
+      (is eqv name (nel:name army))
       (is eqv element-count (nr:element-count army))
       (is = 3 (length (nr:hq-elements army)))
       (is = 32 (length (nr:elements army))))))

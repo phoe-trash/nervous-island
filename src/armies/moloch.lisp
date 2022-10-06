@@ -8,7 +8,7 @@
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile))
-  (:import-from #:nervous-island.instant
+  (:import-from #:nervous-island.tile
                 #:battle #:move #:air-strike #:push-back)
   (:export
    #:army #:hq
@@ -48,7 +48,7 @@
 ;;; Warriors
 
 (nt:define-unit blocker (nt:warrior)
-  (nsk:armor :w) (nsk:toughness) (nsk:toughness))
+  (nsk:armor :w) (nsk:toughness 2))
 
 (nt:define-unit hybrid (nt:warrior)
   (na:ranged :w) (nsk:initiative 3))
