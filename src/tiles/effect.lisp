@@ -27,8 +27,9 @@
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
-   #:melee-officer #:ranged-officer #:scout #:mother
-   #:medic #:transport #:rotation #:quartermaster #:recon-center #:healing
+   #:melee-officer #:ranged-officer #:scout #:mother #:healing
+   #:medic #:transport #:rotation #:quartermaster #:recon-center #:underground
+   #:paralysis
    #:scoper #:saboteur
    #:motherland #:net-of-steel-launcher))
 
@@ -88,6 +89,8 @@
 (define-effect rotation ())
 (define-effect quartermaster ())
 (define-effect recon-center ())
+(define-effect underground ())
+(define-effect paralysis ())
 
 (define-effect scoper ())
 (define-effect saboteur ())

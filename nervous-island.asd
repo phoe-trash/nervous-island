@@ -27,7 +27,8 @@
                              (:file "neojungle")
                              (:file "new-york")
                              (:file "steel-police")
-                             (:file "dancer")))
+                             (:file "dancer")
+                             (:file "sharrash")))
                ;; (:module "state"
                ;;  :components ((:file "coord")
                ;;               (:file "board")

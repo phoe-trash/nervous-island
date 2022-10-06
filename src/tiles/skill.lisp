@@ -15,8 +15,9 @@
    #:*special-initiative-values* #:initiative-value
    #:armor #:net #:redirection-input #:redirection-output #:reflection
    #:toughness #:initiative #:value
-   #:venom #:sharpshooter #:spy
+   #:venom #:sharpshooter #:spy #:paralysis #:mortar #:underground
    #:mobility #:push-back #:grab #:net-of-steel #:execution #:open
+   #:underground-castling
    #:explosion))
 
 (in-package #:nervous-island.skill)
@@ -112,6 +113,9 @@
 (define-skill venom (passive undirected) ())
 (define-skill sharpshooter (passive undirected) ())
 (define-skill spy (passive undirected) ())
+(define-skill paralysis (passive undirected) ())
+(define-skill mortar (passive undirected) ())
+(define-skill underground (passive undirected) ())
 
 (define-skill mobility (active undirected) ()
   (:default-initargs :activation-time :turn))
@@ -122,6 +126,8 @@
 (define-skill net-of-steel (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill open (active undirected) ()
+  (:default-initargs :activation-time :turn))
+(define-skill underground-castling (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill execution (active undirected) ()
   (:default-initargs :activation-time :turn))
