@@ -12,10 +12,11 @@
    #:*activation-times* #:activation-time #:active #:activation-time #:passive
    ;; Skills - concrete classes
    #:*special-initiative-values* #:initiative-value
-   #:armor #:net #:redirection-input #:redirection-output
+   #:armor #:net #:redirection-input #:redirection-output #:reflection
    #:toughness #:initiative #:value
    #:venom #:sharpshooter #:spy
-   #:mobility #:push-back #:grab #:explosion))
+   #:mobility #:push-back #:grab #:net-of-steel #:execution
+   #:explosion))
 
 (in-package #:nervous-island.skill)
 
@@ -101,6 +102,7 @@
 (define-skill net (passive directed) ())
 (define-skill redirection-input (passive directed) ())
 (define-skill redirection-output (passive directed) ())
+(define-skill reflection (passive directed) ())
 
 (define-skill toughness (passive undirected)
   ((value :type (integer 1) :initform 1)))
@@ -116,6 +118,11 @@
   (:default-initargs :activation-time :turn))
 (define-skill grab (active undirected) ()
   (:default-initargs :activation-time :turn))
+(define-skill net-of-steel (active undirected) ()
+  (:default-initargs :activation-time :turn))
+(define-skill execution (active undirected) ()
+  (:default-initargs :activation-time :turn))
+
 (define-skill explosion (active undirected) ()
   (:default-initargs :activation-time :initiative))
 

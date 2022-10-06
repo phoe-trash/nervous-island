@@ -30,7 +30,7 @@
    #:melee-officer #:ranged-officer #:scout #:mother
    #:medic #:transport #:rotation #:quartermaster #:recon-center
    #:scoper #:saboteur
-   #:motherland))
+   #:motherland #:net-of-steel-launcher))
 
 (in-package #:nervous-island.effect)
 
@@ -92,6 +92,7 @@
 (define-effect saboteur ())
 
 (define-effect motherland ())
+(define-effect net-of-steel-launcher ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - trap (DDM)
