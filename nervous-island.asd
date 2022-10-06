@@ -29,7 +29,7 @@
                              (:file "steel-police")
                              (:file "dancer")
                              (:file "sharrash")
-                             ;; TODO (:file "mephisto")
+                             (:file "mephisto")
                              (:file "ddm")
                              (:file "ddm-old")
                              ;; TODO (:file "missisipi")

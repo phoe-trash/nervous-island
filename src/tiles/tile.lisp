@@ -26,7 +26,7 @@
    #:move #:push-back #:grab #:reposition #:castling #:rotation #:drill
    #:sniper #:grenade #:air-strike #:small-bomb
    #:terror #:action #:paralysis
-   #:incubate #:quill #:left-quill #:right-quill))
+   #:incubation #:quill #:left-quill #:right-quill))
 
 (in-package #:nervous-island.tile)
 
@@ -106,7 +106,7 @@
 (define-instant action)
 (define-instant paralysis)
 
-(define-instant incubate)
+(define-instant incubation)
 (define-class quill (instant) ()
   (:protocolp t))
 (define-instant left-quill (:superclass quill))

@@ -71,19 +71,11 @@
 ;;; Implants
 
 (nt:define-implant jaws (nt:battle))
-
-(nt:define-implant incubator (nt:incubate))
-
+(nt:define-implant incubator (nt:incubation))
 (nt:define-implant transmitter (nt:castling))
-
 (nt:define-implant tail (nt:push-back))
-
 (nt:define-implant tentacles (nt:grab))
-
 (nt:define-implant left-quill (nt:left-quill))
-
 (nt:define-implant right-quill (nt:right-quill))
-
 (nt:define-implant limbs (nt:move))
-
 (nt:define-implant drill (nt:drill))
