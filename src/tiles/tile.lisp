@@ -16,12 +16,12 @@
    ;; Macros
    #:define-unit
    ;; Tiles - foundation
-   #:roots #:mine
+   #:roots #:mine #:hole
    ;; Tiles - instant
    #:battle
    #:move #:push-back #:grab #:reposition #:castling
    #:sniper #:grenade #:air-strike #:small-bomb
-   #:terror))
+   #:terror #:action #:paralysis))
 
 (in-package #:nervous-island.tile)
 
@@ -61,6 +61,7 @@
 
 (define-class roots (foundation) ())
 (define-class mine (foundation) ())
+(define-class hole (foundation) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - instant
@@ -84,3 +85,5 @@
 (define-instant small-bomb)
 
 (define-instant terror)
+(define-instant action)
+(define-instant paralysis)
