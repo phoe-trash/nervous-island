@@ -2,6 +2,7 @@
 
 (uiop:define-package #:nervous-island.skill
   (:use #:nervous-island.cl)
+  (:shadow #:open)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
@@ -15,7 +16,7 @@
    #:armor #:net #:redirection-input #:redirection-output #:reflection
    #:toughness #:initiative #:value
    #:venom #:sharpshooter #:spy
-   #:mobility #:push-back #:grab #:net-of-steel #:execution
+   #:mobility #:push-back #:grab #:net-of-steel #:execution #:open
    #:explosion))
 
 (in-package #:nervous-island.skill)
@@ -119,6 +120,8 @@
 (define-skill grab (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill net-of-steel (active undirected) ()
+  (:default-initargs :activation-time :turn))
+(define-skill open (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill execution (active undirected) ()
   (:default-initargs :activation-time :turn))

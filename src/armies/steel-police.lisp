@@ -68,7 +68,7 @@
   (na:ranged :w) (na:ranged :e) (nsk:initiative 2))
 
 (nt:define-unit pacifier (nt:warrior)
-  (nsk:net :q) ;; TODO (nsk:open)
+  (nsk:net :q) (nsk:open)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
