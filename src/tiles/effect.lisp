@@ -27,11 +27,12 @@
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
-   #:melee-officer #:ranged-officer #:scout #:mother #:healing
+   #:melee-officer #:ranged-officer #:scout #:mother #:toughness #:healing
    #:medic #:transport #:rotation #:quartermaster #:recon-center #:underground
    #:paralysis
    #:scoper #:saboteur #:takeover
-   #:motherland #:net-of-steel-launcher))
+   #:motherland #:net-of-steel-launcher
+   #:implant-activation #:muzzle))
 
 (in-package #:nervous-island.effect)
 
@@ -82,6 +83,7 @@
 (define-effect ranged-officer (:numericp t))
 (define-effect scout (:numericp t))
 (define-effect mother (:numericp t))
+(define-effect toughness (:numericp t))
 (define-effect healing (:numericp t))
 
 (define-effect medic ())
@@ -98,6 +100,9 @@
 
 (define-effect motherland ())
 (define-effect net-of-steel-launcher ())
+
+(define-effect implant-activation ())
+(define-effect muzzle ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - trap (DDM)

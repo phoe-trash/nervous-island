@@ -1,6 +1,6 @@
 ;;;; src/armies/borgo.lisp
 
-(uiop:define-package #:nervous-island.armies.doomsday-machine
+(uiop:define-package #:nervous-island.armies.ddm-old
   (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:na #:nervous-island.attack)
@@ -9,29 +9,29 @@
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile))
   (:import-from #:nervous-island.tile
-                #:battle #:push-back #:small-bomb)
+                #:battle #:push-back #:grab #:reposition)
   (:export
    #:army #:hq
-   #:alpha-shooter #:gamma-shooter #:delta-shooter #:omega-shooter
-   #:gauss-cannon
-   #:tripler #:doom-net-fighter #:fireblast
-   #:trap #:medic #:officer #:scout #:main-war-processor
-   #:battle #:push-back #:small-bomb))
+   #:alpha-shooter #:beta-shooter #:gamma-shooter #:delta-shooter
+   #:omega-shooter
+   #:tripler #:doom-net-fighter #:pusher
+   #:medic #:officer #:scout #:main-war-processor
+   #:battle #:push-back #:grab #:reposition))
 
-(in-package #:nervous-island.armies.doomsday-machine)
+(in-package #:nervous-island.armies.ddm-old)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
 (define-class army (nr:army) ()
   (:default-initargs
-   :name :doomsday-machine
+   :name :ddm-old
    :designators '(hq
-                  (alpha-shooter 2) gamma-shooter delta-shooter
-                  (omega-shooter 4) (gauss-cannon 2)
-                  (tripler 2) (doom-net-fighter 2) (fireblast 2)
-                  trap (medic 5) (officer 2) (scout 2) (main-war-processor 2)
-                  (battle 4) push-back small-bomb)))
+                  (alpha-shooter 2) (beta-shooter 2) gamma-shooter delta-shooter
+                  (omega-shooter 2)
+                  (tripler 1) (doom-net-fighter 2) (pusher 2)
+                  (medic 4) (officer 7) (scout 2) (main-war-processor 2)
+                  (battle 3) push-back grab reposition)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; HQ
@@ -47,20 +47,18 @@
 (nt:define-unit alpha-shooter (nt:warrior)
   (na:ranged :q) (na:ranged :e) (nsk:initiative 3))
 
+(nt:define-unit beta-shooter (nt:warrior)
+  (na:ranged :w) (nsk:initiative 2) (nsk:toughness))
+
 (nt:define-unit gamma-shooter (nt:warrior)
-  (na:ranged :w)
-  (nsk:initiative 2) (nsk:initiative 1) (nsk:toughness)
-  (nsk:armor :a) (nsk:armor :d))
+  (na:ranged :w) (nsk:initiative 2) (nsk:initiative 1))
 
 (nt:define-unit delta-shooter (nt:warrior)
   (na:ranged :w 2) (nsk:initiative 1) (nsk:toughness))
 
 (nt:define-unit omega-shooter (nt:warrior)
   (na:ranged :q) (na:ranged :w) (na:ranged :e)
-  (nsk:initiative 2) (nsk:armor :s))
-
-(nt:define-unit gauss-cannon (nt:warrior)
-  (na:gauss-cannon :w) (nsk:initiative 1) (nsk:toughness))
+  (nsk:initiative 2))
 
 (nt:define-unit tripler (nt:warrior)
   (nsk:redirection-input :a)
@@ -78,9 +76,10 @@
   (nsk:redirection-input :q)
   (nsk:redirection-output :w)
   (nsk:redirection-input :e)
-  (nsk:net :w))
+  (nsk:net :w)
+  (nsk:grab))
 
-(nt:define-unit fireblast (nt:warrior)
+(nt:define-unit pusher (nt:warrior)
   (nsk:redirection-input :a)
   (nsk:redirection-input :s)
   (nsk:redirection-input :d)
@@ -88,13 +87,11 @@
   (nsk:redirection-output :w)
   (nsk:redirection-input :e)
   (nsk:armor :w)
-  (nsk:toughness))
+  (nsk:toughness)
+  (nsk:push-back))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Modules
-
-(nt:define-unit trap (nt:module)
-  (ne:directed-trap :w))
 
 (nt:define-unit medic (nt:module)
   (ne:long-range-directed-medic :w))
@@ -106,4 +103,4 @@
   (ne:long-range-directed-mother :w))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :w) (ne:directed-scout :d))
+  (ne:long-range-directed-scout :w))

@@ -2,25 +2,26 @@
 
 (in-package #:nervous-island/test)
 
-(defun list-all-army-packages ()
+(defun make-all-armies ()
+  ;; TODO remove the extra copy made in NI.USER
   (loop with prefix = (symbol-name '#:nervous-island.armies.)
-        for package in (list-all-packages)
+        for package in (sort (copy-list (list-all-packages)) #'string<
+                             :key #'package-name)
         for package-name = (package-name package)
         for result = (search prefix package-name)
         when (and result (= 0 result))
-          collect package))
+          collect (make-instance (find-symbol (symbol-name '#:army) package))))
 
 (define-test armies-instantiate
-  (dolist (package (list-all-army-packages))
-    (let* ((symbol (find-symbol (symbol-name '#:army) package))
-           (army (make-instance symbol))
-           (elements (append (nr:hq-elements army)
+  (dolist (army (make-all-armies))
+    (let* ((elements (append (nr:hq-elements army)
                              (nr:elements army)
                              ;; TODO: tokens can and will conflict with tiles.
                              ;; (nr:tokens army)
                              )))
       (dolist (element (remove-duplicates elements :test #'eqv))
-        (let ((name (class-name (class-of element))))
+        (let ((name (class-name (class-of element)))
+              (package (symbol-package (class-name (class-of army)))))
           (multiple-value-bind (value foundp)
               (find-symbol (symbol-name name) package)
             (true value)

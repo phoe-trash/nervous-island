@@ -40,9 +40,9 @@
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
   (nsk:initiative 0)
-  (ne:directed-mother :q) (ne:directed-mother :w)
-  (ne:directed-mother :e) (ne:directed-mother :a)
-  (ne:directed-mother :s) (ne:directed-mother :d))
+  (ne:directed-toughness :q) (ne:directed-toughness :w)
+  (ne:directed-toughness :e) (ne:directed-toughness :a)
+  (ne:directed-toughness :s) (ne:directed-toughness :d))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Warriors

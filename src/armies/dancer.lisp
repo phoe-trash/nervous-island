@@ -26,21 +26,21 @@
                   (battle 8) (move 10) (push-back 7) (action 7))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; HQ
+;;; Objects
 
-(nt:define-unit object-blue (nt:hq)
+(nt:define-unit object-blue (nt:object)
   (na:melee :q) (na:melee :w 2) (na:melee :e)
   (na:melee :a 2) (na:melee :d 2)
   (nsk:initiative 2)
   (ne:directed-ranged-officer :s))
 
-(nt:define-unit object-red (nt:hq)
+(nt:define-unit object-red (nt:object)
   (na:ranged :q) (na:ranged :w 2) (na:ranged :e)
   (na:ranged :a 2) (na:ranged :d 2)
   (nsk:initiative 1)
   (ne:directed-melee-officer :s))
 
-(nt:define-unit object-yellow (nt:hq)
+(nt:define-unit object-yellow (nt:object)
   (nsk:net :q) (na:ranged :w 2) (nsk:net :e)
   (ne:directed-scout :a) (ne:directed-scout :d)
   (nsk:initiative 0)

@@ -146,13 +146,16 @@
                      (get-properties default-initargs (list keyword))
                    `(,keyword ,(cond (foundp value)
                                      (t `(a:required-argument ,keyword)))))))))
-         (process-default-initargs ()
-           (a:assoc-value options :default-initargs)))
+         (process-default-initargs (initform-initargs)
+           (let ((default-initargs (a:assoc-value options :default-initargs)))
+             (loop for (key value) on default-initargs by #'cddr
+                   unless (get-properties initform-initargs (list key))
+                     collect key and collect value))))
     (let* ((protocolp (car (a:assoc-value options :protocolp)))
            (definition-symbol (if protocolp 'p:define-protocol-class 'defclass))
            (slot-definitions (mapcar #'process-slot-definition slots))
            (initform-initargs (a:mappend #'process-initform-initargs slots))
-           (default-initargs (process-default-initargs)))
+           (default-initargs (process-default-initargs initform-initargs)))
       `(,definition-symbol
         ,name ,superclasses ,slot-definitions
         (:default-initargs ,@initform-initargs
