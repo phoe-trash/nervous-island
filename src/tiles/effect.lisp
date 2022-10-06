@@ -28,7 +28,7 @@
    #:trap #:directed-trap)
   (:export-effects
    #:melee-officer #:ranged-officer #:scout #:mother
-   #:medic #:transport #:rotation #:quartermaster #:recon-center
+   #:medic #:transport #:rotation #:quartermaster #:recon-center #:healing
    #:scoper #:saboteur
    #:motherland #:net-of-steel-launcher))
 
@@ -81,6 +81,7 @@
 (define-effect ranged-officer (:numericp t))
 (define-effect scout (:numericp t))
 (define-effect mother (:numericp t))
+(define-effect healing (:numericp t))
 
 (define-effect medic ())
 (define-effect transport ())

@@ -26,7 +26,8 @@
                              (:file "doomsday-machine-old")
                              (:file "neojungle")
                              (:file "new-york")
-                             (:file "steel-police")))
+                             (:file "steel-police")
+                             (:file "dancer")))
                ;; (:module "state"
                ;;  :components ((:file "coord")
                ;;               (:file "board")
