@@ -30,7 +30,7 @@
    #:melee-officer #:ranged-officer #:scout #:mother #:healing
    #:medic #:transport #:rotation #:quartermaster #:recon-center #:underground
    #:paralysis
-   #:scoper #:saboteur
+   #:scoper #:saboteur #:takeover
    #:motherland #:net-of-steel-launcher))
 
 (in-package #:nervous-island.effect)
@@ -94,6 +94,7 @@
 
 (define-effect scoper ())
 (define-effect saboteur ())
+(define-effect takeover ())
 
 (define-effect motherland ())
 (define-effect net-of-steel-launcher ())

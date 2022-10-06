@@ -86,4 +86,4 @@
   (ne:directed-scoper :a) (ne:directed-scoper :s) (ne:directed-scoper :d))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :a) (ne:directed-scout :w)  (ne:directed-scout :d))
+  (ne:directed-scout :a) (ne:directed-scout :w) (ne:directed-scout :d))

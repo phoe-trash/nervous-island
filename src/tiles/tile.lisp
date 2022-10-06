@@ -19,7 +19,7 @@
    #:roots #:mine #:hole
    ;; Tiles - instant
    #:battle
-   #:move #:push-back #:grab #:reposition #:castling
+   #:move #:push-back #:grab #:reposition #:castling #:rotation
    #:sniper #:grenade #:air-strike #:small-bomb
    #:terror #:action #:paralysis))
 
@@ -78,6 +78,7 @@
 (define-instant grab)
 (define-instant reposition)
 (define-instant castling)
+(define-instant rotation)
 
 (define-instant sniper)
 (define-instant grenade)

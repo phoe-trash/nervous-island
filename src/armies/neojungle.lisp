@@ -9,11 +9,10 @@
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile)
                     (#:nto #:nervous-island.token))
-  (:import-from #:nervous-island.token #:venom)
   (:import-from #:nervous-island.tile
                 #:roots #:battle #:castling #:move #:small-bomb)
   (:export
-   #:army #:hq #:venom
+   #:army #:hq
    #:wall-of-trees
    #:crusher #:monster #:net-fighter #:nightshade #:swarm #:slicer
    #:medic #:vines #:symbiont-alpha #:symbiont-beta #:symbiont-gamma
@@ -29,7 +28,7 @@
   (:default-initargs
    :name :neojungle
    :token-count 2
-   :token-designators '((venom 2))
+   :token-designators '((nto:venom 2))
    :designators '(hq
                   wall-of-trees (crusher 3) monster (net-fighter 3)
                   (nightshade 2) (swarm 2) (slicer 4)

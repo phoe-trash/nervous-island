@@ -16,7 +16,9 @@
            (army (make-instance symbol))
            (elements (append (nr:hq-elements army)
                              (nr:elements army)
-                             (nr:tokens army))))
+                             ;; TODO: tokens can and will conflict with tiles.
+                             ;; (nr:tokens army)
+                             )))
       (dolist (element (remove-duplicates elements :test #'eqv))
         (let ((name (class-name (class-of element))))
           (multiple-value-bind (value foundp)

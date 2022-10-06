@@ -29,9 +29,10 @@
   (:after #'make-army-after))
 
 (defmethod print-object ((object army) stream)
-  (print-unreadable-object (object stream :type nil :identity t)
-    (format stream "~A ~A (~D elements)"
-            (nel:name object) (type-of object) (element-count object))))
+  (print-unreadable-object (object stream :type nil :identity nil)
+    (format stream "~A ~A (~D elements~:[, ~D tokens~;~])"
+            (nel:name object) (type-of object) (element-count object)
+            (= 0 (token-count object)) (token-count object))))
 
 (defun make-army-before (army &key
                                 (hq-elements nil hq-elements-p)

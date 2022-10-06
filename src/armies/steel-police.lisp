@@ -7,7 +7,8 @@
                     (#:ne #:nervous-island.effect)
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill)
-                    (#:nt #:nervous-island.tile))
+                    (#:nt #:nervous-island.tile)
+                    (#:nto #:nervous-island.token))
   (:import-from #:nervous-island.tile
                 #:mine #:battle #:move #:push-back #:terror)
   (:export
@@ -26,6 +27,8 @@
 (define-class army (nr:army) ()
   (:default-initargs
    :name :steel-police
+   :token-count 1
+   :token-designators '(nto:steel-net)
    :designators '(hq
                   predator (judge 3) (pacifier 2) (riot-policeman 2) executioner
                   bandog (wardog 2)

@@ -7,7 +7,8 @@
                     (#:ne #:nervous-island.effect)
                     (#:nr #:nervous-island.army)
                     (#:nsk #:nervous-island.skill)
-                    (#:nt #:nervous-island.tile))
+                    (#:nt #:nervous-island.tile)
+                    (#:nto #:nervous-island.token))
   (:import-from #:nervous-island.tile
                 #:battle #:move #:paralysis #:hole)
   (:export
@@ -25,9 +26,12 @@
 (define-class army (nr:army) ()
   (:default-initargs
    :name :sharrash
+   :token-count 7
+   :token-designators '(nto:hole (nto:paralysis 6))
    :designators '(hq
                   (plague 2) beast (mutant 3) (mortar 3) (rats 3) (explosive 4)
-                  underworlds landfill officer (medic 2) (transport 2) scout mother
+                  underworlds landfill officer (medic 2) (transport 2) scout
+                  mother
                   hole
                   (battle 5) (move 2) paralysis)))
 
