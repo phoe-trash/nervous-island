@@ -13,7 +13,7 @@
   (:import-from #:nervous-island.tile
                 #:roots #:battle #:castling #:move #:small-bomb)
   (:export
-   #:army #:hq
+   #:army #:hq #:venom
    #:wall-of-trees
    #:crusher #:monster #:net-fighter #:nightshade #:swarm #:slicer
    #:medic #:vines #:symbiont-alpha #:symbiont-beta #:symbiont-gamma

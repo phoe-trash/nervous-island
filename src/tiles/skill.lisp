@@ -2,6 +2,7 @@
 
 (uiop:define-package #:nervous-island.skill
   (:use #:nervous-island.cl)
+  (:shadow #:open #:return)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
@@ -14,7 +15,7 @@
    #:*special-initiative-values* #:initiative-value
    #:armor #:net #:redirection-input #:redirection-output
    #:toughness #:initiative #:value
-   #:venom #:sharpshooter #:spy
+   #:venom #:sharpshooter #:spy #:return #:open
    #:mobility #:push-back #:grab #:explosion))
 
 (in-package #:nervous-island.skill)
@@ -109,6 +110,8 @@
 (define-skill venom (passive undirected) ())
 (define-skill sharpshooter (passive undirected) ())
 (define-skill spy (passive undirected) ())
+(define-skill return (passive undirected) ())
+(define-skill open (passive undirected) ())
 
 (define-skill mobility (active undirected) ()
   (:default-initargs :activation-time :turn))

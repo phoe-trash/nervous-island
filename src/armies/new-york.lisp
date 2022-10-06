@@ -12,9 +12,10 @@
                 #:mine #:battle #:move #:push-back #:sniper)
   (:export
    #:army #:hq
-   #:runner #:hmg #:commando #:annihilator #:mobile-armor #:brawler
-   #:saboteur #:recon-center #:medic #:officer #:scoper #:scout
-   #:battle #:move #:sniper))
+   #:spy-cleaner #:spy-shooter #:rocket-launcher #:shotgun #:hammer
+   #:steel-boxer #:sharpshooter #:cop #:shooter #:pusher #:net-fighter
+   #:sergeant #:officer-1 #:officer-2 #:scout
+   #:mine #:battle #:move #:push-back #:sniper))
 
 (in-package #:nervous-island.armies.new-york)
 
