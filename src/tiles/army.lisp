@@ -123,6 +123,7 @@
              (let ((new-value (remove-if predicate value :count 1)))
                (setf (slot-value army slot) new-value)))))
     (dolist (discard discards)
+      (check-type discard symbol)
       (let ((slot (a:switch (discard :test #'subtypep)
                     ('nel:hq-element '%hq-elements)
                     ('nel:element '%elements)
@@ -164,7 +165,6 @@
       ;; TODO document the reparenting behavior.
       (ensure-element-owner army)))
   (when discardp
-    (check-type discard (φ:list-of symbol))
     (discard-elements army discard))
   (check-element-count army))
 

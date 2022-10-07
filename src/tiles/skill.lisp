@@ -6,7 +6,8 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
-                    (#:ncom #:nervous-island.common))
+                    (#:ncom #:nervous-island.common)
+                    (#:nel #:nervous-island.element))
   (:export
    ;; Skills - protocol
    #:skill #:skill-printables #:directed #:direction #:undirected
@@ -20,7 +21,8 @@
    #:venom #:sharpshooter #:spy #:return #:open #:paralysis #:mortar
    #:underground #:powered #:revival #:charge #:devouring
    #:mobility #:double-mobility #:rotation #:push-back #:grab #:net-of-steel
-   #:execution #:paralysis #:mortar #:underground #:net-of-steel
+   #:execution #:adaptation #:sandstorm-move
+   #:paralysis #:mortar #:underground #:net-of-steel
    #:underground-castling
    #:explosion
    #:chain #:explosives #:ranged-net #:sacrifice))
@@ -51,9 +53,9 @@
 (define-class undirected (skill) ()
   (:protocolp t))
 
-(defvar *activation-times* '(:initiative :turn))
+(defvar *activation-times* '(:initiative :turn :before-battle))
 (deftype activation-time ()
-  '(member :initiative :initiative-player-choice :turn))
+  '(member :initiative :turn :before-battle))
 
 (define-class active (skill)
   ((activation-time :type activation-time :initform :initiative))
@@ -155,6 +157,11 @@
   (:default-initargs :activation-time :turn))
 (define-skill execution (active undirected) ()
   (:default-initargs :activation-time :turn))
+(define-skill adaptation (active undirected)
+  ((adapt-into :type symbol))
+  (:default-initargs :activation-time :turn))
+(define-skill sandstorm-move (active undirected) ()
+  (:default-initargs :activation-time :before-battle))
 
 (define-skill explosion (active undirected) ()
   (:default-initargs :activation-time :initiative))

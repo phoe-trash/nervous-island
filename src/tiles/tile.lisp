@@ -20,9 +20,9 @@
    ;; Macros
    #:define-unit #:define-implant
    ;; Tiles - foundation
-   #:roots #:mine #:hole #:toxic-bomb
+   #:roots #:mine #:hole #:toxic-bomb #:quicksands
    ;; Tiles - instant
-   #:battle #:order
+   #:battle #:order #:sandstorm
    #:move #:doubled-move
    #:push-back #:grab #:reposition #:castling #:rotation #:drill
    #:transposition
@@ -83,6 +83,8 @@
 (define-class hole (foundation) ())
 (define-class toxic-bomb (foundation skill-having) ()
   (:default-initargs :skills (set (nsk:explosion) (nsk:initiative 1))))
+(define-class quicksands (foundation skill-having) ()
+  (:default-initargs :skills (set (nsk:sandstorm-move))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - instant
@@ -94,6 +96,7 @@
 
 (define-instant battle)
 (define-instant order (:superclass battle))
+(define-instant sandstorm (:superclass battle))
 
 (define-instant move)
 (define-instant doubled-move (:superclass move))

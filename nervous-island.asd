@@ -36,7 +36,7 @@
                              (:file "uranopolis")
                              (:file "death-breath")
                              (:file "iron-gang")
-                             ;; TODO (:file "sand-runners")
+                             (:file "sand-runners")
                              ;; TODO (:file "troglodytes")
                              ;; TODO (:file "beasts")
                              ;; TODO (:file "pirates")

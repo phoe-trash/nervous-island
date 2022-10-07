@@ -7,7 +7,7 @@
   (:export #:token
            #:damage #:net
            #:venom #:takeover #:steel-net #:paralysis #:no-power #:ranged-net
-           #:roots #:hole #:toxic-bomb
+           #:roots #:hole #:toxic-bomb #:quicksands
            #:incubator-token #:accelerator #:claw #:attack-net #:acid-thrower
            #:quill #:left-quill #:right-quill
            #:tentacles #:zombie))
@@ -47,6 +47,7 @@
 (define-token roots (:owned t))
 (define-token hole (:owned t))
 (define-token toxic-bomb (:owned t))
+(define-token quicksands (:owned t))
 
 (define-class incubator-token (token) ()
   (:protocolp t))
