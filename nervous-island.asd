@@ -39,9 +39,7 @@
                              (:file "sand-runners")
                              (:file "troglodytes")
                              (:file "beasts")
-                             (:file "pirates")
-                             ;; TODO shilling time! (:file "hell-hounds")
-                             ))
+                             (:file "pirates")))
                ;; (:module "state"
                ;;  :components ((:file "coord")
                ;;               (:file "board")
