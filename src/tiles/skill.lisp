@@ -11,16 +11,19 @@
    ;; Skills - protocol
    #:skill #:skill-printables #:directed #:direction #:undirected
    #:*activation-times* #:activation-time #:active #:activation-time #:passive
+   #:zombie
    ;; Skills - concrete classes
    #:*special-initiative-values* #:initiative-value
    #:armor #:net #:redirection-input #:redirection-output #:reflection
-   #:toughness #:initiative #:value
+   #:tentacles
+   #:toughness #:initiative #:value #:zombie-initiative
    #:venom #:sharpshooter #:spy #:return #:open #:paralysis #:mortar
-   #:underground
-   #:mobility #:push-back #:grab #:net-of-steel #:execution
-   #:paralysis #:mortar #:underground #:net-of-steel
+   #:underground #:powered #:revival #:charge #:devouring
+   #:mobility #:double-mobility #:rotation #:push-back #:grab #:net-of-steel
+   #:execution #:paralysis #:mortar #:underground #:net-of-steel
    #:underground-castling
-   #:explosion))
+   #:explosion
+   #:chain #:explosives #:ranged-net #:sacrifice))
 
 (in-package #:nervous-island.skill)
 
@@ -40,7 +43,7 @@
     (format stream "~{~A~^ ~}" (reverse (skill-printables object)))))
 
 (define-class directed (skill)
-  ((direction :type (or ncom:direction ncom:diagonal)))
+  ((direction :type (or ncom:direction ncom:diagonal ncom:anywhere)))
   (:protocolp t))
 (defmethod skill-printables append ((skill directed))
   (list (direction skill)))
@@ -59,6 +62,12 @@
   (list (activation-time skill)))
 
 (define-class passive (skill) ()
+  (:protocolp t))
+
+(define-class zombie (skill) ()
+  (:protocolp t))
+
+(define-class hidden (skill) ()
   (:protocolp t))
 
 (defmacro define-skill (name (&rest superclasses)
@@ -107,10 +116,14 @@
 (define-skill redirection-input (passive directed) ())
 (define-skill redirection-output (passive directed) ())
 (define-skill reflection (passive directed) ())
+(define-skill tentacles (passive directed) ())
 
 (define-skill toughness (passive undirected)
   ((value :type (integer 1) :initform 1)))
 (define-skill initiative (passive undirected)
+  ((value :type initiative-value)))
+(define-skill zombie-initiative (zombie initiative)
+  ;; TODO fix this to avoid duplication maybe
   ((value :type initiative-value)))
 (define-skill venom (passive undirected) ())
 (define-skill sharpshooter (passive undirected) ())
@@ -119,8 +132,16 @@
 (define-skill paralysis (passive undirected) ())
 (define-skill mortar (passive undirected) ())
 (define-skill underground (passive undirected) ())
+(define-skill powered (passive undirected) ())
+(define-skill revival (passive undirected) ())
+(define-skill charge (passive undirected) ())
+(define-skill devouring (passive undirected) ())
 
 (define-skill mobility (active undirected) ()
+  (:default-initargs :activation-time :turn))
+(define-skill double-mobility (mobility) ()
+  (:default-initargs :activation-time :turn))
+(define-skill rotation (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill push-back (active undirected) ()
   (:default-initargs :activation-time :turn))
@@ -137,6 +158,15 @@
 
 (define-skill explosion (active undirected) ()
   (:default-initargs :activation-time :initiative))
+
+(define-skill chain (active undirected hidden) ()
+  (:default-initargs :activation-time :turn))
+(define-skill explosives (active undirected hidden) ()
+  (:default-initargs :activation-time :turn))
+(define-skill ranged-net (active directed hidden) ()
+  (:default-initargs :activation-time :turn))
+(define-skill sacrifice (active undirected hidden) ()
+  (:default-initargs :activation-time :turn))
 
 (defmethod skill-printables append ((skill toughness))
   (list (value skill)))

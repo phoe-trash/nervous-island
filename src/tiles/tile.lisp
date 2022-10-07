@@ -20,12 +20,15 @@
    ;; Macros
    #:define-unit #:define-implant
    ;; Tiles - foundation
-   #:roots #:mine #:hole
+   #:roots #:mine #:hole #:toxic-bomb
    ;; Tiles - instant
-   #:battle
-   #:move #:push-back #:grab #:reposition #:castling #:rotation #:drill
-   #:sniper #:grenade #:air-strike #:small-bomb
-   #:terror #:action #:paralysis
+   #:battle #:order
+   #:move #:doubled-move
+   #:push-back #:grab #:reposition #:castling #:rotation #:drill
+   #:transposition
+   #:sniper #:grenade #:air-strike #:small-bomb #:ray
+   #:terror #:action #:paralysis #:smokescreen #:reappearance
+   #:castling-with-the-opponent
    #:incubation #:quill #:left-quill #:right-quill))
 
 (in-package #:nervous-island.tile)
@@ -78,6 +81,8 @@
 (define-class roots (foundation) ())
 (define-class mine (foundation) ())
 (define-class hole (foundation) ())
+(define-class toxic-bomb (foundation skill-having) ()
+  (:default-initargs :skills (set (nsk:explosion) (nsk:initiative 1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tiles - instant
@@ -88,23 +93,30 @@
      (defun ,name () (make-instance ',name))))
 
 (define-instant battle)
+(define-instant order (:superclass battle))
 
 (define-instant move)
+(define-instant doubled-move (:superclass move))
 (define-instant push-back)
 (define-instant grab)
 (define-instant reposition)
 (define-instant castling)
 (define-instant rotation)
 (define-instant drill)
+(define-instant transposition)
+(define-instant reappearance)
 
 (define-instant sniper)
 (define-instant grenade)
 (define-instant air-strike)
 (define-instant small-bomb)
+(define-instant ray)
 
 (define-instant terror)
 (define-instant action)
 (define-instant paralysis)
+(define-instant smokescreen)
+(define-instant castling-with-the-opponent)
 
 (define-instant incubation)
 (define-class quill (instant) ()

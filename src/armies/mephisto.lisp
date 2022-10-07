@@ -29,7 +29,6 @@
    :token-count 6
    :token-designators '(nto:accelerator nto:claw nto:attack-net nto:acid-thrower
                         nto:left-quill nto:right-quill)
-   ;; TODO tokens
    :designators '(hq
                   (probe 2) muzzle (claw 4) (accelerator 3) (toughener 2)
                   (jaws 2) (incubator 3) transmitter (tail 2) (tentacles 2)

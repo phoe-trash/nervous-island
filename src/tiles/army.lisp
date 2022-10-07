@@ -24,7 +24,7 @@
    (token-count :type (integer 0) :initform 0)
    (tokens :type (φ:list-of nto:token) :initform '()))
   (:protocolp t)
-  (:extra-args :designators :token-designators)
+  (:extra-args :designators :token-designators :discard)
   (:before #'make-army-before)
   (:after #'make-army-after))
 
@@ -123,9 +123,26 @@
                                   :expected token-count
                                   :actual actual-token-count))))
 
+(defun discard-elements (army discards)
+  (flet ((discard-tile (type slot)
+           (let* ((predicate (lambda (x) (typep x type)))
+                  (value (slot-value army slot))
+                  (foundp (find-if predicate value)))
+             (unless foundp
+               (error "~S contains no ~S in its ~S." army type slot))
+             (let ((new-value (remove-if predicate value :count 1)))
+               (setf (slot-value army slot) new-value)))))
+    (dolist (discard discards)
+      (let ((slot (a:switch (discard :test #'subtypep)
+                    ('nel:hq-element '%hq-elements)
+                    ('nel:element '%elements)
+                    ('nto:token '%tokens))))
+        (discard-tile discard slot)))))
+
 (defun make-army-after (army &key
                                (designators nil designatorsp)
                                (token-designators nil token-designators-p)
+                               (discard '() discardp)
                         &allow-other-keys)
   (flet ((foreign-elements-p (elements)
            (find-if-not (a:curry #'eqv army) elements :key #'nel:owner)))
@@ -138,6 +155,9 @@
               (foreign-elements-p (tokens army)))
       ;; TODO document the reparenting behavior.
       (ensure-element-owner army)))
+  (when discardp
+    (check-type discard (φ:list-of symbol))
+    (discard-elements army discard))
   (let ((element-count (element-count army))
         (token-count (token-count army)))
     (check-element-count army element-count token-count)))

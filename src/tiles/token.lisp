@@ -5,9 +5,12 @@
   (:local-nicknames (#:p #:protest/base)
                     (#:nel #:nervous-island.element))
   (:export #:token
-           #:damage #:net #:venom #:takeover #:steel-net #:paralysis #:hole
+           #:damage #:net
+           #:venom #:takeover #:steel-net #:paralysis #:no-power #:ranged-net
+           #:roots #:hole #:toxic-bomb
            #:incubator-token #:accelerator #:claw #:attack-net #:acid-thrower
-           #:quill #:left-quill #:right-quill))
+           #:quill #:left-quill #:right-quill
+           #:tentacles #:zombie))
 
 (in-package #:nervous-island.token)
 
@@ -38,11 +41,15 @@
 (define-token takeover (:owned t))
 (define-token steel-net (:owned t))
 (define-token paralysis (:owned t))
+(define-token no-power (:owned t))
+(define-token ranged-net (:owned t))
+
+(define-token roots (:owned t))
 (define-token hole (:owned t))
+(define-token toxic-bomb (:owned t))
 
 (define-class incubator-token (token) ()
   (:protocolp t))
-
 (define-token accelerator (:owned t :superclass incubator-token))
 (define-token claw (:owned t :superclass incubator-token))
 (define-token attack-net (:owned t :superclass incubator-token))
@@ -52,3 +59,6 @@
   (:protocolp t))
 (define-token left-quill (:owned t :superclass quill))
 (define-token right-quill (:owned t :superclass quill))
+
+(define-token tentacles (:owned t))
+(define-token zombie (:owned t))

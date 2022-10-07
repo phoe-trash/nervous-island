@@ -27,8 +27,8 @@
 (define-class army (nr:army) ()
   (:default-initargs
    :name :neojungle
-   :token-count 2
-   :token-designators '((nto:venom 2))
+   :token-count 4
+   :token-designators '((nto:venom 2) (nto:roots 2))
    :designators '(hq
                   wall-of-trees (crusher 3) monster (net-fighter 3)
                   (nightshade 2) (swarm 2) (slicer 4)

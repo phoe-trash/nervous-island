@@ -6,9 +6,10 @@
                     (#:p #:protest/base)
                     (#:ncom #:nervous-island.common)
                     (#:nsk #:nervous-island.skill))
-  (:export #:attack #:strength
-           #:melee #:ranged #:gauss-cannon #:shotgun #:rocket-launcher
-           #:explosive))
+  (:export #:attack #:strength #:directed-attack #:undirected-attack
+           #:melee #:zombie-melee
+           #:ranged #:gauss-cannon #:shotgun #:rocket-launcher
+           #:explosive #:poisoning #:demolition ))
 
 (in-package #:nervous-island.attack)
 
@@ -24,19 +25,21 @@
     (format stream "~A ~A ~A" (type-of object) (nsk:direction object)
             (strength object))))
 
-(defmacro define-attack (name)
+(defmacro define-attack (name (&key (superclasses '(attack))))
   `(progn
-     (define-class ,name (attack) ())
+     (define-class ,name (,@superclasses) ())
      (defun ,name (direction &optional (strength 1))
        (make-instance ',name :direction direction :strength strength))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Attacks - concrete classes
 
-(define-attack melee)
-(define-attack ranged)
-(define-attack gauss-cannon)
-(define-attack shotgun)
-(define-attack rocket-launcher)
-
-(define-attack explosive)
+(define-attack melee ())
+(define-attack zombie-melee (:superclasses (nsk:zombie attack)))
+(define-attack ranged ())
+(define-attack gauss-cannon ())
+(define-attack shotgun ())
+(define-attack rocket-launcher ())
+(define-attack explosive ())
+(define-attack poisoning ())
+(define-attack demolition ())

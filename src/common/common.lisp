@@ -14,7 +14,7 @@
                           #:set-exclusive-or)
   (:export
    ;; Types and constants
-   #:direction #:diagonal #:*directions* #:*diagonals*
+   #:direction #:diagonal #:anywhere #:*directions* #:*diagonals* #:*anywhere*
    ;; Conditions
    #:nervous-island-condition #:nervous-island-error
    ;; Macros
@@ -69,9 +69,13 @@
 
 (deftype diagonal () '(member :aq :qw :we :ed :ds :sa))
 
+(deftype anywhere () '(member :anywhere))
+
 (defparameter *directions* '(:q :w :e :d :s :a))
 
 (defparameter *diagonals* '(:aq :qw :we :ed :ds :sa))
+
+(defparameter *anywhere* '(:anywhere))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Conditions

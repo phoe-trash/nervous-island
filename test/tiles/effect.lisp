@@ -5,7 +5,7 @@
 (define-test effect-instantiation-negative
   (flet ((test (class)
            (fail (make-instance class) p:protocol-object-instantiation)))
-    (mapcar #'test '(ne:effect ne:undirected-effect ne:numeric-effect
+    (mapcar #'test '(ne:effect ne:undirected-effect ne:numeric
                      ne:melee-officer ne:ranged-officer ne:scout ne:mother
                      ne:medic ne:transport ne:quartermaster ne:recon-center
                      ne:scoper ne:saboteur)))
@@ -24,12 +24,12 @@
     (let ((effect (make-instance class :direction :w :strength 42
                                        :allow-other-keys t)))
       (is eqv :w (nsk:direction effect))
-      (when (typep effect 'ne:numeric-effect)
+      (when (typep effect 'ne:numeric)
         (is eqv 42 (ne:strength effect))))))
 
 (define-test effect-instantiation-undirected
   (dolist (class (find-effects 'ne:undirected-effect))
     (let ((effect (make-instance class :strength 42
                                        :allow-other-keys t)))
-      (when (typep effect 'ne:numeric-effect)
+      (when (typep effect 'ne:numeric)
         (is eqv 42 (ne:strength effect))))))

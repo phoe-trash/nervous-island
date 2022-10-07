@@ -18,21 +18,25 @@
   (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
+                    (#:na #:nervous-island.attack)
                     (#:ncom #:nervous-island.common)
                     (#:nsk #:nervous-island.skill))
   (:export
    ;; Module effects - protocol
    #:effect #:undirected-effect #:directed-effect :long-range-directed-effect
-   #:numeric-effect #:strength
+   #:numeric #:strength
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
    #:melee-officer #:ranged-officer #:scout #:mother #:toughness #:healing
-   #:medic #:transport #:rotation #:quartermaster #:recon-center #:underground
-   #:paralysis
-   #:scoper #:saboteur #:takeover
+   #:quartermaster #:attack-types
+   #:medic #:transport #:rotation #:recon-center #:underground
+   #:paralysis #:venom
+   #:scoper #:saboteur #:takeover #:zone #:wastes
    #:motherland #:net-of-steel-launcher
-   #:implant-activation #:muzzle))
+   #:implant-activation #:muzzle
+   #:power-supply
+   #:hidden-activation))
 
 (in-package #:nervous-island.effect)
 
@@ -49,21 +53,34 @@
 (define-class long-range-directed-effect (nsk:directed effect) ()
   (:protocolp t))
 
-;; TODO rename to just NUMERIC
-(define-class numeric-effect (effect)
+(define-class numeric (effect)
   ((strength :type (integer 1) :initform 1))
   (:protocolp t))
 
-(defmacro define-effect (name (&key numericp))
+(defmacro define-effect (name (&key numericp quartermasterp))
   (let ((undirected-name (a:symbolicate '#:undirected- name))
         (directed-name (a:symbolicate '#:directed- name))
         (long-range-directed-name (a:symbolicate '#:long-range-directed- name))
-        (superclass (if numericp 'numeric-effect 'effect))
-        (lambda-list (if numericp '(&optional (strength 1)) '()))
-        (initargs (if numericp '(:strength strength) '())))
+        (slots (cond (quartermasterp '((attack-types :type set
+                                                     :initform (set))))
+                     (t '())))
+        (superclass (cond (numericp 'numeric)
+                          (t 'effect)))
+        (lambda-list (cond (numericp '(&optional (strength 1)))
+                           (quartermasterp '(&rest attack-types))
+                           (t '())))
+        (initargs (cond (numericp '(:strength strength))
+                        (quartermasterp '(:attack-types
+                                          (apply #'set attack-types)))
+                        (t '())))
+        (options (cond (quartermasterp '((:default-initargs
+                                          :attack-types
+                                          (set 'na:melee 'na:ranged))))
+                       (t '()))))
     `(progn
-       (define-class ,name (,superclass) ()
-         (:protocolp t))
+       (define-class ,name (,superclass) (,@slots)
+         (:protocolp t)
+         ,@options)
        (define-class ,undirected-name (,name undirected-effect) ())
        (defun ,undirected-name (,@lambda-list)
          (make-instance ',undirected-name ,@initargs))
@@ -86,23 +103,33 @@
 (define-effect toughness (:numericp t))
 (define-effect healing (:numericp t))
 
+(define-effect quartermaster (:quartermasterp t))
+(defmethod nsk:skill-printables append ((skill quartermaster))
+  (list (set-contents (attack-types skill))))
+
 (define-effect medic ())
 (define-effect transport ())
 (define-effect rotation ())
-(define-effect quartermaster ())
 (define-effect recon-center ())
 (define-effect underground ())
 (define-effect paralysis ())
+(define-effect venom ())
 
 (define-effect scoper ())
 (define-effect saboteur ())
 (define-effect takeover ())
+(define-effect zone ())
+(define-effect wastes ())
 
 (define-effect motherland ())
 (define-effect net-of-steel-launcher ())
 
 (define-effect implant-activation ())
 (define-effect muzzle ())
+
+(define-effect power-supply ())
+
+(define-effect hidden-activation ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - trap (DDM)
