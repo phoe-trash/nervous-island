@@ -17,7 +17,7 @@
 (define-test army-instantiation
   (flet ((test (army &optional (nelements 35))
            (is eqv :test-army (nel:name army))
-           (is = nelements (nr:element-count army))
+           (is = nelements (nr:total-element-count army))
            (let ((hq-elements (nr:hq-elements army)))
              (is = 1 (length hq-elements))
              (is eqv 'army-test-hq-element (type-of (first hq-elements)))
@@ -35,13 +35,14 @@
            (apply #'make-instance 'army-test-army args)))
     (test (make :designators '(army-test-hq-element (army-test-element 34))))
     (test (make :designators '(army-test-hq-element (army-test-element 9))
-                :element-count 10)
+                :total-element-count 10 :element-count 9)
           10)
     (test (make :hq-elements (list (make-instance 'army-test-hq-element))
                 :elements (make-elements 34)))
     (test (make :hq-elements (list (make-instance 'army-test-hq-element))
                 :elements (make-elements 9)
-                :element-count 10)
+                :total-element-count 10
+                :element-count 9)
           10)))
 
 (define-test army-instantiation-negative
@@ -77,12 +78,12 @@
                                 collect (make-instance
                                          'element-test-element))))
          (name (nel:name army))
-         (element-count (nr:element-count army))
+         (element-count (nr:total-element-count army))
          (hq-elements (nr:hq-elements army))
          (elements (nr:elements army)))
     (is eqv army (reinitialize-instance army))
     (is eqv name (nel:name army))
-    (is eqv element-count (nr:element-count army))
+    (is eqv element-count (nr:total-element-count army))
     (is eqv hq-elements (nr:hq-elements army))
     (is eqv elements (nr:elements army))
     (let ((hq-elements (loop repeat 3
@@ -92,8 +93,12 @@
       ;; TODO add a second R-I call in all other tests, one that actually makes
       ;;      use of kwargs to be passed around - like below
       (is eqv army (reinitialize-instance army :hq-elements hq-elements
-                                               :elements elements))
+                                               :hq-element-count 3
+                                               :elements elements
+                                               :element-count 32))
       (is eqv name (nel:name army))
-      (is eqv element-count (nr:element-count army))
+      (is eqv element-count (nr:total-element-count army))
+      (is = 3 (nr:hq-element-count army))
       (is = 3 (length (nr:hq-elements army)))
+      (is = 32 (nr:element-count army))
       (is = 32 (length (nr:elements army))))))

@@ -22,6 +22,8 @@
 (define-class army (nr:army) ()
   (:default-initargs
    :name :dancer
+   :hq-element-count 3
+   :element-count 32
    :designators '(object-blue object-red object-yellow
                   (battle 8) (move 10) (push-back 7) (action 7))))
 

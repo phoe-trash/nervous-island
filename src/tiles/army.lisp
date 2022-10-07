@@ -9,7 +9,10 @@
                     (#:nel #:nervous-island.element)
                     (#:nto #:nervous-island.token))
   (:export #:army
-           #:element-count #:hq-elements #:elements #:token-count #:tokens
+           #:total-element-count
+           #:hq-element-count #:hq-elements
+           #:element-count #:elements
+           #:token-count #:tokens
            #:element-count-error #:ensure-army))
 
 (in-package #:nervous-island.army)
@@ -18,8 +21,10 @@
 ;;; Army
 
 (define-class army (nel:element-container)
-  ((element-count :type (integer 1) :initform 35)
+  ((total-element-count :type (integer 1) :initform 35)
+   (hq-element-count :type (integer 1) :initform 1)
    (hq-elements :type (φ:list-of nel:hq-element) :initform '())
+   (element-count :type (integer 1) :initform 34)
    (elements :type (φ:list-of nel:element) :initform '())
    (token-count :type (integer 0) :initform 0)
    (tokens :type (φ:list-of nto:token) :initform '()))
@@ -31,7 +36,7 @@
 (defmethod print-object ((object army) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~A ~A (~D elements~:[, ~D tokens~;~])"
-            (nel:name object) (type-of object) (element-count object)
+            (nel:name object) (type-of object) (total-element-count object)
             (= 0 (token-count object)) (token-count object))))
 
 (defun make-army-before (army &key
@@ -103,7 +108,7 @@
                      :type (a:required-argument :type))
   (:report (lambda (condition stream)
              (format stream
-                     "~:(~A~) count error in army: expected ~D, but got ~D."
+                     "~A count error in army: expected ~D, but got ~D."
                      (element-count-error-type condition)
                      (element-count-error-expected condition)
                      (element-count-error-actual condition)))))
@@ -124,23 +129,23 @@
                     ('nto:token '%tokens))))
         (discard-tile discard slot)))))
 
-(defun check-element-count (army element-count token-count)
-  (let* ((hq-elements (hq-elements army))
-         (elements (elements army))
-         (tokens (tokens army))
-         (actual-element-count (+ (length hq-elements) (length elements)))
-         (actual-token-count (length tokens)))
-    (unless (= element-count actual-element-count)
-      (error 'element-count-error :type 'nel:element
-                                  :expected element-count
-                                  :actual actual-element-count))
-    (unless (= token-count actual-token-count)
-      (error 'element-count-error :type 'nto:token
-                                  :expected token-count
-                                  :actual actual-token-count)))
-  ;; TODO ensure that only one HQ or three objects are present
-  ;;      (see Sand Runners)
-  )
+(defun check-element-count (army)
+  (flet ((test (type expected actual)
+           (unless (= expected actual)
+             (error 'element-count-error
+                     :type type :expected expected :actual actual))))
+    (test 'nel:hq-element
+           (hq-element-count army)
+           (length (hq-elements army)))
+    (test 'nel:element
+           (element-count army)
+           (length (elements army)))
+    (test 'total-element-count
+           (total-element-count army)
+           (+ (length (hq-elements army)) (length (elements army))))
+    (test 'nto:token
+           (token-count army)
+           (length (tokens army)))))
 
 (defun make-army-after (army &key
                                (designators nil designatorsp)
@@ -161,9 +166,7 @@
   (when discardp
     (check-type discard (φ:list-of symbol))
     (discard-elements army discard))
-  (let ((element-count (element-count army))
-        (token-count (token-count army)))
-    (check-element-count army element-count token-count)))
+  (check-element-count army))
 
 (defgeneric ensure-army (thing)
   (:method ((army army)) army)
