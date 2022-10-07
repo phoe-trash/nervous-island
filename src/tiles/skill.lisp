@@ -13,18 +13,19 @@
    #:skill-having #:skills
    #:skill #:skill-printables #:directed #:direction #:undirected
    #:*activation-times* #:activation-time #:active #:activation-time #:passive
-   #:zombie
+   #:zombie #:friendly-fire
    ;; Skills - concrete classes
-   #:*special-initiative-values* #:initiative-value
-   #:armor #:net #:redirection-input #:redirection-output #:reflection
-   #:tentacles
+   #:*special-initiative-values* #:special-initiative-value #:initiative-value
+   #:armor #:net #:friendly-fire-net #:redirection-input #:redirection-output
+   #:reflection #:tentacles
    #:toughness #:initiative #:value #:zombie-initiative
    #:venom #:sharpshooter #:spy #:return #:open #:paralysis #:mortar
    #:underground #:powered #:revival #:charge #:devouring #:thrower
-   #:bloodlust
+   #:bloodlust #:lair #:flying
    #:mobility #:double-mobility #:rotation #:push-back #:grab #:net-of-steel
    #:execution #:adaptation #:cannibalism
    #:sandstorm-move
+   #:scavenger
    #:paralysis #:mortar #:underground #:net-of-steel
    #:underground-castling
    #:explosion
@@ -60,9 +61,9 @@
 (define-class undirected (skill) ()
   (:protocolp t))
 
-(defvar *activation-times* '(:initiative :turn :before-battle))
+(defvar *activation-times* '(:initiative :turn :before-battle :after-battle))
 (deftype activation-time ()
-  '(member :initiative :turn :before-battle))
+  '(member :initiative :turn :before-battle :after-battle))
 
 (define-class active (skill)
   ((activation-time :type activation-time :initform :initiative))
@@ -77,6 +78,9 @@
   (:protocolp t))
 
 (define-class hidden (skill) ()
+  (:protocolp t))
+
+(define-class friendly-fire (skill) ()
   (:protocolp t))
 
 (defmacro define-skill (name (&rest superclasses)
@@ -117,11 +121,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skills - concrete classes
 
-(defvar *special-initiative-values* '(:before :after))
-(deftype initiative-value () '(or (member :before :after) (integer 0)))
+(defvar *special-initiative-values* '(:before :agony :after))
+(deftype special-initiative-value () '(member :before :agony :after))
+
+(macrolet ((make (thing)
+             `(progn
+                (defmethod generic-eqv ((x (cl:eql ,thing)) (y integer))
+                  (values nil nil nil nil))
+                (defmethod generic-eqv ((x integer) (y (cl:eql ,thing)))
+                  (values nil nil nil nil)))))
+  (make :before)
+  (make :agony)
+  (make :after))
+
+(deftype initiative-value () '(or special-initiative-value (integer 0)))
 
 (define-skill armor (passive directed) ())
 (define-skill net (passive directed) ())
+(define-skill friendly-fire-net (net friendly-fire directed) ())
 (define-skill redirection-input (passive directed) ())
 (define-skill redirection-output (passive directed) ())
 (define-skill reflection (passive directed) ())
@@ -147,6 +164,8 @@
 (define-skill devouring (passive undirected) ())
 (define-skill thrower (passive undirected) ())
 (define-skill bloodlust (passive undirected) ())
+(define-skill lair (passive undirected) ())
+(define-skill flying (passive undirected) ())
 
 (define-skill mobility (active undirected) ()
   (:default-initargs :activation-time :turn))
@@ -174,6 +193,9 @@
 
 (define-skill sandstorm-move (active undirected) ()
   (:default-initargs :activation-time :before-battle))
+
+(define-skill scavenger (active undirected) ()
+  (:default-initargs :activation-time :after-battle))
 
 (define-skill explosion (active undirected) ()
   (:default-initargs :activation-time :initiative))

@@ -26,7 +26,7 @@
    #:move #:doubled-move
    #:push-back #:grab #:reposition #:castling #:rotation #:drill
    #:transposition
-   #:sniper #:grenade #:air-strike #:small-bomb #:ray #:avalanche
+   #:sniper #:grenade #:air-strike #:small-bomb #:ray #:avalanche #:hunt
    #:terror #:action #:paralysis #:smokescreen #:reappearance
    #:castling-with-the-opponent #:cannibalize-enemy
    #:incubation #:quill #:left-quill #:right-quill))
@@ -111,6 +111,7 @@
 (define-instant small-bomb)
 (define-instant ray)
 (define-instant avalanche)
+(define-instant hunt)
 
 (define-instant terror)
 (define-instant action)

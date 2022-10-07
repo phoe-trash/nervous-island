@@ -30,7 +30,7 @@
   (:export-effects
    #:melee-officer #:ranged-officer #:scout #:mother #:toughness #:healing
    #:quartermaster #:attack-types
-   #:medic #:transport #:rotation #:recon-center #:underground
+   #:medic #:transport #:grab #:rotation #:recon-center #:underground
    #:paralysis #:venom
    #:scoper #:saboteur #:takeover #:zone #:wastes
    #:motherland #:net-of-steel-launcher
@@ -110,6 +110,7 @@
 
 (define-effect medic ())
 (define-effect transport ())
+(define-effect grab ())
 (define-effect rotation ())
 (define-effect recon-center ())
 (define-effect underground ())

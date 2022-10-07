@@ -38,7 +38,7 @@
                              (:file "iron-gang")
                              (:file "sand-runners")
                              (:file "troglodytes")
-                             ;; TODO (:file "beasts")
+                             (:file "beasts")
                              ;; TODO (:file "pirates")
                              ;; TODO shilling time! (:file "hell-hounds")
                              ))

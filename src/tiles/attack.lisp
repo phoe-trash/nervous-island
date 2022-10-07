@@ -6,10 +6,10 @@
                     (#:p #:protest/base)
                     (#:ncom #:nervous-island.common)
                     (#:nsk #:nervous-island.skill))
-  (:export #:attack #:strength #:directed-attack #:undirected-attack
-           #:melee #:zombie-melee
+  (:export #:attack #:strength
+           #:melee #:zombie-melee #:friendly-fire-melee
            #:ranged #:gauss-cannon #:shotgun #:rocket-launcher
-           #:explosive #:poisoning #:demolition ))
+           #:explosive #:poisoning #:demolition))
 
 (in-package #:nervous-island.attack)
 
@@ -35,7 +35,8 @@
 ;;; Attacks - concrete classes
 
 (define-attack melee ())
-(define-attack zombie-melee (:superclasses (nsk:zombie attack)))
+(define-attack zombie-melee (:superclasses (attack nsk:zombie)))
+(define-attack friendly-fire-melee (:superclasses (attack nsk:friendly-fire)))
 (define-attack ranged ())
 (define-attack gauss-cannon ())
 (define-attack shotgun ())
