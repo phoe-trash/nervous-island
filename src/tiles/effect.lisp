@@ -36,7 +36,8 @@
    #:motherland #:net-of-steel-launcher
    #:implant-activation #:muzzle
    #:power-supply
-   #:hidden-activation))
+   #:hidden-activation
+   #:gourmet #:freezing))
 
 (in-package #:nervous-island.effect)
 
@@ -130,6 +131,9 @@
 (define-effect power-supply ())
 
 (define-effect hidden-activation ())
+
+(define-effect gourmet ())
+(define-effect freezing ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module effects - trap (DDM)

@@ -12,9 +12,9 @@
                     (#:nto #:nervous-island.token))
   (:export
    ;; Tiles - protocol
-   #:tile #:instant #:target #:board-tile #:skill-having #:skills
+   #:tile #:instant #:target #:board-tile
    #:hq #:starting-hit-points #:object
-   #:unit #:skills #:warrior #:module
+   #:unit #:warrior #:module
    #:implant #:behavior
    #:foundation
    ;; Macros
@@ -26,9 +26,9 @@
    #:move #:doubled-move
    #:push-back #:grab #:reposition #:castling #:rotation #:drill
    #:transposition
-   #:sniper #:grenade #:air-strike #:small-bomb #:ray
+   #:sniper #:grenade #:air-strike #:small-bomb #:ray #:avalanche
    #:terror #:action #:paralysis #:smokescreen #:reappearance
-   #:castling-with-the-opponent
+   #:castling-with-the-opponent #:cannibalize-enemy
    #:incubation #:quill #:left-quill #:right-quill))
 
 (in-package #:nervous-island.tile)
@@ -46,11 +46,7 @@
 (define-class foundation (board-tile) ()
   (:protocolp t))
 
-(define-class skill-having (tile)
-  ((skills :type set :initform (set)))
-  (:protocolp t))
-
-(define-class unit (skill-having board-tile) ()
+(define-class unit (board-tile nsk:skill-having) ()
   (:protocolp t))
 
 (define-class hq (nel:hq-element unit)
@@ -81,9 +77,9 @@
 (define-class roots (foundation) ())
 (define-class mine (foundation) ())
 (define-class hole (foundation) ())
-(define-class toxic-bomb (foundation skill-having) ()
+(define-class toxic-bomb (foundation nsk:skill-having) ()
   (:default-initargs :skills (set (nsk:explosion) (nsk:initiative 1))))
-(define-class quicksands (foundation skill-having) ()
+(define-class quicksands (foundation nsk:skill-having) ()
   (:default-initargs :skills (set (nsk:sandstorm-move))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -114,12 +110,14 @@
 (define-instant air-strike)
 (define-instant small-bomb)
 (define-instant ray)
+(define-instant avalanche)
 
 (define-instant terror)
 (define-instant action)
 (define-instant paralysis)
 (define-instant smokescreen)
 (define-instant castling-with-the-opponent)
+(define-instant cannibalize-enemy)
 
 (define-instant incubation)
 (define-class quill (instant) ()

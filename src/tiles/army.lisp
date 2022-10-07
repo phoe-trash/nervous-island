@@ -102,14 +102,17 @@
 (define-condition element-count-error (ncom:nervous-island-error)
   ((%expected :reader element-count-error-expected :initarg :expected)
    (%actual :reader element-count-error-actual :initarg :actual)
-   (%type :reader element-count-error-type :initarg :type))
+   (%type :reader element-count-error-type :initarg :type)
+   (%army :reader element-count-error-army :initarg :army))
   (:default-initargs :actual (a:required-argument :actual)
                      :expected (a:required-argument :expected)
-                     :type (a:required-argument :type))
+                     :type (a:required-argument :type)
+                     :army (a:required-argument :army))
   (:report (lambda (condition stream)
              (format stream
-                     "~A count error in army: expected ~D, but got ~D."
+                     "~A count error in ~S: expected ~D, but got ~D."
                      (element-count-error-type condition)
+                     (element-count-error-army condition)
                      (element-count-error-expected condition)
                      (element-count-error-actual condition)))))
 
@@ -133,8 +136,8 @@
 (defun check-element-count (army)
   (flet ((test (type expected actual)
            (unless (= expected actual)
-             (error 'element-count-error
-                     :type type :expected expected :actual actual))))
+             (error 'element-count-error :army army :type type
+                                         :expected expected :actual actual))))
     (test 'nel:hq-element
            (hq-element-count army)
            (length (hq-elements army)))

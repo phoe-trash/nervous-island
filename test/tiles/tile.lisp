@@ -27,7 +27,7 @@
 
 (define-class tile-test-skill-2 (nsk:skill) ())
 
-(define-class tile-test-skill-having (nt:skill-having) ())
+(define-class tile-test-skill-having (nt:tile nsk:skill-having) ())
 
 (define-test tile-skill-having
   (fail (make-instance 'tile-test-skill-having :skills 42) type-error)
@@ -37,8 +37,8 @@
   (let* ((skill (make-instance 'tile-test-skill-1))
          (skill-having (make-instance 'tile-test-skill-having
                                       :skills (set skill))))
-    (is = 1 (set-count (nt:skills skill-having)))
-    (is eqv skill (first (set-contents (nt:skills skill-having))))))
+    (is = 1 (set-count (nsk:skills skill-having)))
+    (is eqv skill (first (set-contents (nsk:skills skill-having))))))
 
 (define-class tile-test-hq (nt:hq) ())
 

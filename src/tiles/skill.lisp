@@ -10,6 +10,7 @@
                     (#:nel #:nervous-island.element))
   (:export
    ;; Skills - protocol
+   #:skill-having #:skills
    #:skill #:skill-printables #:directed #:direction #:undirected
    #:*activation-times* #:activation-time #:active #:activation-time #:passive
    #:zombie
@@ -19,9 +20,11 @@
    #:tentacles
    #:toughness #:initiative #:value #:zombie-initiative
    #:venom #:sharpshooter #:spy #:return #:open #:paralysis #:mortar
-   #:underground #:powered #:revival #:charge #:devouring
+   #:underground #:powered #:revival #:charge #:devouring #:thrower
+   #:bloodlust
    #:mobility #:double-mobility #:rotation #:push-back #:grab #:net-of-steel
-   #:execution #:adaptation #:sandstorm-move
+   #:execution #:adaptation #:cannibalism
+   #:sandstorm-move
    #:paralysis #:mortar #:underground #:net-of-steel
    #:underground-castling
    #:explosion
@@ -31,6 +34,10 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skills - protocol
+
+(define-class skill-having ()
+  ((skills :type set :initform (set)))
+  (:protocolp t))
 
 (defgeneric skill-printables (skill)
   (:method-combination append))
@@ -138,6 +145,8 @@
 (define-skill revival (passive undirected) ())
 (define-skill charge (passive undirected) ())
 (define-skill devouring (passive undirected) ())
+(define-skill thrower (passive undirected) ())
+(define-skill bloodlust (passive undirected) ())
 
 (define-skill mobility (active undirected) ()
   (:default-initargs :activation-time :turn))
@@ -160,6 +169,9 @@
 (define-skill adaptation (active undirected)
   ((adapt-into :type symbol))
   (:default-initargs :activation-time :turn))
+(define-skill cannibalism (active undirected) ()
+  (:default-initargs :activation-time :turn))
+
 (define-skill sandstorm-move (active undirected) ()
   (:default-initargs :activation-time :before-battle))
 

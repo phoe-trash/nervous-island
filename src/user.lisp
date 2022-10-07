@@ -56,7 +56,7 @@
       (typecase element
         (nervous-island.tile:skill-having
          (nervous-island.common:set-contents
-          (nervous-island.tile:skills element)))
+          (nervous-island.skill:skills element)))
         (t '())))))
 
 (defun describe-army (army &optional (stream *standard-output*))
