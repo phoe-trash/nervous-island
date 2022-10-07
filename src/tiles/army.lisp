@@ -108,21 +108,6 @@
                      (element-count-error-expected condition)
                      (element-count-error-actual condition)))))
 
-(defun check-element-count (army element-count token-count)
-  (let* ((hq-elements (hq-elements army))
-         (elements (elements army))
-         (tokens (tokens army))
-         (actual-element-count (+ (length hq-elements) (length elements)))
-         (actual-token-count (length tokens)))
-    (unless (= element-count actual-element-count)
-      (error 'element-count-error :type 'nel:element
-                                  :expected element-count
-                                  :actual actual-element-count))
-    (unless (= token-count actual-token-count)
-      (error 'element-count-error :type 'nto:token
-                                  :expected token-count
-                                  :actual actual-token-count))))
-
 (defun discard-elements (army discards)
   (flet ((discard-tile (type slot)
            (let* ((predicate (lambda (x) (typep x type)))
@@ -138,6 +123,24 @@
                     ('nel:element '%elements)
                     ('nto:token '%tokens))))
         (discard-tile discard slot)))))
+
+(defun check-element-count (army element-count token-count)
+  (let* ((hq-elements (hq-elements army))
+         (elements (elements army))
+         (tokens (tokens army))
+         (actual-element-count (+ (length hq-elements) (length elements)))
+         (actual-token-count (length tokens)))
+    (unless (= element-count actual-element-count)
+      (error 'element-count-error :type 'nel:element
+                                  :expected element-count
+                                  :actual actual-element-count))
+    (unless (= token-count actual-token-count)
+      (error 'element-count-error :type 'nto:token
+                                  :expected token-count
+                                  :actual actual-token-count)))
+  ;; TODO ensure that only one HQ or three objects are present
+  ;;      (see Sand Runners)
+  )
 
 (defun make-army-after (army &key
                                (designators nil designatorsp)
