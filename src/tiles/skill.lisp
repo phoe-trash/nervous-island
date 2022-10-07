@@ -21,11 +21,12 @@
    #:toughness #:initiative #:value #:zombie-initiative
    #:venom #:sharpshooter #:spy #:return #:open #:paralysis #:mortar
    #:underground #:powered #:revival #:charge #:devouring #:thrower
-   #:bloodlust #:lair #:flying
+   #:bloodlust #:lair #:flying #:drift
    #:mobility #:double-mobility #:rotation #:push-back #:grab #:net-of-steel
    #:execution #:adaptation #:cannibalism
    #:sandstorm-move
    #:scavenger
+   #:boarding
    #:paralysis #:mortar #:underground #:net-of-steel
    #:underground-castling
    #:explosion
@@ -61,9 +62,10 @@
 (define-class undirected (skill) ()
   (:protocolp t))
 
-(defvar *activation-times* '(:initiative :turn :before-battle :after-battle))
+(defvar *activation-times*
+  '(:initiative :turn :before-battle :after-battle :placement))
 (deftype activation-time ()
-  '(member :initiative :turn :before-battle :after-battle))
+  '(member :initiative :turn :before-battle :after-battle :placement))
 
 (define-class active (skill)
   ((activation-time :type activation-time :initform :initiative))
@@ -166,6 +168,7 @@
 (define-skill bloodlust (passive undirected) ())
 (define-skill lair (passive undirected) ())
 (define-skill flying (passive undirected) ())
+(define-skill drift (passive undirected) ())
 
 (define-skill mobility (active undirected) ()
   (:default-initargs :activation-time :turn))
@@ -196,6 +199,9 @@
 
 (define-skill scavenger (active undirected) ()
   (:default-initargs :activation-time :after-battle))
+
+(define-skill boarding (active undirected) ()
+  (:default-initargs :activation-time :placement))
 
 (define-skill explosion (active undirected) ()
   (:default-initargs :activation-time :initiative))

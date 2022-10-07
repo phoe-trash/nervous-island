@@ -26,7 +26,7 @@
    #:move #:doubled-move
    #:push-back #:grab #:reposition #:castling #:rotation #:drill
    #:transposition
-   #:sniper #:grenade #:air-strike #:small-bomb #:ray #:avalanche #:hunt
+   #:sniper #:grenade #:air-strike #:small-bomb #:ray #:avalanche #:hunt #:wave
    #:terror #:action #:paralysis #:smokescreen #:reappearance
    #:castling-with-the-opponent #:cannibalize-enemy
    #:incubation #:quill #:left-quill #:right-quill))
@@ -112,6 +112,7 @@
 (define-instant ray)
 (define-instant avalanche)
 (define-instant hunt)
+(define-instant wave)
 
 (define-instant terror)
 (define-instant action)

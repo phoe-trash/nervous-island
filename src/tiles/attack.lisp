@@ -9,7 +9,7 @@
   (:export #:attack #:strength
            #:melee #:zombie-melee #:friendly-fire-melee
            #:ranged #:gauss-cannon #:shotgun #:rocket-launcher
-           #:explosive #:poisoning #:demolition))
+           #:explosive #:poisoning #:demolition #:water-gun))
 
 (in-package #:nervous-island.attack)
 
@@ -44,3 +44,4 @@
 (define-attack explosive ())
 (define-attack poisoning ())
 (define-attack demolition ())
+(define-attack water-gun ())

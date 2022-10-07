@@ -39,7 +39,7 @@
                              (:file "sand-runners")
                              (:file "troglodytes")
                              (:file "beasts")
-                             ;; TODO (:file "pirates")
+                             (:file "pirates")
                              ;; TODO shilling time! (:file "hell-hounds")
                              ))
                ;; (:module "state"

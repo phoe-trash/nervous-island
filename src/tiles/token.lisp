@@ -14,7 +14,8 @@
            #:quill #:left-quill #:right-quill
            #:tentacles #:zombie
            #:satiety #:lesser-satiety #:greater-satiety
-           #:lungs #:claws #:eyes #:fangs #:muscles #:heart))
+           #:lungs #:claws #:eyes #:fangs #:muscles #:heart
+           #:water-adjacency))
 
 (in-package #:nervous-island.token)
 
@@ -87,3 +88,5 @@
 (define-token fangs (:owned t :superclass greater-satiety))
 (define-token muscles (:owned t :superclass greater-satiety))
 (define-token heart (:owned t :superclass greater-satiety))
+
+(define-token water-adjacency (:owned t))
