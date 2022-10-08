@@ -54,7 +54,7 @@
   (:method ((bulk bulk))
     (let ((element (bulk-element bulk)))
       (typecase element
-        (nervous-island.tile:skill-having
+        (nervous-island.skill:skill-having
          (nervous-island.common:set-contents
           (nervous-island.skill:skills element)))
         (t '())))))
