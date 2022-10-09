@@ -17,29 +17,6 @@
                              (:file "attack")
                              (:file "effect")
                              (:file "tile")))
-               (:module "armies"
-                :components ((:file "moloch")
-                             (:file "borgo")
-                             (:file "outpost")
-                             (:file "hegemony")
-                             (:file "new-york")
-                             (:file "neojungle")
-                             (:file "smart")
-                             (:file "vegas")
-                             (:file "steel-police")
-                             (:file "dancer")
-                             (:file "sharrash")
-                             (:file "mephisto")
-                             (:file "ddm")
-                             (:file "ddm-old")
-                             (:file "missisipi")
-                             (:file "uranopolis")
-                             (:file "death-breath")
-                             (:file "iron-gang")
-                             (:file "sand-runners")
-                             (:file "troglodytes")
-                             (:file "beasts")
-                             (:file "pirates")))
                ;; (:module "state"
                ;;  :components ((:file "coord")
                ;;               (:file "board")
@@ -93,6 +70,36 @@
                  :report (find-symbol "INTERACTIVE"
                                       "PARACHUTE"))))
 
+(asdf:defsystem #:nervous-island/armies
+  :description "ネウロ島六角ボードゲームエンジン"
+  :author "Michał \"phoe\" Herda <phoe@disroot.org>"
+  :license "AGPLv3"
+  :version "0.0"
+  :serial t
+  :pathname "src/armies"
+  :components ((:file "moloch")
+               (:file "borgo")
+               (:file "outpost")
+               (:file "hegemony")
+               (:file "new-york")
+               (:file "neojungle")
+               (:file "smart")
+               (:file "vegas")
+               (:file "steel-police")
+               (:file "dancer")
+               (:file "sharrash")
+               (:file "mephisto")
+               (:file "ddm")
+               (:file "ddm-old")
+               (:file "missisipi")
+               (:file "uranopolis")
+               (:file "death-breath")
+               (:file "iron-gang")
+               (:file "sand-runners")
+               (:file "troglodytes")
+               (:file "beasts")
+               (:file "pirates")))
+
 (asdf:defsystem #:nervous-island/test
   :description "Test suite for Nervous Island"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
@@ -110,7 +117,6 @@
                              (:file "effect")
                              (:file "tile")
                              ))
-               (:file "armies")
                ;; (:module "state"
                ;;  :components ((:file "coord")
                ;;               (:file "board")
@@ -121,8 +127,9 @@
                ;;               (:file "step")
                ;;               (:file "choice")
                ;;               (:file "state")))
-               )
+               (:file "armies"))
   :depends-on (#:alexandria
                #:parachute
                #:named-readtables
-               #:nervous-island))
+               #:nervous-island
+               #:nervous-island/armies))
