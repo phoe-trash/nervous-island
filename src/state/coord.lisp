@@ -1,7 +1,7 @@
 ;;;; src/state/coord.lisp
 
 (uiop:define-package #:nervous-island.coord
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:ncom #:nervous-island.common))
   (:export
@@ -32,6 +32,9 @@
   (print-unreadable-object (object stream :type t :identity nil)
     (format stream "~D ~D" (axial-q object) (axial-r object))))
 
+(defmethod generic-eqv ((x axial) (y axial))
+  (values (cl:equalp x y) nil nil nil))
+
 (defstruct (cube (:constructor %make-cube) (:include coord))
   (x 0 :type integer :read-only t)
   (y 0 :type integer :read-only t)
@@ -55,6 +58,9 @@
 (defmethod print-object ((object cube) stream)
   (print-unreadable-object (object stream :type t :identity nil)
     (format stream "~D ~D ~D" (cube-x object) (cube-y object) (cube-z object))))
+
+(defmethod generic-eqv ((x cube) (y cube))
+  (values (cl:equalp x y) nil nil nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Coordinate conversion and arithmetic
@@ -158,7 +164,7 @@
                     collect (axial+ center result-axial))))
 
 (defun distance (start end)
-  (if (equalp start end)
+  (if (eqv start end)
       0
       (let ((q1 (axial-q start))
             (r1 (axial-r start))
@@ -251,7 +257,7 @@
         (%lerp (cube-z cube-1) (cube-z cube-2) v)))
 
 (defun linedraw (axial-1 axial-2)
-  (if (equalp axial-1 axial-2)
+  (if (eqv axial-1 axial-2)
       (list axial-1)
       (let ((distance (distance axial-1 axial-2))
             (cube-1 (axial-cube axial-1))

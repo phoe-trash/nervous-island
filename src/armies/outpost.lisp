@@ -37,9 +37,9 @@
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
   (nsk:initiative 0)
-  (ne:directed-mother :q) (ne:directed-mother :w)
-  (ne:directed-mother :e) (ne:directed-mother :a)
-  (ne:directed-mother :s) (ne:directed-mother :d))
+  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w)
+  (ne:directed-new-initiative :e) (ne:directed-new-initiative :a)
+  (ne:directed-new-initiative :s) (ne:directed-new-initiative :d))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Warriors
@@ -71,7 +71,7 @@
   (ne:directed-saboteur :a) (ne:directed-saboteur :s) (ne:directed-saboteur :d))
 
 (nt:define-unit recon-center (nt:module)
-  (ne:undirected-recon-center))
+  (ne:undirected-move-doubler))
 
 (nt:define-unit medic (nt:module)
   (ne:directed-medic :q) (ne:directed-medic :w) (ne:directed-medic :e))
@@ -86,4 +86,4 @@
   (ne:directed-scoper :a) (ne:directed-scoper :s) (ne:directed-scoper :d))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :a) (ne:directed-scout :w) (ne:directed-scout :d))
+  (ne:directed-speed :a) (ne:directed-speed :w) (ne:directed-speed :d))

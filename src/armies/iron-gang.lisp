@@ -61,7 +61,7 @@
   (nsk:toughness) (nsk:chain))
 
 (nt:define-unit biker (nt:warrior)
-  (nsk:armor :w) (nsk:chain) (nsk:double-mobility) (ne:directed-scout :s))
+  (nsk:armor :w) (nsk:chain) (nsk:double-mobility) (ne:directed-speed :s))
 
 (nt:define-unit berserker (nt:warrior)
   (na:melee :q 2) (na:melee :e 2) (nsk:initiative 2) (nsk:sacrifice))

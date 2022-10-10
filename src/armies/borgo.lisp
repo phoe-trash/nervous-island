@@ -37,9 +37,9 @@
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
   (nsk:initiative 0)
-  (ne:directed-scout :q) (ne:directed-scout :w)
-  (ne:directed-scout :e) (ne:directed-scout :a)
-  (ne:directed-scout :s) (ne:directed-scout :d))
+  (ne:directed-speed :q) (ne:directed-speed :w)
+  (ne:directed-speed :e) (ne:directed-speed :a)
+  (ne:directed-speed :s) (ne:directed-speed :d))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Warriors
@@ -78,4 +78,4 @@
   (ne:directed-melee-officer :e) (nsk:toughness))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :q) (ne:directed-scout :w) (ne:directed-scout :e))
+  (ne:directed-speed :q) (ne:directed-speed :w) (ne:directed-speed :e))

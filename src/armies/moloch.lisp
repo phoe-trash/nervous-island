@@ -93,7 +93,7 @@
 ;;; Modules
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-mother :w))
+  (ne:directed-new-initiative :w))
 
 (nt:define-unit medic (nt:module)
   (ne:directed-medic :w) (ne:directed-medic :a) (ne:directed-medic :d))
@@ -108,4 +108,4 @@
   (ne:directed-ranged-officer :s))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :w) (ne:directed-scout :a) (ne:directed-scout :d))
+  (ne:directed-speed :w) (ne:directed-speed :a) (ne:directed-speed :d))

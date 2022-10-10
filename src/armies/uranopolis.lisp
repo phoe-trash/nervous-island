@@ -89,8 +89,8 @@
 ;;; Modules
 
 (nt:define-unit acceleration-generator (nt:module)
-  (ne:directed-scout :q) (ne:directed-power-supply :q)
-  (ne:directed-scout :e) (ne:directed-power-supply :e))
+  (ne:directed-speed :q) (ne:directed-power-supply :q)
+  (ne:directed-speed :e) (ne:directed-power-supply :e))
 
 (nt:define-unit combat-generator (nt:module)
   (ne:directed-ranged-officer :q) (ne:directed-power-supply :q)
@@ -105,10 +105,10 @@
   (ne:directed-quartermaster :d 'na:ranged 'na:gauss-cannon))
 
 (nt:define-unit transport (nt:module)
-  (ne:directed-transport :w) (ne:directed-power-supply :w) (nsk:rotation))
+  (ne:directed-mobility :w) (ne:directed-power-supply :w) (nsk:rotation))
 
 (nt:define-unit doubler (nt:module)
-  (ne:directed-mother :q) (ne:directed-mother :w))
+  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w))
 
 (nt:define-unit wastes (nt:module)
   (ne:directed-wastes :q) (ne:directed-wastes :w) (ne:directed-wastes :e)

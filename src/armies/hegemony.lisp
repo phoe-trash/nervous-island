@@ -75,8 +75,8 @@
 ;;; Modules
 
 (nt:define-unit boss (nt:module)
-  (ne:directed-melee-officer :q) (ne:directed-scout :q)
-  (ne:directed-melee-officer :w) (ne:directed-scout :w))
+  (ne:directed-melee-officer :q) (ne:directed-speed :q)
+  (ne:directed-melee-officer :w) (ne:directed-speed :w))
 
 (nt:define-unit officer-1 (nt:module)
   (ne:directed-melee-officer :q) (ne:directed-melee-officer :w))
@@ -86,12 +86,12 @@
   (ne:directed-melee-officer :e))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :q) (ne:directed-scout :w) (ne:directed-scout :e))
+  (ne:directed-speed :q) (ne:directed-speed :w) (ne:directed-speed :e))
 
 (nt:define-unit transport (nt:module)
-  (ne:directed-transport :q) (ne:directed-transport :w)
-  (ne:directed-transport :e) (ne:directed-transport :q)
-  (ne:directed-transport :w) (ne:directed-transport :e))
+  (ne:directed-mobility :q) (ne:directed-mobility :w)
+  (ne:directed-mobility :e) (ne:directed-mobility :q)
+  (ne:directed-mobility :w) (ne:directed-mobility :e))
 
 (nt:define-unit quartermaster (nt:module)
   (ne:directed-quartermaster :w))

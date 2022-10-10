@@ -16,6 +16,7 @@
 
 (define-effect-package #:nervous-island.effect
   (:use #:nervous-island.cl)
+  (:shadow #:speed)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:na #:nervous-island.attack)
@@ -28,13 +29,13 @@
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
-   #:melee-officer #:ranged-officer #:scout #:mother #:toughness #:healing
-   #:quartermaster #:attack-types
-   #:medic #:transport #:grab #:rotation #:recon-center #:underground
-   #:paralysis #:venom
+   #:melee-officer #:ranged-officer #:speed #:new-initiative
+   #:toughness #:healing #:quartermaster #:attack-types
+   #:medic #:mobility #:grab #:rotation #:move-doubler
+   #:underground #:paralysis #:venom
    #:scoper #:saboteur #:takeover #:zone #:wastes
    #:motherland #:net-of-steel-launcher
-   #:implant-activation #:muzzle
+   #:implant-activation #:muzzle #:net-on-melees #:explosion
    #:power-supply
    #:hidden-activation
    #:gourmet #:freezing))
@@ -99,20 +100,20 @@
 
 (define-effect melee-officer (:numericp t))
 (define-effect ranged-officer (:numericp t))
-(define-effect scout (:numericp t))
-(define-effect mother (:numericp t))
+(define-effect speed (:numericp t))
+(define-effect new-initiative (:numericp t))
 (define-effect toughness (:numericp t))
 (define-effect healing (:numericp t))
+(define-effect mobility (:numericp t))
 
 (define-effect quartermaster (:quartermasterp t))
 (defmethod nsk:skill-printables append ((skill quartermaster))
   (list (set-contents (attack-types skill))))
 
 (define-effect medic ())
-(define-effect transport ())
 (define-effect grab ())
 (define-effect rotation ())
-(define-effect recon-center ())
+(define-effect move-doubler ())
 (define-effect underground ())
 (define-effect paralysis ())
 (define-effect venom ())
@@ -128,6 +129,8 @@
 
 (define-effect implant-activation ())
 (define-effect muzzle ())
+(define-effect net-on-melees ())
+(define-effect explosion ())
 
 (define-effect power-supply ())
 

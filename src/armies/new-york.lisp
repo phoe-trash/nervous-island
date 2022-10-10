@@ -88,7 +88,9 @@
 ;;; Modules
 
 (nt:define-unit sergeant (nt:module)
-  (ne:directed-mother :a) (ne:directed-mother :w) (ne:directed-mother :d))
+  (ne:directed-new-initiative :a)
+  (ne:directed-new-initiative :w)
+  (ne:directed-new-initiative :d))
 
 (nt:define-unit officer-1 (nt:module)
   (ne:directed-melee-officer :q)
@@ -101,4 +103,4 @@
   (ne:directed-ranged-officer :e))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :a) (ne:directed-scout :w)  (ne:directed-scout :d))
+  (ne:directed-speed :a) (ne:directed-speed :w)  (ne:directed-speed :d))

@@ -58,7 +58,7 @@
   (ne:undirected-melee-officer) (nsk:armor :s))
 
 (nt:define-unit accelerator (nt:module)
-  (ne:undirected-scout) (nsk:armor :s))
+  (ne:undirected-speed) (nsk:armor :s))
 
 (nt:define-unit toughener (nt:module)
   (ne:directed-toughness :q) (ne:directed-toughness :w)

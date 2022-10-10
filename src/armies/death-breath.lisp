@@ -86,4 +86,4 @@
   (ne:directed-melee-officer :w) (ne:directed-melee-officer :e))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :a) (ne:directed-scout :w) (ne:directed-scout :d))
+  (ne:directed-speed :a) (ne:directed-speed :w) (ne:directed-speed :d))

@@ -4,8 +4,9 @@
   (:use #:nervous-island.cl)
   (:local-nicknames (#:p #:protest/base)
                     (#:nel #:nervous-island.element)
-                    (#:nsk #:nervous-island.skill))
-  (:export #:token
+                    (#:nsk #:nervous-island.skill)
+                    (#:ne #:nervous-island.effect))
+  (:export #:token #:skill-token
            #:damage #:net
            #:venom #:takeover #:steel-net #:paralysis #:no-power #:ranged-net
            #:freezing
@@ -23,7 +24,7 @@
   (:protocolp t))
 
 (define-class skill-token (token nsk:skill-having) ()
-  (:protocolp t)) ;; TODO use me someday
+  (:protocolp t))
 
 (defmethod print-object ((object token) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
@@ -31,62 +32,98 @@
            (name (if owner (nel:name owner) 'unowned)))
       (format stream "~A ~A ~A" name (type-of object) 'token))))
 
-(defmacro define-token (name (&key owned (superclass 'token)))
-  (let ((lambda-list (if owned '(owner) '()))
-        (initargs (if owned '(:owner owner) '())))
+(defmacro define-token (name &key owned (superclass 'token) skill protocolp)
+  (let ((lambda-list (append (when owned '(owner))
+                             (when skill '(skill))))
+        (initargs (append (when owned '(:owner owner))
+                          (when skill '(:skill skill))))
+        (options (when protocolp `((:protocolp t)))))
     `(progn
-       (define-class ,name (,superclass) ())
-       (defun ,name (,@lambda-list)
-         (make-instance ',name ,@initargs)))))
+       (define-class ,name (,superclass) () ,@options)
+       ,@(unless protocolp
+           `((defun ,name (,@lambda-list)
+               (make-instance ',name ,@initargs)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Tokens - concrete classes
 
-(define-token damage ())
-(define-token net ())
+(define-token damage)
+(define-token net)
 
-(define-token venom (:owned t))
-(define-token takeover (:owned t))
-(define-token steel-net (:owned t))
-(define-token paralysis (:owned t))
-(define-token no-power (:owned t))
-(define-token ranged-net (:owned t))
-(define-token freezing (:owned t))
+(define-token venom :owned t)
+(define-token takeover :owned t)
+(define-token steel-net :owned t)
+(define-token paralysis :owned t)
+(define-token no-power :owned t)
+(define-token ranged-net :owned t)
+(define-token freezing :owned t)
 
-(define-token roots (:owned t))
-(define-token hole (:owned t))
-(define-token toxic-bomb (:owned t))
-(define-token quicksands (:owned t))
+(define-token roots :owned t)
+(define-token hole :owned t)
+(define-token toxic-bomb :owned t)
+(define-token quicksands :owned t)
 
-(define-class incubator-token (token) ()
-  (:protocolp t))
-(define-token accelerator (:owned t :superclass incubator-token))
-(define-token claw (:owned t :superclass incubator-token))
-(define-token attack-net (:owned t :superclass incubator-token))
-(define-token acid-thrower (:owned t :superclass incubator-token))
+(define-token incubator-token
+  :superclass skill-token
+  :protocolp t)
+(define-token accelerator
+  :owned t
+  :superclass incubator-token
+  :skill (ne:undirected-speed 2))
+(define-token claw
+  :owned t
+  :superclass incubator-token
+  :skill (ne:undirected-melee-officer 2))
+(define-token attack-net
+  :owned t
+  :superclass incubator-token
+  :skill (ne:undirected-net-on-melees))
+(define-token acid-thrower
+  :owned t
+  :superclass incubator-token
+  :skill (ne:undirected-explosion))
 
-(define-class quill (token) ()
-  (:protocolp t))
-(define-token left-quill (:owned t :superclass quill))
-(define-token right-quill (:owned t :superclass quill))
+(define-token quill :protocolp t)
+(define-token left-quill :owned t :superclass quill)
+(define-token right-quill :owned t :superclass quill)
 
-(define-token tentacles (:owned t))
-(define-token zombie (:owned t))
+(define-token tentacles :owned t)
+(define-token zombie :owned t)
 
-;;; TODO associate tokens with skills maybe
-(define-class satiety (token) ()
-  (:protocolp t))
-(define-class lesser-satiety (satiety) ()
-  (:protocolp t))
-(define-class greater-satiety (satiety) ()
-  (:protocolp t))
+(define-token satiety
+  :superclass skill-token
+  :protocolp t)
 
-(define-token lungs (:owned t :superclass lesser-satiety))
-(define-token claws (:owned t :superclass lesser-satiety))
+(define-token lesser-satiety
+  :superclass satiety
+  :protocolp t)
+(define-token lungs
+  :owned t
+  :superclass lesser-satiety
+  :skill (ne:directed-speed :self))
+(define-token claws
+  :owned t
+  :superclass lesser-satiety
+  :skill (ne:directed-melee-officer :self))
 
-(define-token eyes (:owned t :superclass greater-satiety))
-(define-token fangs (:owned t :superclass greater-satiety))
-(define-token muscles (:owned t :superclass greater-satiety))
-(define-token heart (:owned t :superclass greater-satiety))
+(define-token greater-satiety
+  :superclass satiety
+  :protocolp t)
+(define-token eyes
+  :owned t
+  :superclass greater-satiety
+  :skill (ne:directed-speed :self 2))
+(define-token fangs
+  :owned t
+  :superclass greater-satiety
+  :skill (ne:directed-melee-officer :self 2))
+(define-token muscles
+  :owned t
+  :superclass greater-satiety
+  :skill (ne:directed-mobility :self 2))
+(define-token heart
+  :owned t
+  :superclass greater-satiety
+  :skill (ne:directed-toughness :self 2))
 
-(define-token water-adjacency (:owned t))
+(define-token water-adjacency :owned t)

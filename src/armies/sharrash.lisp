@@ -80,13 +80,14 @@
   (nsk:underground))
 
 (nt:define-unit transport (nt:module)
-  (ne:directed-recon-center :q) (ne:directed-recon-center :w) (nsk:underground))
+  (ne:directed-mobility :q) (ne:directed-mobility :w) (nsk:underground))
 
 (nt:define-unit medic (nt:module)
   (ne:directed-medic :q) (ne:directed-medic :w) (nsk:underground))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :q) (ne:directed-scout :w) (nsk:underground))
+  (ne:directed-speed :q) (ne:directed-speed :w) (nsk:underground))
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-mother :q) (ne:directed-mother :w) (nsk:underground))
+  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w)
+  (nsk:underground))

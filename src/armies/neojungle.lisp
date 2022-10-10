@@ -90,7 +90,7 @@
   (ne:directed-melee-officer :w) (nsk:toughness) (nsk:armor :s))
 
 (nt:define-unit symbiont-beta (nt:module)
-  (ne:directed-scout :w) (nsk:toughness) (nsk:armor :s))
+  (ne:directed-speed :w) (nsk:toughness) (nsk:armor :s))
 
 (nt:define-unit symbiont-gamma (nt:module)
-  (ne:directed-scout :w) (ne:directed-melee-officer :w) (nsk:armor :s))
+  (ne:directed-speed :w) (ne:directed-melee-officer :w) (nsk:armor :s))

@@ -100,7 +100,7 @@
   (ne:long-range-directed-ranged-officer :w))
 
 (nt:define-unit main-war-processor (nt:module)
-  (ne:long-range-directed-mother :w))
+  (ne:long-range-directed-new-initiative :w))
 
 (nt:define-unit scout (nt:module)
-  (ne:long-range-directed-scout :w))
+  (ne:long-range-directed-speed :w))

@@ -59,7 +59,7 @@
   (nsk:initiative 3))
 
 (nt:define-unit optimist (nt:warrior)
-  (ne:directed-scout :q) (na:melee :a 3) (ne:directed-scout :s)
+  (ne:directed-speed :q) (na:melee :a 3) (ne:directed-speed :s)
   (nsk:initiative 1) (nsk:mobility))
 
 (nt:define-unit vulture (nt:warrior)
@@ -93,7 +93,7 @@
   (ne:directed-ranged-officer :s))
 
 (nt:define-unit chieftain (nt:module)
-  (ne:directed-mother :q) (ne:directed-mother :w))
+  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w))
 
 (nt:define-unit caravan (nt:module)
-  (ne:directed-recon-center :q) (nsk:mobility))
+  (ne:directed-mobility :q) (nsk:mobility))

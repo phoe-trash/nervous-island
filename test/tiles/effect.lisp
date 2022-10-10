@@ -6,9 +6,9 @@
   (flet ((test (class)
            (fail (make-instance class) p:protocol-object-instantiation)))
     (mapcar #'test '(ne:effect ne:undirected-effect ne:numeric
-                     ne:melee-officer ne:ranged-officer ne:scout ne:mother
-                     ne:medic ne:transport ne:quartermaster ne:recon-center
-                     ne:scoper ne:saboteur)))
+                     ne:melee-officer ne:ranged-officer ne:speed
+                     ne:new-initiative ne:medic ne:mobility ne:quartermaster
+                     ne:move-doubler ne:scoper ne:saboteur)))
   (fail (make-instance 'ne:directed-effect :direction :w)
       p:protocol-object-instantiation))
 

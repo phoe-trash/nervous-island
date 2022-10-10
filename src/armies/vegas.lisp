@@ -73,4 +73,4 @@
   (ne:directed-medic :w))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :w))
+  (ne:directed-speed :w))

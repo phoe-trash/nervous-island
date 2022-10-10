@@ -53,8 +53,11 @@
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~{~A~^ ~}" (reverse (skill-printables object)))))
 
+(deftype direction ()
+  `(or ncom:direction ncom:diagonal ncom:anywhere ncom:self))
+
 (define-class directed (skill)
-  ((direction :type (or ncom:direction ncom:diagonal ncom:anywhere)))
+  ((direction :type direction))
   (:protocolp t))
 (defmethod skill-printables append ((skill directed))
   (list (direction skill)))
@@ -151,7 +154,6 @@
 (define-skill initiative (passive undirected)
   ((value :type initiative-value)))
 (define-skill zombie-initiative (zombie initiative)
-  ;; TODO fix this to avoid duplication maybe
   ((value :type initiative-value)))
 (define-skill venom (passive undirected) ())
 (define-skill sharpshooter (passive undirected) ())

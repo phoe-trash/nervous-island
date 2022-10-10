@@ -38,9 +38,9 @@
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
   (nsk:initiative 0)
-  (ne:directed-transport :q) (ne:directed-transport :w)
-  (ne:directed-transport :e) (ne:directed-transport :a)
-  (ne:directed-transport :s) (ne:directed-transport :d))
+  (ne:directed-mobility :q) (ne:directed-mobility :w)
+  (ne:directed-mobility :e) (ne:directed-mobility :a)
+  (ne:directed-mobility :s) (ne:directed-mobility :d))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Warriors
@@ -74,10 +74,10 @@
 ;;; Modules
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-mother :w))
+  (ne:directed-new-initiative :w))
 
 (nt:define-unit officer (nt:module)
   (ne:directed-ranged-officer :w))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :w))
+  (ne:directed-speed :w))

@@ -44,6 +44,6 @@
 
 (nt:define-unit object-yellow (nt:object)
   (nsk:net :q) (na:ranged :w 2) (nsk:net :e)
-  (ne:directed-scout :a) (ne:directed-scout :d)
+  (ne:directed-speed :a) (ne:directed-speed :d)
   (nsk:initiative 0)
   (ne:directed-healing :s 2))

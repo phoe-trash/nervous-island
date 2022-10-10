@@ -83,7 +83,7 @@
 ;;; Modules
 
 (nt:define-unit ranger (nt:module)
-  (ne:directed-scout :w) (nsk:rotation) (nsk:toughness))
+  (ne:directed-speed :w) (nsk:rotation) (nsk:toughness))
 
 (nt:define-unit officer (nt:module)
   (ne:directed-melee-officer :w) (nsk:rotation))

@@ -12,10 +12,10 @@
                (:module "tiles"
                 :components ((:file "element")
                              (:file "skill")
-                             (:file "token")
-                             (:file "army")
                              (:file "attack")
                              (:file "effect")
+                             (:file "token")
+                             (:file "army")
                              (:file "tile")))
                ;; (:module "state"
                ;;  :components ((:file "coord")
@@ -28,7 +28,7 @@
                ;;               (:file "choice")
                ;;               (:file "state")))
                ;; (:module "gui"
-               ;;  :components
+               ;;  :componentsq
                ;;  ((:module "shapes"
                ;;    :components ((:file "package")
                ;;                 (:file "common")

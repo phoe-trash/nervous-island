@@ -86,11 +86,11 @@
   (ne:directed-ranged-officer :e))
 
 (nt:define-unit sergeant (nt:module)
-  (ne:directed-mother :q)
-  (ne:directed-mother :e))
+  (ne:directed-new-initiative :q)
+  (ne:directed-new-initiative :e))
 
 (nt:define-unit scout (nt:module)
-  (ne:directed-scout :a) (ne:directed-scout :w) (ne:directed-scout :d))
+  (ne:directed-speed :a) (ne:directed-speed :w) (ne:directed-speed :d))
 
 (nt:define-unit saboteur (nt:module)
   (ne:directed-saboteur :q) (ne:directed-saboteur :w) (ne:directed-saboteur :e)
