@@ -88,9 +88,9 @@
 ;;; Modules
 
 (nt:define-unit sergeant (nt:module)
-  (ne:directed-new-initiative :a)
-  (ne:directed-new-initiative :w)
-  (ne:directed-new-initiative :d))
+  (ne:directed-additional-initiative :a)
+  (ne:directed-additional-initiative :w)
+  (ne:directed-additional-initiative :d))
 
 (nt:define-unit officer-1 (nt:module)
   (ne:directed-melee-officer :q)

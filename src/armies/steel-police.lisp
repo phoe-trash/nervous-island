@@ -86,8 +86,8 @@
   (ne:directed-ranged-officer :e))
 
 (nt:define-unit sergeant (nt:module)
-  (ne:directed-new-initiative :q)
-  (ne:directed-new-initiative :e))
+  (ne:directed-additional-initiative :q)
+  (ne:directed-additional-initiative :e))
 
 (nt:define-unit scout (nt:module)
   (ne:directed-speed :a) (ne:directed-speed :w) (ne:directed-speed :d))

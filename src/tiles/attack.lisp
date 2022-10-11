@@ -2,6 +2,7 @@
 
 (uiop:define-package #:nervous-island.attack
   (:use #:nervous-island.cl)
+  (:shadow #:throw)
   (:local-nicknames (#:a #:alexandria)
                     (#:p #:protest/base)
                     (#:ncom #:nervous-island.common)
@@ -9,7 +10,7 @@
   (:export #:attack #:strength
            #:melee #:zombie-melee #:friendly-fire-melee
            #:ranged #:gauss-cannon #:shotgun #:rocket-launcher
-           #:explosive #:poisoning #:demolition #:water-gun))
+           #:explosive #:poisoning #:demolition #:throw #:water-gun))
 
 (in-package #:nervous-island.attack)
 
@@ -44,4 +45,5 @@
 (define-attack explosive ())
 (define-attack poisoning ())
 (define-attack demolition ())
+(define-attack throw ())
 (define-attack water-gun ())

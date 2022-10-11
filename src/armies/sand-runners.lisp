@@ -93,7 +93,7 @@
   (ne:directed-ranged-officer :s))
 
 (nt:define-unit chieftain (nt:module)
-  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w))
+  (ne:directed-additional-initiative :q) (ne:directed-additional-initiative :w))
 
 (nt:define-unit caravan (nt:module)
   (ne:directed-mobility :q) (nsk:mobility))

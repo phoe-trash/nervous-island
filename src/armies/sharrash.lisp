@@ -89,5 +89,5 @@
   (ne:directed-speed :q) (ne:directed-speed :w) (nsk:underground))
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w)
+  (ne:directed-additional-initiative :q) (ne:directed-additional-initiative :w)
   (nsk:underground))

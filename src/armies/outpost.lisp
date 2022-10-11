@@ -37,9 +37,9 @@
   (na:melee :q) (na:melee :w) (na:melee :e)
   (na:melee :a) (na:melee :s) (na:melee :d)
   (nsk:initiative 0)
-  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w)
-  (ne:directed-new-initiative :e) (ne:directed-new-initiative :a)
-  (ne:directed-new-initiative :s) (ne:directed-new-initiative :d))
+  (ne:directed-additional-initiative :q) (ne:directed-additional-initiative :w)
+  (ne:directed-additional-initiative :e) (ne:directed-additional-initiative :a)
+  (ne:directed-additional-initiative :s) (ne:directed-additional-initiative :d))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Warriors

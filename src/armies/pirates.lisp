@@ -76,9 +76,9 @@
 
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-new-initiative :q)
-  (ne:directed-new-initiative :w)
-  (ne:directed-new-initiative :e))
+  (ne:directed-additional-initiative :q)
+  (ne:directed-additional-initiative :w)
+  (ne:directed-additional-initiative :e))
 
 (nt:define-unit officer (nt:module)
   (ne:directed-melee-officer :q)

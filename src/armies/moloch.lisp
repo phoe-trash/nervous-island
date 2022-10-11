@@ -93,7 +93,7 @@
 ;;; Modules
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-new-initiative :w))
+  (ne:directed-additional-initiative :w))
 
 (nt:define-unit medic (nt:module)
   (ne:directed-medic :w) (ne:directed-medic :a) (ne:directed-medic :d))

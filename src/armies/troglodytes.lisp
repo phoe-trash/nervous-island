@@ -52,7 +52,7 @@
   (nsk:initiative 3) (nsk:cannibalism))
 
 (nt:define-unit archer (nt:warrior)
-  (na:ranged :aq) (nsk:initiative 3) (nsk:initiative 1)
+  (na:throw :aq) (nsk:initiative 3) (nsk:initiative 1)
   (nsk:thrower) (nsk:rotation) (nsk:cannibalism))
 
 (nt:define-unit tundra (nt:warrior)
@@ -76,5 +76,5 @@
   (nsk:initiative 1) (nsk:cannibalism))
 
 (nt:define-unit kids (nt:warrior)
-  (nsk:armor :q) (na:ranged :aq) (nsk:armor :a) (nsk:initiative 1)
+  (nsk:armor :q) (na:throw :aq) (nsk:armor :a) (nsk:initiative 1)
   (nsk:thrower) (nsk:push-back) (nsk:cannibalism))

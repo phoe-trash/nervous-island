@@ -74,7 +74,7 @@
 ;;; Modules
 
 (nt:define-unit mother (nt:module)
-  (ne:directed-new-initiative :w))
+  (ne:directed-additional-initiative :w))
 
 (nt:define-unit officer (nt:module)
   (ne:directed-ranged-officer :w))

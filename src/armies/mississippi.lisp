@@ -1,6 +1,6 @@
-;;;; src/armies/missisipi.lisp
+;;;; src/armies/mississippi.lisp
 
-(uiop:define-package #:nervous-island.armies.missisipi
+(uiop:define-package #:nervous-island.armies.mississippi
   (:use #:nervous-island.cl)
   (:shadow #:shadow)
   (:local-nicknames (#:a #:alexandria)
@@ -20,14 +20,14 @@
    #:toxic-bomb
    #:battle #:move #:smokescreen #:push-back #:transposition))
 
-(in-package #:nervous-island.armies.missisipi)
+(in-package #:nervous-island.armies.mississippi)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army
 
 (define-class army (nr:army) ()
   (:default-initargs
-   :name :missisipi
+   :name :mississippi
    :token-count 6
    :token-designators '((nto:venom 5) nto:toxic-bomb)
    :designators '(hq

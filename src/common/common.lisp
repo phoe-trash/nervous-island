@@ -1,10 +1,11 @@
 ;;;; src/common/common.lisp
 
 (uiop:define-package #:nervous-island.common
-  (:use #:cl)
+  (:use #:c2cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:φ #:phoe-toolbox)
                     (#:p #:protest/base)
+                    (#:t #:trivial-indent)
                     (#:v #:value-semantics-utils))
   (:shadowing-import-from #:value-semantics-utils
                           #:eqv #:generic-eqv #:copy
@@ -28,6 +29,11 @@
    #:set #:set-test #:set-contents #:set-count
    #:set-insert #:set-remove #:set-find
    #:set-difference #:set-union #:set-intersection #:set-exclusive-or))
+
+(in-package #:nervous-island.common)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Nervous Island CL package
 
 (macrolet
     ((create-ncl-package ()
@@ -60,8 +66,6 @@
             (:export ,@(c2cl-symbols))
             (:export ,@(ncom-symbols))))))
   (create-ncl-package))
-
-(in-package #:nervous-island.common)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Types and constants
@@ -123,8 +127,7 @@
     (name (&rest superclasses) (&rest slot-definitions) &body options)
   (%define-class name superclasses slot-definitions options))
 
-(setf (trivial-indent:indentation 'define-class)
-      '(4 &lambda &body))
+(setf (t:indentation 'define-class) '(4 &lambda &body))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Class definition
@@ -177,7 +180,8 @@
 (defun create-shared-initialize (name slots options)
   (a:with-gensyms (args)
     (flet
-        ((decorate-slot (slot-form)
+        (;; Slot decoration
+         (decorate-slot (slot-form)
            (destructuring-bind (name &key transform &allow-other-keys)
                slot-form
              (let* ((keyword (a:make-keyword name))
@@ -185,11 +189,23 @@
                     (suffix (if (find #\- (string name)) "-P" "P"))
                     (predicate (a:make-gensym (format nil "~A~A" name suffix))))
                (list name var predicate keyword transform))))
+         ;; Argument handling
          (make-key (decorated)
            (destructuring-bind (name var predicate keyword transform)
                decorated
              (declare (ignore name transform))
              `((,keyword ,var) nil ,predicate)))
+         (make-transform (decorated)
+           (destructuring-bind (name var predicate keyword transform)
+               decorated
+             (declare (ignore name predicate keyword))
+             (when transform
+               `((setf ,var (funcall ,transform ,var))))))
+         (make-transform-arg (decorated)
+           (destructuring-bind (name var predicate keyword transform)
+               decorated
+             (declare (ignore name predicate))
+             (when transform `(,keyword ,var))))
          (make-ignore (decorated)
            `(,(second decorated) ,(third decorated)))
          (make-before ()
@@ -198,6 +214,7 @@
          (make-after ()
            (a:when-let ((function (car (a:assoc-value options :after))))
              `((apply ,function ,name ,args))))
+         ;; Extra argument handling
          (decorate-extra-args ()
            (a:when-let ((extra-args (a:assoc-value options :extra-args)))
              (loop for keyword in extra-args
@@ -215,19 +232,25 @@
              args)))
       (let ((decorated-slots (mapcar #'decorate-slot slots))
             (decorated-extra-args (decorate-extra-args)))
+        ;; TODO this bugs out with u-i-f-r-c, fix it
         (a:with-gensyms (slots)
           (let ((keys (mapcar #'make-key decorated-slots))
                 (ignores (a:mappend #'make-ignore decorated-slots))
                 (extra-keys (mapcar #'make-extra-key decorated-extra-args))
                 (extra-ignores (mapcar #'make-extra-ignore
                                        decorated-extra-args))
+                (transforms (a:mappend #'make-transform decorated-slots))
+                (transform-args (a:mappend #'make-transform-arg
+                                           decorated-slots))
                 (before (make-before))
                 (after (make-after))
                 (new-args (remove-extra-args args)))
             `(defmethod shared-initialize :around
                  ((,name ,name) ,slots &rest ,args &key ,@keys ,@extra-keys)
                (declare (ignorable ,@ignores ,@extra-ignores))
+               ,@transforms
                ,@before
-               (apply #'call-next-method ,name ,slots ,new-args)
+               (apply #'call-next-method ,name ,slots ,@transform-args
+                      ,new-args)
                ,@after
                ,name)))))))

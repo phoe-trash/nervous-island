@@ -108,7 +108,7 @@
   (ne:directed-mobility :w) (ne:directed-power-supply :w) (nsk:rotation))
 
 (nt:define-unit doubler (nt:module)
-  (ne:directed-new-initiative :q) (ne:directed-new-initiative :w))
+  (ne:directed-additional-initiative :q) (ne:directed-additional-initiative :w))
 
 (nt:define-unit wastes (nt:module)
   (ne:directed-wastes :q) (ne:directed-wastes :w) (ne:directed-wastes :e)

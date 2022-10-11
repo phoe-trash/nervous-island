@@ -29,7 +29,7 @@
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
-   #:melee-officer #:ranged-officer #:speed #:new-initiative
+   #:melee-officer #:ranged-officer #:speed #:additional-initiative
    #:toughness #:healing #:quartermaster #:attack-types
    #:medic #:mobility #:grab #:rotation #:move-doubler
    #:underground #:paralysis #:venom
@@ -101,7 +101,7 @@
 (define-effect melee-officer (:numericp t))
 (define-effect ranged-officer (:numericp t))
 (define-effect speed (:numericp t))
-(define-effect new-initiative (:numericp t))
+(define-effect additional-initiative (:numericp t))
 (define-effect toughness (:numericp t))
 (define-effect healing (:numericp t))
 (define-effect mobility (:numericp t))
