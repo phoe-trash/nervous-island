@@ -106,6 +106,27 @@
                (:module "tilecache"
                 :components ((:file "tilecache")))))
 
+(asdf:defsystem #:nervous-island/rules
+  :description "ネウロ島六角ボードゲームエンジン"
+  :author "Michał \"phoe\" Herda <phoe@disroot.org>"
+  :license "AGPLv3"
+  :version "0.0"
+  :depends-on (#:split-sequence
+               #:in-nomine
+               #:nervous-island/common)
+  :pathname "src/rules"
+  :components ((:file "rules")
+               (:module "faq"
+                :depends-on ("rules")
+                :components
+                ((:file "errata")
+                 (:file "gameplay")
+                 (:file "general")
+                 (:file "more-tactical-game")
+                 (:file "non-tournament-optional-rules")
+                 (:file "multiplayer")
+                 (:file "non-army-additions")))))
+
 (asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
