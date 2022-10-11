@@ -3,19 +3,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; AUTO-MODULE - adapted from https://github.com/sjl/rosalind
 
-(defclass auto-module (module) ())
+(defclass auto-module (module)
+  ((cachedp :initform nil)))
 
-(defmethod component-children ((self auto-module))
-  (flet ((make-file (pathname)
-           (make-instance 'cl-source-file
-                          :name (pathname-name pathname)
-                          :type "lisp"
-                          :pathname pathname
-                          :parent (component-parent self))))
-    (let* ((pattern (make-pathname :directory nil :name uiop:*wild*
-                                   :type "lisp"))
-           (files (uiop:directory-files (component-pathname self) pattern)))
-      (mapcar #'make-file files))))
+(defmethod component-children :before ((self auto-module))
+  (unless (slot-value self 'cachedp)
+    (flet ((make-file (pathname)
+             (make-instance 'cl-source-file
+                            :name (pathname-name pathname)
+                            :type "lisp"
+                            :pathname pathname
+                            :parent (component-parent self))))
+      (let* ((pattern (make-pathname :directory nil :name uiop:*wild*
+                                     :type "lisp"))
+             (pathnames (directory-files (component-pathname self) pattern))
+             (children (mapcar #'make-file pathnames)))
+        (setf (slot-value self 'asdf/component:children) children
+              (slot-value self 'cachedp) t)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; System definitions
@@ -122,6 +126,7 @@
   :depends-on (;; NI dependencies
                #:nervous-island/common
                #:nervous-island/tiles
+               #:nervous-island/armies
                #:nervous-island/junk
                ;; User package dependencies
                #:utilities.print-tree
@@ -141,6 +146,10 @@
   :license "AGPLv3"
   :version "0.0"
   :serial t
+  :depends-on (#:alexandria
+               #:parachute
+               #:named-readtables
+               #:nervous-island)
   :pathname "test"
   :components ((:file "package")
                (:module "tiles"
@@ -162,8 +171,4 @@
                ;;               (:file "step")
                ;;               (:file "choice")
                ;;               (:file "state")))
-               (:file "armies"))
-  :depends-on (#:alexandria
-               #:parachute
-               #:named-readtables
-               #:nervous-island))
+               (:file "armies")))

@@ -13,7 +13,8 @@
            #:hq-element-count #:hq-elements
            #:element-count #:elements
            #:token-count #:tokens
-           #:element-count-error #:ensure-army))
+           #:element-count-error
+           #:ensure-army #:make-all-armies))
 
 (in-package #:nervous-island.army)
 
@@ -176,3 +177,12 @@
   (:method ((symbol symbol)) (ensure-army (make-instance symbol)))
   (:method (thing)
     (error 'type-error :datum thing :expected-type '(or army symbol))))
+
+(defun make-all-armies ()
+  (loop with prefix = (symbol-name '#:nervous-island.armies.)
+        for package in (sort (copy-list (list-all-packages)) #'string<
+                             :key #'package-name)
+        for package-name = (package-name package)
+        for result = (search prefix package-name)
+        when (and result (= 0 result))
+          collect (make-instance (find-symbol (symbol-name '#:army) package))))

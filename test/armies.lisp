@@ -3,7 +3,7 @@
 (in-package #:nervous-island/test)
 
 (define-test armies-instantiate
-  (dolist (army (nu:make-all-armies))
+  (dolist (army (nr:make-all-armies))
     ;; Elements should have their names exported from their army packages
     (let* ((package (symbol-package (class-name (class-of army))))
            (elements (append (nr:hq-elements army) (nr:elements army))))

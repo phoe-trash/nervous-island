@@ -38,8 +38,7 @@
             ;;                   (#:nsp #:nervous-island.space)
             ;;                   (#:nst #:nervous-island.state))
             ;; Nervous Island armies
-            (:local-nicknames ,@(make-army-nicknames))
-            (:export #:make-all-armies)))))
+            (:local-nicknames ,@(make-army-nicknames))))))
   (create-user-package))
 
 (in-package #:nervous-island.user)
@@ -88,15 +87,6 @@
     (utilities.print-tree:print-tree
      stream army
      (utilities.print-tree:make-node-printer #'frob nil #'children))))
-
-(defun make-all-armies ()
-  (loop with prefix = (symbol-name '#:nervous-island.armies.)
-        for package in (sort (copy-list (list-all-packages)) #'string<
-                             :key #'package-name)
-        for package-name = (package-name package)
-        for result = (search prefix package-name)
-        when (and result (= 0 result))
-          collect (make-instance (find-symbol (symbol-name '#:army) package))))
 
 (defun frob-faq (pathname prefix &aux (i 0))
   (flet ((frob (x)
