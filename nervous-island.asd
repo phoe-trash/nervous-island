@@ -1,5 +1,25 @@
 ;;;; nervous-island.asd
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; AUTO-MODULE - adapted from https://github.com/sjl/rosalind
+
+(defclass auto-module (module) ())
+
+(defmethod component-children ((self auto-module))
+  (flet ((make-file (pathname)
+           (make-instance 'cl-source-file
+                          :name (pathname-name pathname)
+                          :type "lisp"
+                          :pathname pathname
+                          :parent (component-parent self))))
+    (let* ((pattern (make-pathname :directory nil :name uiop:*wild*
+                                   :type "lisp"))
+           (files (uiop:directory-files (component-pathname self) pattern)))
+      (mapcar #'make-file files))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; System definitions
+
 (asdf:defsystem #:nervous-island/common
   :description "ネウロ島六角ボードゲームエンジン"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
@@ -38,31 +58,10 @@
   :version "0.0"
   :serial nil
   :depends-on (#:nervous-island/tiles)
-  :pathname "src/armies"
-  :components ((:file "moloch")
-               (:file "borgo")
-               (:file "outpost")
-               (:file "hegemony")
-               (:file "new-york")
-               (:file "neojungle")
-               (:file "smart")
-               (:file "vegas")
-               (:file "steel-police")
-               (:file "dancer")
-               (:file "sharrash")
-               (:file "mephisto")
-               (:file "ddm")
-               (:file "ddm-old")
-               (:file "mississippi")
-               (:file "uranopolis")
-               (:file "death-breath")
-               (:file "iron-gang")
-               (:file "sand-runners")
-               (:file "troglodytes")
-               (:file "beasts")
-               (:file "pirates")))
+  :pathname "src"
+  :components ((auto-module "armies")))
 
-(asdf:defsystem #:nervous-island
+(asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
   :license "AGPLv3"
@@ -112,7 +111,23 @@
                ;;                               (:file "warrior")
                ;;                               (:file "module")))))))
                ;; (:file "user")
-               )
+               ))
+
+(asdf:defsystem #:nervous-island
+  :description "ネウロ島六角ボードゲームエンジン"
+  :author "Michał \"phoe\" Herda <phoe@disroot.org>"
+  :license "AGPLv3"
+  :version "0.0"
+  :serial t
+  :depends-on (;; NI dependencies
+               #:nervous-island/common
+               #:nervous-island/tiles
+               #:nervous-island/junk
+               ;; User package dependencies
+               #:utilities.print-tree
+               #:split-sequence)
+  :pathname "src"
+  :components ((:file "user"))
   :in-order-to ((test-op (load-op :nervous-island/test)))
   :perform
   (test-op (o c)

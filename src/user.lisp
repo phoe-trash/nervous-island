@@ -1,32 +1,47 @@
 ;;;; src/user.lisp
 
-(uiop:define-package #:nervous-island.user
-  (:use #:cl)
-  ;; Nervous Island packages
-  (:local-nicknames (#:na #:nervous-island.attack)
-                    (#:nb #:nervous-island.board)
-                    (#:nc #:nervous-island.coord)
-                    (#:nd #:nervous-island.damage)
-                    (#:nch #:nervous-island.choice)
-                    (#:ncom #:nervous-island.common)
-                    (#:ne #:nervous-island.effect)
-                    (#:ni #:nervous-island.instant)
-                    (#:np #:nervous-island.player)
-                    (#:nph #:nervous-island.phase)
-                    (#:nr #:nervous-island.army)
-                    (#:nsk #:nervous-island.skill)
-                    (#:nsp #:nervous-island.space)
-                    (#:nst #:nervous-island.state)
-                    (#:nt #:nervous-island.tile)
-                    (#:nto #:nervous-island.token))
-  ;; Nervous Island armies
-  (:local-nicknames (#:moloch #:nervous-island.armies.moloch)
-                    (#:outpost #:nervous-island.armies.outpost)
-                    (#:borgo #:nervous-island.armies.borgo)
-                    (#:hegemony #:nervous-island.armies.hegemony)))
+(in-package #:nervous-island.common)
+
+(macrolet
+    ((create-user-package ()
+       (flet ((make-army-nicknames ()
+                (loop with prefix = (symbol-name '#:nervous-island.armies.)
+                      for package in (sort (copy-list (list-all-packages))
+                                           #'string<
+                                           :key #'package-name)
+                      for package-name = (package-name package)
+                      for result = (search prefix package-name)
+                      when (and result (= 0 result))
+                        collect (list (make-symbol (subseq package-name
+                                                           (length prefix)))
+                                      (make-symbol package-name)))))
+         `(uiop:define-package #:nervous-island.user
+            (:use #:nervous-island.cl)
+            (:local-nicknames (#:a #:alexandria)
+                              (#:s #:split-sequence))
+            ;; Nervous Island packages
+            (:local-nicknames (#:ncom #:nervous-island.common)
+                              (#:nel #:nervous-island.element)
+                              (#:nsk #:nervous-island.skill)
+                              (#:na #:nervous-island.attack)
+                              (#:ne #:nervous-island.effect)
+                              (#:nto #:nervous-island.token)
+                              (#:nr #:nervous-island.army)
+                              (#:nt #:nervous-island.tile))
+            ;; Old junk
+            ;; (:local-nicknames (#:nb #:nervous-island.board)
+            ;;                   (#:nc #:nervous-island.coord)
+            ;;                   (#:nd #:nervous-island.damage)
+            ;;                   (#:nch #:nervous-island.choice)
+            ;;                   (#:np #:nervous-island.player)
+            ;;                   (#:nph #:nervous-island.phase)
+            ;;                   (#:nsp #:nervous-island.space)
+            ;;                   (#:nst #:nervous-island.state))
+            ;; Nervous Island armies
+            (:local-nicknames ,@(make-army-nicknames))))))
+  (create-user-package))
 
 (in-package #:nervous-island.user)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Describer
