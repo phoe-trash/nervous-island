@@ -38,7 +38,8 @@
             ;;                   (#:nsp #:nervous-island.space)
             ;;                   (#:nst #:nervous-island.state))
             ;; Nervous Island armies
-            (:local-nicknames ,@(make-army-nicknames))))))
+            (:local-nicknames ,@(make-army-nicknames))
+            (:export #:make-all-armies)))))
   (create-user-package))
 
 (in-package #:nervous-island.user)
