@@ -86,8 +86,8 @@
 (defun si-make-transform-arg (decorated)
   (destructuring-bind (name var predicate keyword transform)
       decorated
-    (declare (ignore name predicate))
-    (when transform `(,keyword ,var))))
+    (declare (ignore name))
+    (when transform `((when ,predicate (list ,keyword ,var))))))
 
 (defun si-make-ignore (decorated)
   `(,(second decorated) ,(third decorated)))
@@ -134,8 +134,8 @@
              (declare (ignorable ,@ignores ,@extra-ignores))
              ,@transforms
              ,@before
-             (apply #'call-next-method ,name ,slots ,@transform-args
-                    ,new-args)
+             (apply #'call-next-method ,name ,slots
+                    (append ,@transform-args ,new-args))
              ,@after
              ,name))))))
 

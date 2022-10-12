@@ -75,7 +75,7 @@
   :depends-on (#:nervous-island/common)
   :pathname "src/state"
   :components ((:file "coord")
-               ;; (:file "space")
+               (:file "space")
                ;; (:file "board")
                ;; (:file "player")
                ;; (:file "damage")
@@ -102,7 +102,6 @@
   :pathname "src"
   :components (;; (:module "state"
                ;;  :components ((:file "board")
-               ;;               (:file "space")
                ;;               (:file "player")
                ;;               (:file "damage")
                ;;               (:file "phase")
@@ -183,7 +182,7 @@
                              ))
                (:module "state"
                 :components ((:file "coord")
-                             ;; (:file "space")
+                             (:file "space")
                              ;; (:file "board")
                              ;; (:file "player")
                              ;; (:file "damage")

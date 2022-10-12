@@ -10,8 +10,9 @@
                     (#:ncom #:nervous-island.common)
                     (#:nt #:nervous-island.tile)
                     (#:nto #:nervous-island.token))
-  (:export
-   #:space #:axial #:tokens #:unit #:unit-rotation #:foundation #:make-spaces))
+  (:export #:space
+           #:axial #:tokens #:overlay #:unit #:unit-rotation #:foundation
+           #:make-spaces #:find-element))
 
 (in-package #:nervous-island.space)
 
@@ -21,11 +22,21 @@
 (define-class space ()
   ((axial :type nc:axial)
    (tokens :type (φ:list-of nto:token) :initform '())
+   (overlay :type (or null nt:instant) :initform nil)
    (unit :type (or null nt:unit) :initform nil)
    (unit-rotation :type (or null (mod 6)) :initform nil
                   :transform (lambda (x) (when x (mod x 6))))
    (foundation :type (or null nt:foundation) :initform nil))
   (:before #'make-space-before))
+
+(defmethod print-object ((object space) stream)
+  (print-unreadable-object (object stream :type t :identity nil)
+    (let ((axial (axial object)))
+      (format stream "(~D ~D) ~D~A~A~A" (nc:q axial) (nc:r axial)
+              (if (tokens object) (length (tokens object)) "-")
+              (if (overlay object) "O" "-")
+              (if (unit object) "U" "-")
+              (if (foundation object) "F" "-")))))
 
 (defun make-space-before (space &key
                                   (unit nil unitp)
@@ -44,7 +55,7 @@
 
 (defun make-spaces (&rest things)
   (let ((result '()))
-    (dolist (thing things (apply #'vs:dict (nreverse result)))
+    (dolist (thing things (apply #'dict (nreverse result)))
       (let (axial space)
         (etypecase thing
           (nc:axial (setf axial thing
@@ -59,36 +70,15 @@
         ;;     (setf (gethash axial spaces) space))
         ))))
 
-;; (defgeneric edit-space (space &rest initargs)
-;;   (:method ((space space) &rest initargs)
-;;     (apply #'φ:copy-object space initargs)))
-
-;; (define-condition cannot-edit-axial (ncom:nervous-island-error)
-;;   ((%space :reader cannot-edit-axial-space :initarg :space)
-;;    (%spaces :reader cannot-edit-axial-spaces :initarg :spaces))
-;;   (:default-initargs :space (a:required-argument :space)
-;;                      :spaces (a:required-argument :spaces))
-;;   (:report
-;;    (lambda (condition stream)
-;;      (format stream "Attempted to edit the axial of space ~S in spaces ~S."
-;;              (cannot-edit-axial-space condition)
-;;              (cannot-edit-axial-spaces condition)))))
-
-;; (defun edit-spaces (spaces space &rest initargs &key axial &allow-other-keys)
-;;   (when axial (error 'cannot-edit-axial :space space :spaces spaces))
-;;   (let ((axial (axial space))
-;;         (new-space (apply #'edit-space space initargs))
-;;         (new-spaces (a:copy-hash-table spaces)))
-;;     (setf (gethash axial new-spaces) new-space)
-;;     new-spaces))
-
-;; (defgeneric find-tile (spaces tile)
-;;   (:method ((spaces hash-table) (tile nt:tile))
-;;     (φ:fbind ((fn (etypecase tile
-;;                     (nt:foundation #'foundation)
-;;                     (nt:tile #'tile))))
-;;       (maphash (lambda (axial space)
-;;                  (declare (ignore axial))
-;;                  (when (eq tile (funcall #'fn space))
-;;                    (return-from find-tile space)))
-;;                spaces))))
+(defun find-element (spaces element)
+  (φ:fbind ((fn (etypecase element
+                  (nt:instant #'overlay)
+                  (nt:foundation #'foundation)
+                  (nt:unit #'unit)
+                  (nto:token (lambda (space) (find element (tokens space)))))))
+    (dict-map (lambda (axial space)
+                (declare (ignore axial))
+                (a:when-let ((actual (funcall #'fn space)))
+                  (when (eqv element actual)
+                    (return-from find-element space))))
+              spaces)))

@@ -7,12 +7,19 @@
                     (#:p #:protest/base)
                     (#:t #:trivial-indent)
                     (#:v #:value-semantics-utils))
-  (:shadowing-import-from #:value-semantics-utils
-                          #:eqv #:generic-eqv #:copy
-                          #:set #:set-test #:set-contents #:set-count
-                          #:set-insert #:set-remove #:set-find
-                          #:set-difference #:set-union #:set-intersection
-                          #:set-exclusive-or)
+  (:shadowing-import-from
+   #:value-semantics-utils
+   #:eqv #:generic-eqv #:copy
+   ;; Set
+   #:set #:set-test #:set-contents #:set-count
+   #:set-insert #:set-remove #:set-find #:set-map
+   #:set-union #:set-intersection #:set-difference
+   #:set-exclusive-or #:set-union* #:set-intersection*
+   ;; Dict
+   #:dict #:dict-test #:dict-contents #:dict-count
+   #:dict-insert #:dict-remove #:dict-find #:dict-map
+   #:dict-union #:dict-intersection #:dict-difference
+   #:dict-exclusive-or #:dict-union* #:dict-intersection*)
   (:export
    ;; Types and constants
    #:direction #:diagonal #:anywhere #:self
@@ -21,14 +28,20 @@
    #:nervous-island-condition #:nervous-island-error
    ;; Macros
    #:define-class
-   ;; EQV and SHALLOW-COPY
+   ;; EQV and COPY
    ;; TODO try to not use EQ/EQL/EQUAL/EQUALP anywhere in the codebase
    ;; TODO get rid of Φ:LIST-OF everywhere we actually mean a set
    #:eqv #:generic-eqv #:copy
    ;; Set
    #:set #:set-test #:set-contents #:set-count
-   #:set-insert #:set-remove #:set-find
-   #:set-difference #:set-union #:set-intersection #:set-exclusive-or))
+   #:set-insert #:set-remove #:set-find #:set-map
+   #:set-union #:set-intersection #:set-difference
+   #:set-exclusive-or #:set-union* #:set-intersection*
+   ;; Dict
+   #:dict #:dict-test #:dict-contents #:dict-count
+   #:dict-insert #:dict-remove #:dict-find #:dict-map
+   #:dict-union #:dict-intersection #:dict-difference
+   #:dict-exclusive-or #:dict-union* #:dict-intersection*))
 
 (in-package #:nervous-island.common)
 
@@ -53,12 +66,20 @@
                           cl:defclass)))
                   (sort (cl:set-difference symbols banned-symbols) #'string<)))
               (ncom-symbols ()
-                '(#:eqv #:generic-eqv #:copy
+                '(;; Macros
                   #:define-class
+                  ;; EQV and COPY
+                  #:eqv #:generic-eqv #:copy
+                  ;; Set
                   #:set #:set-test #:set-contents #:set-count
-                  #:set-insert #:set-remove #:set-find
-                  #:set-difference #:set-union #:set-intersection
-                  #:set-exclusive-or)))
+                  #:set-insert #:set-remove #:set-find #:set-map
+                  #:set-union #:set-intersection #:set-difference
+                  #:set-exclusive-or #:set-union* #:set-intersection*
+                  ;; Dict
+                  #:dict #:dict-test #:dict-contents #:dict-count
+                  #:dict-insert #:dict-remove #:dict-find #:dict-map
+                  #:dict-union #:dict-intersection #:dict-difference
+                  #:dict-exclusive-or #:dict-union* #:dict-intersection*)))
          `(uiop:define-package #:nervous-island.cl
             (:use)
             (:import-from #:c2cl ,@(c2cl-symbols))

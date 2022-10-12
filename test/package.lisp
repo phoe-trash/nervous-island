@@ -17,7 +17,8 @@
    (#:ne #:nervous-island.effect)
    (#:nt #:nervous-island.tile)
    (#:nto #:nervous-island.token)
-   (#:nu #:nervous-island.user))
+   (#:nu #:nervous-island.user)
+   (#:nsp #:nervous-island.space))
   ;; state/
   (:local-nicknames
    (#:nc #:nervous-island.coord)
@@ -27,7 +28,6 @@
    ;; (#:np #:nervous-island.player)
    ;; (#:nph #:nervous-island.phase)
    ;; (#:ns #:nervous-island.step)
-   ;; (#:nsp #:nervous-island.space)
    ;; (#:nst #:nervous-island.state)
    )
   ;; Nervous Island armies
