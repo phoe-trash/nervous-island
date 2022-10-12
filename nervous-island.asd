@@ -63,7 +63,7 @@
   :serial nil
   :depends-on (#:nervous-island/tiles)
   :pathname "src"
-  :components ((auto-module "armies")))
+  :components ((:auto-module "armies")))
 
 (asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"
