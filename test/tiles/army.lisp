@@ -1,6 +1,6 @@
 ;;;; test/tiles/army.lisp
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Army

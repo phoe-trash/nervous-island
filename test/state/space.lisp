@@ -1,6 +1,6 @@
 ;;;; test/state/space.lisp
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
 (define-class space-test-tile (nt:tile) ())
 

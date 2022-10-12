@@ -55,6 +55,7 @@
     (error 'a:simple-program-error
            :format-control
            "Must provide either DESIGNATORS or ELEMENTS and HQ-ELEMENTS."))
+  ;; TODO test this against REINITIALIZE-INSTANCE
   (when (or hq-elements-p elementsp designatorsp)
     (flet ((die (x y)
              (error 'a:simple-program-error
@@ -170,6 +171,7 @@
       (ensure-element-owner army)))
   (when discardp
     (discard-elements army discard))
+  ;; TODO check against REINITIALIZE-INSTANCE
   (check-element-count army))
 
 (defgeneric ensure-army (thing)

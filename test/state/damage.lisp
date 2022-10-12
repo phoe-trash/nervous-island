@@ -1,6 +1,6 @@
 ;;;; test/state/damage.lisp
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
 ;;; TODO
 

@@ -1,6 +1,6 @@
 ;;;; test/package.lisp
 
-(uiop:define-package #:nervous-island/test
+(uiop:define-package #:nervous-island.test
   (:use #:nervous-island.cl
         #:parachute)
   (:local-nicknames
@@ -20,8 +20,8 @@
    (#:nu #:nervous-island.user))
   ;; state/
   (:local-nicknames
+   (#:nc #:nervous-island.coord)
    ;; (#:nb #:nervous-island.board)
-   ;; (#:nc #:nervous-island.coord)
    ;; (#:nd #:nervous-island.damage)
    ;; (#:nch #:nervous-island.choice)
    ;; (#:np #:nervous-island.player)
@@ -38,11 +38,11 @@
    ;; (#:hegemony #:nervous-island.armies.hegemony)
    ))
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
-;; (defvar *center-axial* (nc:ensure-axial '(0 0)))
+(defvar *center-axial* (nc:ensure-axial '(0 0)))
 
-;; (defvar *center-cube* (nc:ensure-cube '(0 0 0)))
+(defvar *center-cube* (nc:ensure-cube '(0 0 0)))
 
 ;; (defun make-standard-board ()
 ;;   (apply #'nb:make-board '((-2 2) (-2 1) (-2 0)

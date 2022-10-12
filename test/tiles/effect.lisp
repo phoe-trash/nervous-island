@@ -1,6 +1,6 @@
 ;;;; test/tiles/effect.lisp
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
 (define-test effect-instantiation-negative
   (flet ((test (class)

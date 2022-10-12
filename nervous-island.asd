@@ -37,7 +37,8 @@
                #:value-semantics-utils
                #:closer-mop)
   :pathname "src/common"
-  :components ((:file "common")))
+  :components ((:file "common")
+               (:file "define-class")))
 
 (asdf:defsystem #:nervous-island/tiles
   :description "ネウロ島六角ボードゲームエンジン"
@@ -65,6 +66,25 @@
   :pathname "src"
   :components ((:auto-module "armies")))
 
+(asdf:defsystem #:nervous-island/state
+  :description "ネウロ島六角ボードゲームエンジン"
+  :author "Michał \"phoe\" Herda <phoe@disroot.org>"
+  :license "AGPLv3"
+  :version "0.0"
+  :serial t
+  :depends-on (#:nervous-island/common)
+  :pathname "src/state"
+  :components ((:file "coord")
+               ;; (:file "space")
+               ;; (:file "board")
+               ;; (:file "player")
+               ;; (:file "damage")
+               ;; (:file "phase")
+               ;; (:file "step")
+               ;; (:file "choice")
+               ;; (:file "state")
+               ))
+
 (asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
@@ -81,8 +101,7 @@
                )
   :pathname "src"
   :components (;; (:module "state"
-               ;;  :components ((:file "coord")
-               ;;               (:file "board")
+               ;;  :components ((:file "board")
                ;;               (:file "space")
                ;;               (:file "player")
                ;;               (:file "damage")
@@ -127,6 +146,7 @@
                #:nervous-island/common
                #:nervous-island/tiles
                #:nervous-island/armies
+               #:nervous-island/state
                #:nervous-island/junk
                ;; User package dependencies
                #:utilities.print-tree
@@ -136,7 +156,7 @@
   :in-order-to ((test-op (load-op :nervous-island/test)))
   :perform
   (test-op (o c)
-    (symbol-call '#:parachute '#:test '#:nervous-island/test
+    (symbol-call '#:parachute '#:test '#:nervous-island.test
                  :report (find-symbol "INTERACTIVE"
                                       "PARACHUTE"))))
 
@@ -161,14 +181,15 @@
                              (:file "effect")
                              (:file "tile")
                              ))
-               ;; (:module "state"
-               ;;  :components ((:file "coord")
-               ;;               (:file "board")
-               ;;               (:file "space")
-               ;;               (:file "player")
-               ;;               (:file "damage")
-               ;;               (:file "phase")
-               ;;               (:file "step")
-               ;;               (:file "choice")
-               ;;               (:file "state")))
+               (:module "state"
+                :components ((:file "coord")
+                             ;; (:file "space")
+                             ;; (:file "board")
+                             ;; (:file "player")
+                             ;; (:file "damage")
+                             ;; (:file "phase")
+                             ;; (:file "step")
+                             ;; (:file "choice")
+                             ;; (:file "state")
+                             ))
                (:file "armies")))

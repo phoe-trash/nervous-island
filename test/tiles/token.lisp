@@ -1,6 +1,6 @@
 ;;;; test/tiles/token.lisp
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
 (define-test token-instantiation
   (fail (make-instance 'nto:token) p:protocol-object-instantiation)

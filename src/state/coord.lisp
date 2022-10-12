@@ -5,7 +5,7 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:ncom #:nervous-island.common))
   (:export
-   #:coord #:axial #:axial-q #:axial-r #:cube #:cube-x #:cube-y #:cube-z
+   #:coord #:axial #:q #:r #:cube #:x #:y #:z
    #:make-axial #:make-cube #:invalid-coords #:cube-axial #:axial-cube
    #:axial+ #:axial- #:cube+ #:cube- #:axial-move #:cube-move
    #:axial-position #:cube-position #:ensure-axial #:ensure-cube
@@ -17,28 +17,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Coordinates
 
-(defstruct (coord (:constructor nil) (:copier nil) (:predicate nil)))
+(define-class coord () ()
+  (:protocolp t))
 
-(defstruct (axial (:constructor %make-axial) (:include coord))
-  (q 0 :type integer :read-only t)
-  (r 0 :type integer :read-only t))
+(define-class axial (coord)
+  ((q :type integer :initform 0)
+   (r :type integer :initform 0)))
 
 (defun make-axial (q r)
-  (check-type q integer)
-  (check-type r integer)
-  (%make-axial :q q :r r))
+  (make-instance 'axial :q q :r r))
 
 (defmethod print-object ((object axial) stream)
   (print-unreadable-object (object stream :type t :identity nil)
-    (format stream "~D ~D" (axial-q object) (axial-r object))))
+    (format stream "~D ~D" (q object) (r object))))
 
-(defmethod generic-eqv ((x axial) (y axial))
-  (values (cl:equalp x y) nil nil nil))
-
-(defstruct (cube (:constructor %make-cube) (:include coord))
-  (x 0 :type integer :read-only t)
-  (y 0 :type integer :read-only t)
-  (z 0 :type integer :read-only t))
+(define-class cube (coord)
+  ((x :type integer :initform 0)
+   (y :type integer :initform 0)
+   (z :type integer :initform 0)))
 
 (define-condition invalid-coords (ncom:nervous-island-error)
   ((%coordinates :reader invalid-coords-coords :initarg :coords))
@@ -47,66 +43,63 @@
              (format stream "Invalid coordinates: ~S"
                      (invalid-coords-coords condition)))))
 
+(defmethod shared-initialize :after ((cube cube) slot-names &key)
+  (let ((x (x cube))
+        (y (y cube))
+        (z (z cube)))
+    (unless (= 0 (+ x y z))
+      (error 'invalid-coords :coords (list x y z)))))
+
 (defun make-cube (x y z)
-  (check-type x integer)
-  (check-type y integer)
-  (check-type z integer)
-  (unless (= 0 (+ x y z))
-    (error 'invalid-coords :coords (list x y z)))
-  (%make-cube :x x :y y :z z))
+  (make-instance 'cube :x x :y y :z z))
 
 (defmethod print-object ((object cube) stream)
   (print-unreadable-object (object stream :type t :identity nil)
-    (format stream "~D ~D ~D" (cube-x object) (cube-y object) (cube-z object))))
-
-(defmethod generic-eqv ((x cube) (y cube))
-  (values (cl:equalp x y) nil nil nil))
+    (format stream "~D ~D ~D" (x object) (y object) (z object))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Coordinate conversion and arithmetic
 
 (defun cube-axial (cube)
-  (let ((q (cube-x cube))
-        (r (cube-z cube)))
+  (let ((q (x cube))
+        (r (z cube)))
     (make-axial q r)))
 
 (defun axial-cube (axial)
-  (let* ((x (axial-q axial))
-         (z (axial-r axial))
+  (let* ((x (q axial))
+         (z (r axial))
          (y (- 0 x z)))
     (make-cube x y z)))
 
 (defun axial+ (a b)
-  (make-axial (+ (axial-q a) (axial-q b))
-              (+ (axial-r a) (axial-r b))))
+  (make-axial (+ (q a) (q b))
+              (+ (r a) (r b))))
 
 (defun axial- (a b)
-  (make-axial (- (axial-q a) (axial-q b))
-              (- (axial-r a) (axial-r b))))
+  (make-axial (- (q a) (q b))
+              (- (r a) (r b))))
 
 (defun cube+ (a b)
-  (make-cube (+ (cube-x a) (cube-x b))
-             (+ (cube-y a) (cube-y b))
-             (+ (cube-z a) (cube-z b))))
+  (make-cube (+ (x a) (x b))
+             (+ (y a) (y b))
+             (+ (z a) (z b))))
 
 (defun cube- (a b)
-  (make-cube (- (cube-x a) (cube-x b))
-             (- (cube-y a) (cube-y b))
-             (- (cube-z a) (cube-z b))))
+  (make-cube (- (x a) (x b))
+             (- (y a) (y b))
+             (- (z a) (z b))))
 
-(defgeneric axial-move (axial direction)
-  (:method ((axial axial) direction)
-    (axial+ axial (apply #'make-axial
-                         (ecase direction
-                           (:q '(-1 0)) (:w '(0 -1)) (:e '(1 -1))
-                           (:a '(-1 1)) (:s '( 0 1)) (:d '(1 0))
-                           ((:qw :wq) '(-1 -1)) ((:we :ew) '(1 -2))
-                           ((:ed :de) '(2 -1)) ((:sd :ds) '(1 1))
-                           ((:as :sa) '(-1 2)) ((:aq :qa) '(-2 1)))))))
+(defun axial-move (axial direction)
+  (axial+ axial (apply #'make-axial
+                       (ecase direction
+                         (:q '(-1 0)) (:w '(0 -1)) (:e '(1 -1))
+                         (:a '(-1 1)) (:s '( 0 1)) (:d '(1 0))
+                         (:qw '(-1 -1)) (:we '(1 -2))
+                         (:ed '(2 -1)) (:ds '(1 1))
+                         (:sa '(-1 2)) (:aq '(-2 1))))))
 
-(defgeneric cube-move (cube direction)
-  (:method ((cube cube) direction)
-    (axial-cube (axial-move (cube-axial cube) direction))))
+(defun cube-move (cube direction)
+  (axial-cube (axial-move (cube-axial cube) direction)))
 
 (deftype axial-position () '(cons integer (cons integer null)))
 
@@ -137,16 +130,16 @@
 
 (defun neighbors (axial)
   (check-type axial axial)
-  (let ((q (axial-q axial))
-        (r (axial-r axial)))
+  (let ((q (q axial))
+        (r (r axial)))
     (list (make-axial (1+ q) r) (make-axial (1+ q) (1- r))
           (make-axial q (1- r)) (make-axial (1- q) r)
           (make-axial (1- q) (1+ r)) (make-axial q (1+ r)))))
 
 (defun diagonals (axial)
   (check-type axial axial)
-  (let ((q (axial-q axial))
-        (r (axial-r axial)))
+  (let ((q (q axial))
+        (r (r axial)))
     (flet ((2+ (x) (+ x 2))
            (2- (x) (- x 2)))
       (list (make-axial (2+ q) (1- r)) (make-axial (1+ q) (1+ r))
@@ -166,10 +159,10 @@
 (defun distance (start end)
   (if (eqv start end)
       0
-      (let ((q1 (axial-q start))
-            (r1 (axial-r start))
-            (q2 (axial-q end))
-            (r2 (axial-r end)))
+      (let ((q1 (q start))
+            (r1 (r start))
+            (q2 (q end))
+            (r2 (r end)))
         (* 1/2 (+ (abs (- q1 q2))
                   (abs (+ q1 r1 (- q2) (- r2)))
                   (abs (- r1 r2)))))))
@@ -183,12 +176,12 @@
                                   (- (funcall fn cube-2) range-2)))
            (compute-max (fn) (min (+ (funcall fn cube-1) range-1)
                                   (+ (funcall fn cube-2) range-2))))
-      (loop with xmin = (compute-min #'cube-x)
-            with xmax = (compute-max #'cube-x)
-            with ymin = (compute-min #'cube-y)
-            with zmin = (compute-min #'cube-z)
-            with ymax = (compute-max #'cube-y)
-            with zmax = (compute-max #'cube-z)
+      (loop with xmin = (compute-min #'x)
+            with xmax = (compute-max #'x)
+            with ymin = (compute-min #'y)
+            with zmin = (compute-min #'z)
+            with ymax = (compute-max #'y)
+            with zmax = (compute-max #'z)
             for x from xmin to xmax
             nconc (loop for y from (max ymin (- (+ x zmax)))
                           to (min ymax (- (+ x zmin)))
@@ -196,10 +189,10 @@
                         for result-cube = (make-cube x y z)
                         collect (cube-axial result-cube))))))
 
-(defun rotate-axial (axial clockwise-turns)
+(defun rotate-axial (axial rotation)
   (let* ((cube (axial-cube axial))
-         (x (cube-x cube)) (y (cube-y cube)) (z (cube-z cube))
-         (result-cube (ecase clockwise-turns
+         (x (x cube)) (y (y cube)) (z (z cube))
+         (result-cube (ecase (mod rotation 6)
                         (0 cube)
                         (1 (make-cube (- z) (- x) (- y)))
                         (2 (make-cube (+ y) (+ z) (+ x)))
@@ -210,8 +203,9 @@
 
 (defun rotate (axial center rotation)
   (let* ((shifted (axial- axial center))
-         (rotated (rotate-axial shifted (mod rotation 6))))
-    (axial+ rotated center)))
+         (rotated (rotate-axial shifted (mod rotation 6)))
+         (unshifted (axial+ rotated center)))
+    unshifted))
 
 (defun ring (center radius)
   (if (= radius 0)
@@ -228,19 +222,16 @@
         nconc (ring center k) into result
         finally (return result)))
 
-(defun %round (number)
-  (if (= 1/2 (mod number 1))
-      (truncate number)
-      (round number)))
-
 (defun cube-round (fx fy fz)
-  (let* ((x (%round fx)) (dx (abs (- x fx)))
-         (y (%round fy)) (dy (abs (- y fy)))
-         (z (%round fz)) (dz (abs (- z fz))))
-    (cond ((= dx (max dx dy dz)) (setf x (- (+ y z))))
-          ((= dy (max dx dy dz)) (setf y (- (+ x z))))
-          ((= dz (max dx dy dz)) (setf z (- (+ x y)))))
-    (make-cube x y z)))
+  (flet ((%round (number)
+           (if (= 1/2 (mod number 1)) (truncate number) (round number))))
+    (let* ((x (%round fx)) (dx (abs (- x fx)))
+           (y (%round fy)) (dy (abs (- y fy)))
+           (z (%round fz)) (dz (abs (- z fz))))
+      (cond ((= dx (max dx dy dz)) (setf x (- (+ y z))))
+            ((= dy (max dx dy dz)) (setf y (- (+ x z))))
+            ((= dz (max dx dy dz)) (setf z (- (+ x y)))))
+      (make-cube x y z))))
 
 (defun axial-round (fq fr)
   (let* ((fx fq)
@@ -252,9 +243,9 @@
   (+ a (* (- b a) v)))
 
 (defun lerp (cube-1 cube-2 v)
-  (list (%lerp (cube-x cube-1) (cube-x cube-2) v)
-        (%lerp (cube-y cube-1) (cube-y cube-2) v)
-        (%lerp (cube-z cube-1) (cube-z cube-2) v)))
+  (list (%lerp (x cube-1) (x cube-2) v)
+        (%lerp (y cube-1) (y cube-2) v)
+        (%lerp (z cube-1) (z cube-2) v)))
 
 (defun linedraw (axial-1 axial-2)
   (if (eqv axial-1 axial-2)

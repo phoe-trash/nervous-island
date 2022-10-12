@@ -1,6 +1,6 @@
 ;;;; test/armies.lisp
 
-(in-package #:nervous-island/test)
+(in-package #:nervous-island.test)
 
 (define-test armies-instantiate
   (dolist (army (nr:make-all-armies))
