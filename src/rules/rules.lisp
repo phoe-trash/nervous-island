@@ -6,7 +6,7 @@
                     (#:i #:in-nomine)
                     (#:φ #:phoe-toolbox)
                     (#:s #:split-sequence))
-  (:export #:entry #:name #:polish #:english
+  (:export #:entry #:name #:polish #:english #:tags
            #:symbol-entry #:entry-boundp #:entry-makunbound #:unbound-entry))
 
 (in-package #:nervous-island.rules)

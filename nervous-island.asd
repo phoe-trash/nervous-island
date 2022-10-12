@@ -116,16 +116,8 @@
                #:nervous-island/common)
   :pathname "src/rules"
   :components ((:file "rules")
-               (:module "faq"
-                :depends-on ("rules")
-                :components
-                ((:file "errata")
-                 (:file "gameplay")
-                 (:file "general")
-                 (:file "more-tactical-game")
-                 (:file "non-tournament-optional-rules")
-                 (:file "multiplayer")
-                 (:file "non-army-additions")))))
+               (:auto-module "faq"
+                :depends-on ("rules"))))
 
 (asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"
