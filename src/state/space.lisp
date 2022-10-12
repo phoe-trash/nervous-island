@@ -5,14 +5,13 @@
   (:shadow #:space)
   (:local-nicknames (#:a #:alexandria)
                     (#:Φ #:phoe-toolbox)
-                    (#:vs #:value-semantics-utils)
                     (#:nc #:nervous-island.coord)
                     (#:ncom #:nervous-island.common)
                     (#:nt #:nervous-island.tile)
                     (#:nto #:nervous-island.token))
   (:export #:space
            #:axial #:tokens #:overlay #:unit #:unit-rotation #:foundation
-           #:make-spaces #:augment-spaces #:find-element))
+           #:make-spaces #:find-element #:augment-spaces))
 
 (in-package #:nervous-island.space)
 
@@ -70,15 +69,6 @@
         ;;     (setf (gethash axial spaces) space))
         ))))
 
-(defun augment-spaces (dict &rest dicts-and-spaces)
-  (flet ((frob (thing)
-           (etypecase thing
-             (space (list (axial thing) thing))
-             (dict (loop for (axial . thing) in (dict-contents thing)
-                         collect axial collect thing)))))
-    (let ((args (mapcan #'frob dicts-and-spaces)))
-      (dict-union* (apply #'dict args) dict))))
-
 (defun find-element (dict element)
   (φ:fbind ((fn (etypecase element
                   (nt:instant #'overlay)
@@ -91,3 +81,12 @@
                   (when (eqv element actual)
                     (return-from find-element space))))
               dict)))
+
+(defun augment-spaces (dict &rest dicts-and-spaces)
+  (flet ((frob (thing)
+           (etypecase thing
+             (space (list (axial thing) thing))
+             (dict (loop for (axial . thing) in (dict-contents thing)
+                         collect axial collect thing)))))
+    (let ((args (mapcan #'frob dicts-and-spaces)))
+      (dict-union* (apply #'dict args) dict))))

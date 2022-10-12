@@ -4,6 +4,7 @@
 
 (define-class space-test-instant (nt:instant) ())
 (define-class space-test-unit (nt:unit) ())
+(define-class space-test-other-unit (nt:unit) ())
 (define-class space-test-foundation (nt:foundation) ())
 (define-class space-test-token (nto:token) ())
 
@@ -26,6 +27,8 @@
           'type-error)
       (fail (make :axial axial :foundation unit) 'type-error)
       (true (make :axial axial :unit unit :unit-rotation unit-rotation))
+      (true (make :axial axial :unit unit :unit-rotation (+ 6 unit-rotation)))
+      (true (make :axial axial :unit unit :unit-rotation (- 6 unit-rotation)))
       (true (make :axial axial :unit unit :unit-rotation unit-rotation
                   :foundation foundation :tokens tokens))
       (true (make :axial axial :foundation foundation))
@@ -42,7 +45,7 @@
                                           :tokens tokens
                                           :overlay overlay
                                           :unit unit
-                                          :unit-rotation unit-rotation
+                                          :unit-rotation (+ 6 unit-rotation)
                                           :foundation foundation)))
     (is eqv axial (nsp:axial space))
     (is eqv tokens (nsp:tokens space))
@@ -50,7 +53,8 @@
     (is eqv unit (nsp:unit space))
     (is eqv unit-rotation (nsp:unit-rotation space))
     (is eqv foundation (nsp:foundation space))
-    (is eqv space (reinitialize-instance space))
+    (is eqv space (reinitialize-instance space
+                                         :unit-rotation (- 6 unit-rotation)))
     (is eqv axial (nsp:axial space))
     (is eqv tokens (nsp:tokens space))
     (is eqv overlay (nsp:overlay space))
@@ -88,55 +92,6 @@
          (space-3 (make-instance 'nsp:space :axial axial))
          (dict (nsp:make-spaces space-1 space-2 space-3 axial)))
     (is = 1 (dict-count dict))))
-
-;; ;;; TODO
-;; (define-test space-edit-space
-;;   (let* ((axial (nc:axial 0 0))
-;;          (tokens-1 (list (make-instance 'space-test-token)))
-;;          (tokens-2 (list (make-instance 'space-test-token)))
-;;          (tile-1 (make-instance 'space-test-tile))
-;;          (tile-2 (make-instance 'space-test-tile))
-;;          (rotation-1 :w)
-;;          (rotation-2 :s)
-;;          (foundation-1 (make-instance 'space-test-foundation))
-;;          (foundation-2 (make-instance 'space-test-foundation))
-;;          (space-1 (make-instance 'nsp:space :axial axial :tokens tokens-1
-;;                                             :tile tile-1 :rotation rotation-1
-;;                                             :foundation foundation-1))
-;;          (space-2 (nsp:edit-space space-1 :tokens tokens-2
-;;                                           :tile tile-2 :rotation rotation-2
-;;                                           :foundation foundation-2)))
-;;     (isnt eq space-1 space-2)
-;;     (is equalp (nsp:axial space-1) (nsp:axial space-2))
-;;     (is eq tokens-1 (nsp:tokens space-1))
-;;     (is eq tile-1 (nsp:tile space-1))
-;;     (is eq rotation-1 (nsp:rotation space-1))
-;;     (is eq foundation-1 (nsp:foundation space-1))
-;;     (is eq tokens-2 (nsp:tokens space-2))
-;;     (is eq tile-2 (nsp:tile space-2))
-;;     (is eq rotation-2 (nsp:rotation space-2))
-;;     (is eq foundation-2 (nsp:foundation space-2))))
-
-;; (define-test space-edit-spaces
-;;   (let* ((space-1 (make-instance 'nsp:space :axial (nc:axial 0 0)))
-;;          (space-2 (make-instance 'nsp:space :axial (nc:axial 0 1)))
-;;          (spaces (nsp:make-spaces space-1 space-2)))
-;;     (is eq nil (nsp:tile space-1))
-;;     (is eq nil (nsp:tile space-2))
-;;     (let* ((tile (make-instance 'space-test-tile))
-;;            (new-spaces (nsp:edit-spaces spaces space-2 :tile tile))
-;;            (new-space (gethash (nc:axial 0 1) new-spaces)))
-;;       (is = 2 (hash-table-count new-spaces))
-;;       (is eq nil (nsp:tile space-1))
-;;       (is eq nil (nsp:tile space-2))
-;;       (is eq tile (nsp:tile new-space))))
-;;   (let* ((space-1 (make-instance 'nsp:space :axial (nc:axial 0 0)))
-;;          (space-2 (make-instance 'nsp:space :axial (nc:axial 0 1)))
-;;          (spaces (nsp:make-spaces space-1 space-2)))
-;;     (fail (nsp:edit-spaces spaces space-2 :axial (nc:axial 0 0))
-;;         nsp:cannot-edit-axial)))
-
-(define-class space-test-other-unit (nt:unit) ())
 
 (define-test space-find-element
   (let* ((token (make-instance 'space-test-token))
