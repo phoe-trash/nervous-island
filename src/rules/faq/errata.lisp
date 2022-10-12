@@ -147,3 +147,11 @@
   :english
   "The description of Flying should be: \"The unit is not affected by Melee ~
    attacks (including Friendly Fire Melee), unless it is netted\".")
+
+(define-entry campaign.errata.1 ()
+  :polish
+  "W opisie rezultatu Misji 4 kampanii \"Moloch Powstaje\" jest zbędny akapit, ~
+   którego być nie powinno: \"Za każdego Naukowca, który nie został odbity, ~
+   gracz Molocha otrzymuje Kasparowa-Teflę do Puli Ulepszeń\"."
+  :english
+  "TODO")
