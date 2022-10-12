@@ -45,7 +45,7 @@
     (make-instance 'board :axials axials)))
 
 (defun make-standard-board ()
-  (apply #'make-board (nc:range (nc:make-axial 0 0) 2)))
+  (apply #'make-board (nc:range (nc:axial 0 0) 2)))
 
 (defgeneric axial-present-p (board axial)
   (:method ((board board) (axial nc:axial))

@@ -27,4 +27,4 @@
              (is eq '() (nst:previous-steps state)))))
     (test)
     (test :board :standard)
-    (test :board (apply #'nb:make-board (nc:range (nc:make-axial 0 0) 2)))))
+    (test :board (apply #'nb:make-board (nc:range (nc:axial 0 0) 2)))))

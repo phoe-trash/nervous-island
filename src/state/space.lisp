@@ -11,8 +11,7 @@
                     (#:nt #:nervous-island.tile)
                     (#:nto #:nervous-island.token))
   (:export
-   #:space #:axial #:tokens #:tile #:rotation #:foundation #:make-spaces
-   #:edit-space #:edit-spaces #:find-tile #:cannot-edit-axial))
+   #:space #:axial #:tokens #:unit #:unit-rotation #:foundation #:make-spaces))
 
 (in-package #:nervous-island.space)
 
