@@ -12,7 +12,7 @@
                     (#:nto #:nervous-island.token))
   (:export #:space
            #:axial #:tokens #:overlay #:unit #:unit-rotation #:foundation
-           #:make-spaces #:find-element))
+           #:make-spaces #:augment-spaces #:find-element))
 
 (in-package #:nervous-island.space)
 
@@ -70,7 +70,16 @@
         ;;     (setf (gethash axial spaces) space))
         ))))
 
-(defun find-element (spaces element)
+(defun augment-spaces (dict &rest dicts-and-spaces)
+  (flet ((frob (thing)
+           (etypecase thing
+             (space (list (axial thing) thing))
+             (dict (loop for (axial . thing) in (dict-contents thing)
+                         collect axial collect thing)))))
+    (let ((args (mapcan #'frob dicts-and-spaces)))
+      (dict-union* (apply #'dict args) dict))))
+
+(defun find-element (dict element)
   (φ:fbind ((fn (etypecase element
                   (nt:instant #'overlay)
                   (nt:foundation #'foundation)
@@ -81,4 +90,4 @@
                 (a:when-let ((actual (funcall #'fn space)))
                   (when (eqv element actual)
                     (return-from find-element space))))
-              spaces)))
+              dict)))
