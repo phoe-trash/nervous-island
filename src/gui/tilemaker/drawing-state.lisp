@@ -1,6 +1,8 @@
+;;;; src/gui/tilemaker/drawing-state.lisp
+
 (in-package #:nervous-island.gui.tilemaker)
 
-(define-class drawing-state ()
+(defclass drawing-state ()
   ((%tile :accessor tile
           :initarg :tile)
    (%allocated-corners :accessor allocated-corners
@@ -29,7 +31,7 @@
          (directions '())
          (result (mapcar (a:rcurry #'cons 2) all-corners)))
     ;; Collect all directions
-    (loop with skills = (nt:skills (tile state))
+    (loop with skills = (vs:set-contents (nsk:skills (tile state)))
           with predicate = (a:rcurry #'typep 'nsk:directed)
           for directed in (remove-if-not predicate skills)
           do (pushnew (nsk:direction directed) directions))

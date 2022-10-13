@@ -5,12 +5,12 @@
    (#:v #:vecto)
    (#:i #:imago)
    (#:z #:zpng))
-  (:export #:*side* #:with-hex-tile
+  (:export #:*side*
+           #:with-hex-tile
            #:module-background #:module-ring #:module-circle
            #:module-range-shadow #:module-range
            #:melee #:ranged #:gauss
            #:net
            #:armor-shadow #:armor
            #:ability-circle
-           #:text #:mobility #:toughness #:bomb
-           ))
+           #:text #:mobility #:toughness #:bomb))

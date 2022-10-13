@@ -1,16 +1,18 @@
+;;;; src/gui/tilemaker/draw-skills.lisp
+
 (in-package #:nervous-island.gui.tilemaker)
 
 (defgeneric draw-skills (state skill &rest skills))
-
-(defmethod draw-skills (state (skill nsk:undirected) &rest skills)
-  (dolist (skill (cons skill skills))
-    (let ((corner (a:assoc-value (allocated-corners state) skill)))
-      (draw-skill skill :corner corner))))
 
 (defmethod draw-skills (state skill &rest skills)
   (declare (ignore state))
   (dolist (skill (cons skill skills))
     (draw-skill skill)))
+
+(defmethod draw-skills (state (skill nsk:undirected) &rest skills)
+  (dolist (skill (cons skill skills))
+    (let ((corner (a:assoc-value (allocated-corners state) skill)))
+      (draw-skill skill :corner corner))))
 
 (defmethod draw-skills (state (skill nsk:armor) &rest skills)
   (dolist (skill (cons skill skills))
@@ -22,7 +24,7 @@
   (flet ((preprocess (attacks)
            (loop for attack in attacks
                  for strength = (na:strength attack)
-                 for copy = (φ::copy-object attack :strength 1)
+                 for copy = (vs:copy attack :strength 1)
                  nconc (make-list strength :initial-element copy))))
     (let* ((attacks (preprocess (cons attack attacks)))
            (direction (nsk:direction attack))

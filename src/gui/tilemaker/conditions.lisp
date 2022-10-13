@@ -1,3 +1,5 @@
+;;;; src/gui/tilemaker/conditions.lisp
+
 (in-package #:nervous-island.gui.tilemaker)
 
 (define-condition drawing-an-unknown-skill (warning)

@@ -8,11 +8,13 @@
 (draw-tile (make-instance 'nervous-island.armies.hegemony:guard))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:net-master))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:universal-soldier))
-(draw-tile (make-instance 'nt:warrior :skills (list (na:melee :q 6))))
-(let ((skills (list (na:melee :q) (na:ranged :q) (na:gauss-cannon :q))))
-  (draw-tile (make-instance 'nt:warrior :skills skills)))
-(let ((skills (list (na:melee :s) (nsk:net :a) (nsk:net :d))))
-  (draw-tile (make-instance 'nt:warrior :skills skills)))
+
+(ncom:define-class my-warrior (nt:warrior) ())
+(draw-tile (make-instance 'my-warrior :skills (vs:set (na:melee :q 6))))
+(let ((skills (vs:set (na:melee :q) (na:ranged :q) (na:gauss-cannon :q))))
+  (draw-tile (make-instance 'my-warrior :skills skills)))
+(let ((skills (vs:set (na:melee :s) (nsk:net :a) (nsk:net :d))))
+  (draw-tile (make-instance 'my-warrior :skills skills)))
 
 (draw-tile (make-instance 'nervous-island.armies.hegemony:boss))
 (draw-tile (make-instance 'nervous-island.armies.borgo:super-officer))

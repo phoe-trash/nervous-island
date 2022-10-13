@@ -116,21 +116,21 @@
 
 (define-test coord-neighbors
   (let* ((neighbors (nc:neighbors *center-axial*))
-         (expected-axials '((0 -1) (1 -1) (1 0) (0 1) (-1 1) (-1 0)))
-         (expected-neighbors (mapcar #'nc:ensure-axial expected-axials)))
-    (true (a:set-equal neighbors expected-neighbors :test #'eqv))))
+         (axials '((0 -1) (1 -1) (1 0) (0 1) (-1 1) (-1 0)))
+         (expected-neighbors (apply #'set (mapcar #'nc:ensure-axial axials))))
+    (is eqv neighbors expected-neighbors)))
 
 (define-test coord-diagonals
   (let* ((diagonals (nc:diagonals *center-axial*))
-         (expected-axials '((2 -1) (1 1) (-1 2) (-2 1) (-1 -1) (1 -2)))
-         (expected-diagonals (mapcar #'nc:ensure-axial expected-axials)))
-    (true (a:set-equal diagonals expected-diagonals :test #'eqv))))
+         (axials '((2 -1) (1 1) (-1 2) (-2 1) (-1 -1) (1 -2)))
+         (expected-diagonals (apply #'set (mapcar #'nc:ensure-axial axials))))
+    (is eqv diagonals expected-diagonals)))
 
 (define-test coord-range
   (let* ((range (nc:range *center-axial* 1))
-         (expected-axials '((0 0) (0 -1) (1 -1) (1 0) (0 1) (-1 1) (-1 0)))
-         (expected-range (mapcar #'nc:ensure-axial expected-axials)))
-    (true (a:set-equal range expected-range :test #'eqv))))
+         (axials '((0 0) (0 -1) (1 -1) (1 0) (0 1) (-1 1) (-1 0)))
+         (expected-range (apply #'set (mapcar #'nc:ensure-axial axials))))
+    (is eqv range expected-range)))
 
 (define-test coord-distance
   (is = 0 (nc:distance *center-axial* *center-axial*))
@@ -141,9 +141,9 @@
   (let* ((axial-1 (nc:ensure-axial '(-2 0)))
          (axial-2 (nc:ensure-axial '(2 -2)))
          (intersection (nc:range-intersection axial-1 2 axial-2 2))
-         (expected-axials '((0 -2) (0 -1) (0 0)))
-         (expected (mapcar #'nc:ensure-axial expected-axials)))
-    (true (a:set-equal intersection expected :test #'eqv))))
+         (axials '((0 -2) (0 -1) (0 0)))
+         (expected (apply #'set (mapcar #'nc:ensure-axial axials))))
+    (is eqv intersection expected)))
 
 (define-test coord-rotate
   (let* ((axial (nc:ensure-axial '(0 0)))
@@ -154,28 +154,26 @@
 
 (define-test coord-ring
   (let* ((ring (nc:ring *center-axial* 1))
-         (expected-axials '((0 -1) (1 -1) (1 0) (0 1) (-1 1) (-1 0)))
-         (expected-ring (mapcar #'nc:ensure-axial expected-axials)))
-    (true (a:set-equal ring expected-ring :test #'eqv))))
+         (axials '((0 -1) (1 -1) (1 0) (0 1) (-1 1) (-1 0)))
+         (expected-ring (apply #'set (mapcar #'nc:ensure-axial axials))))
+    (is eqv ring expected-ring)))
 
-(define-test coord-spiral-ring
-  (let ((ring (nc:spiral-ring *center-axial* 0)))
+(define-test coord-spiral
+  (let ((ring (nc:spiral *center-axial* 0)))
     (is = 1 (length ring))
     (is eqv *center-axial* (first ring)))
-  (let* ((ring (nc:spiral-ring *center-axial* 2))
-         (expected-axials '((0 0)
-                            (0 1) (-1 1) (-1 0) (0 -1) (1 -1) (1 0)
-                            (0 2) (-1 2) (-2 2) (-2 1) (-2 0) (-1 -1)
-                            (0 -2) (1 -2) (2 -2) (2 -1) (2 0) (1 1)))
-         (expected (mapcar #'nc:ensure-axial expected-axials)))
-    (is = (length expected) (length ring))
-    (true (every #'eqv ring expected))))
+  (let* ((ring (nc:spiral *center-axial* 2))
+         (axials '((0 0)
+                   (0 1) (-1 1) (-1 0) (0 -1) (1 -1) (1 0)
+                   (0 2) (-1 2) (-2 2) (-2 1) (-2 0) (-1 -1)
+                   (0 -2) (1 -2) (2 -2) (2 -1) (2 0) (1 1)))
+         (expected-ring (mapcar #'nc:ensure-axial axials)))
+    (is eqv ring expected-ring)))
 
 (define-test coord-linedraw
   (let* ((start (nc:ensure-axial '(-2 0)))
          (end (nc:ensure-axial '(2 -2)))
          (line (nc:linedraw start end))
-         (expected-axials '((-2 0) (-1 0) (0 -1) (1 -1) (2 -2)))
-         (expected (mapcar #'nc:ensure-axial expected-axials)))
-    (is = (length expected) (length line))
-    (true (every #'eqv line expected))))
+         (axials '((-2 0) (-1 0) (0 -1) (1 -1) (2 -2)))
+         (expected (apply #'set (mapcar #'nc:ensure-axial axials))))
+    (is eqv line expected)))

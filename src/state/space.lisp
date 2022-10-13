@@ -11,7 +11,8 @@
                     (#:nto #:nervous-island.token))
   (:export #:space
            #:axial #:tokens #:overlay #:unit #:unit-rotation #:foundation
-           #:make-spaces #:find-element #:augment-spaces))
+           ;; TODO remove MAKE- prefix from constructors
+           #:space #:spaces #:find-element #:augment-spaces))
 
 (in-package #:nervous-island.space)
 
@@ -31,7 +32,7 @@
 (defmethod print-object ((object space) stream)
   (print-unreadable-object (object stream :type t :identity nil)
     (let ((axial (axial object)))
-      (format stream "(~D ~D) ~D~A~A~A" (nc:q axial) (nc:r axial)
+      (format stream "~D ~D ~D~A~A~A" (nc:q axial) (nc:r axial)
               (if (tokens object) (length (tokens object)) "-")
               (if (overlay object) "O" "-")
               (if (unit object) "U" "-")
@@ -52,22 +53,25 @@
              "~S and ~S must be provided together."
              :format-arguments '(unit unit-rotation)))))
 
-(defun make-spaces (&rest things)
+(deftype axial-designator () '(cons integer (cons integer null)))
+
+(defun space (thing)
+  (let (axial space)
+    (etypecase thing
+      (axial-designator (setf axial (apply #'nc:axial thing)
+                              space (make-instance 'space :axial axial)))
+      (nc:axial (setf axial thing
+                      space (make-instance 'space :axial axial)))
+      (space (setf axial (axial thing)
+                   space thing)))
+    (values space axial)))
+
+(defun spaces (&rest things)
   (let ((result '()))
     (dolist (thing things (apply #'dict (nreverse result)))
-      (let (axial space)
-        (etypecase thing
-          (nc:axial (setf axial thing
-                          space (make-instance 'space :axial axial)))
-          (space (setf axial (axial thing)
-                       space thing)))
+      (multiple-value-bind (space axial) (space thing)
         (push axial result)
-        (push space result)
-        ;; TODO this should be validated on the NI.BOARD side
-        ;; (if (gethash axial spaces)
-        ;;     (error 'nb:duplicated-axial :axial axial)
-        ;;     (setf (gethash axial spaces) space))
-        ))))
+        (push space result)))))
 
 (defun find-element (dict element)
   (φ:fbind ((fn (etypecase element
@@ -85,8 +89,11 @@
 (defun augment-spaces (dict &rest dicts-and-spaces)
   (flet ((frob (thing)
            (etypecase thing
+             (nc:axial (list thing (space thing)))
              (space (list (axial thing) thing))
-             (dict (loop for (axial . thing) in (dict-contents thing)
-                         collect axial collect thing)))))
+             (dict (loop for (axial . space) in (dict-contents thing)
+                         do (check-type axial nc:axial)
+                            (check-type space space)
+                         collect axial collect space)))))
     (let ((args (mapcan #'frob dicts-and-spaces)))
       (dict-union* (apply #'dict args) dict))))

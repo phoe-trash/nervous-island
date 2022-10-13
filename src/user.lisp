@@ -7,8 +7,7 @@
        (flet ((make-army-nicknames ()
                 (loop with prefix = (symbol-name '#:nervous-island.armies.)
                       for package in (sort (copy-list (list-all-packages))
-                                           #'string<
-                                           :key #'package-name)
+                                           #'string< :key #'package-name)
                       for package-name = (package-name package)
                       for result = (search prefix package-name)
                       when (and result (= 0 result))
@@ -19,7 +18,7 @@
             (:use #:nervous-island.cl)
             (:local-nicknames (#:a #:alexandria)
                               (#:s #:split-sequence))
-            ;; Nervous Island packages
+            ;; Tiles
             (:local-nicknames (#:ncom #:nervous-island.common)
                               (#:nel #:nervous-island.element)
                               (#:nsk #:nervous-island.skill)
@@ -28,14 +27,15 @@
                               (#:nto #:nervous-island.token)
                               (#:nr #:nervous-island.army)
                               (#:nt #:nervous-island.tile))
+            ;; State
+            (:local-nicknames (#:nc #:nervous-island.coord)
+                              (#:nsp #:nervous-island.space)
+                              (#:nb #:nervous-island.board))
             ;; Old junk
-            ;; (:local-nicknames (#:nb #:nervous-island.board)
-            ;;                   (#:nc #:nervous-island.coord)
-            ;;                   (#:nd #:nervous-island.damage)
+            ;; (:local-nicknames (#:nd #:nervous-island.damage)
             ;;                   (#:nch #:nervous-island.choice)
             ;;                   (#:np #:nervous-island.player)
             ;;                   (#:nph #:nervous-island.phase)
-            ;;                   (#:nsp #:nervous-island.space)
             ;;                   (#:nst #:nervous-island.state))
             ;; Nervous Island armies
             (:local-nicknames ,@(make-army-nicknames))))))

@@ -1,3 +1,5 @@
+;;;; src/gui/tilemaker/draw-skill.lisp
+
 (in-package #:nervous-island.gui.tilemaker)
 
 (defgeneric draw-skill (skill &key &allow-other-keys))

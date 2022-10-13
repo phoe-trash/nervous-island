@@ -72,11 +72,10 @@
       (false (nsp:unit-rotation space))
       (false (nsp:foundation space)))))
 
-(define-test space-make-spaces
-  (let* ((things (list (nc:axial 0 0)
-                       (make-instance 'nsp:space :axial (nc:axial 0 1))))
+(define-test space-spaces
+  (let* ((things (list (nc:axial 0 0) (nsp:space '(0 1))))
          (axials (mapcar #'nc:ensure-axial '((0 0) (0 1))))
-         (dict (apply #'nsp:make-spaces things)))
+         (dict (apply #'nsp:spaces things)))
     (true (typep dict 'dict))
     (is = 2 (dict-count dict))
     (dolist (axial axials)
@@ -90,7 +89,7 @@
          (space-1 (make-instance 'nsp:space :axial axial))
          (space-2 (make-instance 'nsp:space :axial axial))
          (space-3 (make-instance 'nsp:space :axial axial))
-         (dict (nsp:make-spaces space-1 space-2 space-3 axial)))
+         (dict (nsp:spaces space-1 space-2 space-3 axial)))
     (is = 1 (dict-count dict))))
 
 (define-test space-find-element
@@ -104,7 +103,7 @@
              (space-2 (make 0 1 :overlay instant))
              (space-3 (make 0 2 :unit unit :unit-rotation 0))
              (space-4 (make 0 3 :foundation foundation))
-             (dict (nsp:make-spaces space-1 space-2 space-3 space-4)))
+             (dict (nsp:spaces space-1 space-2 space-3 space-4)))
         (is eqv space-1 (nsp:find-element dict token))
         (is eqv space-2 (nsp:find-element dict instant))
         (is eqv space-3 (nsp:find-element dict unit))
@@ -114,7 +113,7 @@
       (let* ((omega-space (make 0 0 :tokens (list token) :overlay instant
                                     :unit unit :unit-rotation 0
                                     :foundation foundation))
-             (dict (nsp:make-spaces omega-space)))
+             (dict (nsp:spaces omega-space)))
         (is eqv omega-space (nsp:find-element dict token))
         (is eqv omega-space (nsp:find-element dict instant))
         (is eqv omega-space (nsp:find-element dict unit))
@@ -127,11 +126,11 @@
            (apply #'make-instance 'nsp:space :axial (nc:axial q r) args)))
     (let* ((space-1 (make 0 0))
            (space-2 (make 0 1))
-           (dict-1 (nsp:make-spaces space-1 space-2))
+           (dict-1 (nsp:spaces space-1 space-2))
            (token (make-instance 'space-test-token))
            (space-1-alt (make 0 0 :tokens (list token)))
            (space-3 (make 0 2))
-           (dict-2 (nsp:make-spaces space-3))
+           (dict-2 (nsp:spaces space-3))
            (dict-3 (nsp:augment-spaces dict-1 space-1-alt space-2 dict-2)))
       (is = 3 (dict-count dict-3))
       (is eqv space-1-alt (dict-find dict-3 (nc:axial 0 0)))

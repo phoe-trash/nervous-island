@@ -22,7 +22,7 @@
   ;; state/
   (:local-nicknames
    (#:nc #:nervous-island.coord)
-   ;; (#:nb #:nervous-island.board)
+   (#:nb #:nervous-island.board)
    ;; (#:nd #:nervous-island.damage)
    ;; (#:nch #:nervous-island.choice)
    ;; (#:np #:nervous-island.player)

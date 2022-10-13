@@ -76,14 +76,41 @@
   :pathname "src/state"
   :components ((:file "coord")
                (:file "space")
-               ;; (:file "board")
-               ;; (:file "player")
-               ;; (:file "damage")
-               ;; (:file "phase")
-               ;; (:file "step")
-               ;; (:file "choice")
-               ;; (:file "state")
-               ))
+               (:file "board")))
+
+(asdf:defsystem #:nervous-island/tilemaker
+  :description "ネウロ島六角ボードゲームエンジン"
+  :author "Michał \"phoe\" Herda <phoe@disroot.org>"
+  :license "AGPLv3"
+  :version "0.0"
+  :serial t
+  :depends-on (#:nervous-island/tiles
+               #:nervous-island/armies
+               ;; GUI dependencies
+               #:vecto
+               #:imago
+               #:vecto-imago
+               #:zpng)
+  :pathname "src/gui/"
+  :components ((:module "shapes"
+                :components ((:file "package")
+                             (:file "common")
+                             (:file "attacks")
+                             (:file "net")
+                             (:file "armor")
+                             (:file "circle")
+                             (:file "text")
+                             (:file "mobility")
+                             (:file "toughness")
+                             (:file "bomb")
+                             (:file "module")))
+               (:module "tilemaker"
+                :components ((:file "package")
+                             (:file "conditions")
+                             (:file "drawing-state")
+                             (:file "draw-skill")
+                             (:file "draw-skills")
+                             (:file "draw-tile")))))
 
 (asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"
@@ -94,44 +121,15 @@
   :depends-on (;; NI dependencies
                #:nervous-island/common
                #:nervous-island/tiles
-               ;; GUI dependencies
-               ;; #:vecto
-               ;; #:imago
-               ;; #:vecto-imago
                )
   :pathname "src"
   :components (;; (:module "state"
-               ;;  :components ((:file "board")
-               ;;               (:file "player")
+               ;;  :components ((:file "player")
                ;;               (:file "damage")
                ;;               (:file "phase")
                ;;               (:file "step")
                ;;               (:file "choice")
                ;;               (:file "state")))
-               ;; (:module "gui"
-               ;;  :componentsq
-               ;;  ((:module "shapes"
-               ;;    :components ((:file "package")
-               ;;                 (:file "common")
-               ;;                 (:file "attacks")
-               ;;                 (:file "net")
-               ;;                 (:file "armor")
-               ;;                 (:file "circle")
-               ;;                 (:file "text")
-               ;;                 (:file "mobility")
-               ;;                 (:file "toughness")
-               ;;                 (:file "bomb")
-               ;;                 (:file "module")))
-               ;;   (:module "tilemaker"
-               ;;    :components ((:file "package")
-               ;;                 (:file "conditions")
-               ;;                 (:file "drawing-state")
-               ;;                 (:file "draw-skill")
-               ;;                 (:file "draw-skills")
-               ;;                 (:module "draw-tile"
-               ;;                  :components ((:file "common")
-               ;;                               (:file "warrior")
-               ;;                               (:file "module")))))))
                ;; (:file "user")
                ))
 
@@ -146,7 +144,6 @@
                #:nervous-island/tiles
                #:nervous-island/armies
                #:nervous-island/state
-               #:nervous-island/junk
                ;; User package dependencies
                #:utilities.print-tree
                #:split-sequence)
@@ -183,12 +180,5 @@
                (:module "state"
                 :components ((:file "coord")
                              (:file "space")
-                             ;; (:file "board")
-                             ;; (:file "player")
-                             ;; (:file "damage")
-                             ;; (:file "phase")
-                             ;; (:file "step")
-                             ;; (:file "choice")
-                             ;; (:file "state")
-                             ))
+                             (:file "board")))
                (:file "armies")))

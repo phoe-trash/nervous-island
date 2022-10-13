@@ -10,7 +10,7 @@
    #:axial+ #:axial- #:cube+ #:cube- #:axial-move #:cube-move
    #:axial-position #:cube-position #:ensure-axial #:ensure-cube
    #:neighbors #:diagonals #:range #:distance #:range-intersection
-   #:rotate #:ring #:spiral-ring #:cube-round #:axial-round #:lerp #:linedraw))
+   #:rotate #:ring #:spiral #:cube-round #:axial-round #:lerp #:linedraw))
 
 (in-package #:nervous-island.coord)
 
@@ -108,8 +108,9 @@
     (satisfies cube-position-good-coords)))
 
 (defun cube-position-good-coords (position)
-  (destructuring-bind (x y z) position
-    (= 0 (+ x y z))))
+  (and (typep position '(cons integer (cons integer (cons integer null))))
+       (destructuring-bind (x y z) position
+         (= 0 (+ x y z)))))
 
 (defun ensure-axial (thing)
   (etypecase thing
@@ -128,13 +129,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Operations
 
+;;; TODO this should return sets of axials instead
 (defun neighbors (axial)
   (check-type axial axial)
   (let ((q (q axial))
         (r (r axial)))
-    (list (axial (1+ q) r) (axial (1+ q) (1- r))
-          (axial q (1- r)) (axial (1- q) r)
-          (axial (1- q) (1+ r)) (axial q (1+ r)))))
+    (set (axial (1+ q) r) (axial (1+ q) (1- r))
+         (axial q (1- r)) (axial (1- q) r)
+         (axial (1- q) (1+ r)) (axial q (1+ r)))))
 
 (defun diagonals (axial)
   (check-type axial axial)
@@ -142,19 +144,20 @@
         (r (r axial)))
     (flet ((2+ (x) (+ x 2))
            (2- (x) (- x 2)))
-      (list (axial (2+ q) (1- r)) (axial (1+ q) (1+ r))
-            (axial (1- q) (2+ r)) (axial (2- q) (1+ r))
-            (axial (1- q) (1- r)) (axial (1+ q) (2- r))))))
+      (set (axial (2+ q) (1- r)) (axial (1+ q) (1+ r))
+           (axial (1- q) (2+ r)) (axial (2- q) (1+ r))
+           (axial (1- q) (1- r)) (axial (1+ q) (2- r))))))
 
 (defun range (center radius)
   (check-type radius unsigned-byte)
-  (loop for x from (- radius) to radius
-        nconc (loop for y from (max (- radius) (- (+ x radius)))
-                      to (min radius (- (- x radius)))
-                    for z = (- (+ x y))
-                    for result-cube = (cube x y z)
-                    for result-axial = (cube-axial result-cube)
-                    collect (axial+ center result-axial))))
+  (apply #'set
+         (loop for x from (- radius) to radius
+               nconc (loop for y from (max (- radius) (- (+ x radius)))
+                             to (min radius (- (- x radius)))
+                           for z = (- (+ x y))
+                           for result-cube = (cube x y z)
+                           for result-axial = (cube-axial result-cube)
+                           collect (axial+ center result-axial)))))
 
 (defun distance (start end)
   (if (eqv start end)
@@ -176,18 +179,18 @@
                                   (- (funcall fn cube-2) range-2)))
            (compute-max (fn) (min (+ (funcall fn cube-1) range-1)
                                   (+ (funcall fn cube-2) range-2))))
-      (loop with xmin = (compute-min #'x)
-            with xmax = (compute-max #'x)
-            with ymin = (compute-min #'y)
-            with zmin = (compute-min #'z)
-            with ymax = (compute-max #'y)
-            with zmax = (compute-max #'z)
-            for x from xmin to xmax
-            nconc (loop for y from (max ymin (- (+ x zmax)))
-                          to (min ymax (- (+ x zmin)))
-                        for z = (- (+ x y))
-                        for result-cube = (cube x y z)
-                        collect (cube-axial result-cube))))))
+      (apply #'set (loop with xmin = (compute-min #'x)
+                         with xmax = (compute-max #'x)
+                         with ymin = (compute-min #'y)
+                         with zmin = (compute-min #'z)
+                         with ymax = (compute-max #'y)
+                         with zmax = (compute-max #'z)
+                         for x from xmin to xmax
+                         nconc (loop for y from (max ymin (- (+ x zmax)))
+                                       to (min ymax (- (+ x zmin)))
+                                     for z = (- (+ x y))
+                                     for result-cube = (cube x y z)
+                                     collect (cube-axial result-cube)))))))
 
 (defun rotate-axial (axial rotation)
   (let* ((cube (axial-cube axial))
@@ -207,7 +210,7 @@
          (unshifted (axial+ rotated center)))
     unshifted))
 
-(defun ring (center radius)
+(defun %ring (center radius)
   (if (= radius 0)
       (list center)
       (let ((result '())
@@ -217,9 +220,12 @@
             (push axial result)
             (setf axial (axial-move axial direction)))))))
 
-(defun spiral-ring (center radius)
+(defun ring (center radius)
+  (apply #'set (%ring center radius)))
+
+(defun spiral (center radius)
   (loop for k from 0 to radius
-        nconc (ring center k) into result
+        nconc (%ring center k) into result
         finally (return result)))
 
 (defun cube-round (fx fy fz)
@@ -255,4 +261,5 @@
             (cube-2 (axial-cube axial-2)))
         (loop for n to distance
               for fractions = (lerp cube-1 cube-2 (/ n distance))
-              collect (cube-axial (apply #'cube-round fractions))))))
+              collect (cube-axial (apply #'cube-round fractions)) into result
+              finally (return (apply #'set result))))))
