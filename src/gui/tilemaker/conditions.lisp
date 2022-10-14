@@ -2,6 +2,8 @@
 
 (in-package #:nervous-island.gui.tilemaker)
 
+;; TODO write out all conditions in here
+
 (define-condition drawing-an-unknown-skill (warning)
   ((%skill :reader drawing-an-unknown-skill-skill :initarg :skill))
   (:report (lambda (condition stream)

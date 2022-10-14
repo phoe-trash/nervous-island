@@ -52,8 +52,8 @@
       (v:line-to 0 (* 0.26 height))
       (v:fill-and-stroke))))
 
-(defun melee (&optional (side *side*) pointsp)
-  (melee-shadow side pointsp)
+(defun melee (&optional (side *side*) pointsp (shadowp t))
+  (when shadowp (melee-shadow side pointsp))
   (melee-body side pointsp)
   (attack-decoration))
 
@@ -70,8 +70,8 @@
       (v:line-to 0 (* 0.2 height))
       (v:fill-and-stroke))))
 
-(defun ranged (&optional (side *side*) pointsp)
-  (ranged-shadow side pointsp)
+(defun ranged (&optional (side *side*) pointsp (shadowp t))
+  (when shadowp (ranged-shadow side pointsp))
   (ranged-body side pointsp)
   (attack-decoration))
 

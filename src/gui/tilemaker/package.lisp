@@ -3,8 +3,10 @@
 (uiop:define-package #:nervous-island.gui.tilemaker
   (:use #:cl)
   (:local-nicknames (#:a #:alexandria)
-                    (#:v #:vecto)
                     (#:φ #:phoe-toolbox)
+                    (#:i #:imago)
+                    (#:v #:vecto)
+                    (#:z #:zpng)
                     (#:vs #:value-semantics-utils)
                     (#:na #:nervous-island.attack)
                     (#:ncom #:nervous-island.common)

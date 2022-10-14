@@ -46,3 +46,33 @@
                    (draw-skill attack
                                :allocated-left-p allocated-left-p
                                :allocated-right-p allocated-right-p)))))))
+
+(defmethod draw-skills (state (skill ne:effect) &rest skills)
+  (let* ((to-draw (remove-duplicates (cons skill skills) :key #'class-of))
+         (plusp (not (find-if (a:rcurry #'typep 'ne:medic) to-draw))))
+    (labels ((help ()
+               ;; (shapes:ability-circle shapes:*side* nil nil)
+               )
+             (draw (x y)
+               (v:with-graphics-state
+                 (v:translate (* shapes:*side* x) (* shapes:*side* y))
+                 (help)
+                 (draw-skill (pop to-draw))))
+             (plus (x x2)
+               (v:translate (* shapes:*side* (- x)) 0)
+               (v:scale 0.7 0.7)
+               (shapes:medic)
+               (v:scale (/ 0.7) (/ 0.7))
+               (v:translate (* shapes:*side* (+ x x2)) 0)))
+      (v:with-graphics-state
+        (ecase (length to-draw)
+          (1 (when plusp (plus 0.25 0.04))
+           (v:scale 1.5 1.5)
+           (draw 0 0))
+          (2 (when plusp (plus 0.18 0))
+           (draw 0 0.15)
+           (draw 0 -0.15))
+          (3 (when plusp (plus 0.25 0))
+           (draw -0.09 0.15)
+           (draw -0.09 -0.15)
+           (draw 0.17 0)))))))

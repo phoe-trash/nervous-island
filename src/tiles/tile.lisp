@@ -56,11 +56,10 @@
 (define-class object (hq) () (:protocolp t)
   (:default-initargs :starting-hit-points 10))
 
-(define-class warrior (unit) () (:protocolp t))
-(define-class module (unit) () (:protocolp t))
+(define-class warrior (unit) ())
+(define-class module (unit) ())
 (define-class implant (unit)
-  ((behavior :type instant))
-  (:protocolp t))
+  ((behavior :type instant)))
 
 (defmacro define-unit (name (&rest superclasses) &body skills)
   `(define-class ,name ,superclasses ()

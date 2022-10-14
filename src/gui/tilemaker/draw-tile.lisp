@@ -22,44 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Module
 
-(defmethod draw-tile ((tile nt:warrior)
-                      &key height background-color save-path
-                        bg-image bg-x-offset bg-y-offset)
-  (let ((state (make-instance 'drawing-state :tile tile))
-        (remaining-skills (copy-list (vs:set-contents (nsk:skills tile)))))
-    (flet ((fetch-skills-if (predicate &key (removep t))
-             (multiple-value-bind (skills remaining)
-                 (φ:split predicate remaining-skills)
-               (when removep (setf remaining-skills remaining))
-               skills)))
-      (let ((undirected (fetch-skills-if (a:rcurry #'typep 'nsk:undirected)
-                                         :removep nil)))
-        (allocate-undirected-skills state undirected))
-      (shapes:with-hex-tile (side height width)
-          (:height height
-           :background-color background-color
-           :save-path save-path
-           :bg-image bg-image
-           :bg-x-offset bg-x-offset :bg-y-offset bg-y-offset)
-        (macrolet ((process ((name) &body body)
-                     (a:with-gensyms (skills)
-                       `(a:when-let ((,skills (fetch-skills-if
-                                               (lambda (,name) ,@body))))
-                          (apply #'draw-skills state ,skills)))))
-          (process (x) (typep x 'nsk:net))
-          (dolist (direction ncom:*directions*)
-            (process (x) (and (typep x 'na:attack)
-                              (eq direction (nsk:direction x)))))
-          (process (x) (typep x 'nsk:armor))
-          (process (x) (typep x 'nsk:undirected))))
-      (when remaining-skills
-        (dolist (skill remaining-skills)
-          (warn 'remaining-skill-after-drawing :skill skill)
-          (draw-skill skill))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Module
-
 (defun partition-by-class (skills)
   (loop with hash-table = (make-hash-table)
         for skill in skills
@@ -82,44 +44,73 @@
     (error "Unable to draw a module with both directed and ~
             undirected effects: ~S" skills)))
 
+(defun draw-module-background (state)
+  (let ((range-directions (module-range-directions state)))
+    (shapes:module-background)
+    (dolist (direction range-directions)
+      (let ((rotation (position direction ncom:*directions*)))
+        (shapes:module-range-shadow rotation)))
+    (shapes:module-ring)
+    (dolist (direction range-directions)
+      (let ((rotation (position direction ncom:*directions*)))
+        (shapes:module-range rotation)))
+    (shapes:module-circle)))
+
 (defmethod draw-tile ((tile nt:module) &key height background-color save-path)
   (let ((state (make-instance 'drawing-state :tile tile))
-        (remaining-skills (copy-list (vs:set-contents (nsk:skills tile)))))
-    (check-directed-undirected-effects remaining-skills)
-    (flet ((fetch-skills-if (predicate &key (removep t))
-             (multiple-value-bind (skills remaining)
-                 (φ:split predicate remaining-skills)
-               (when removep (setf remaining-skills remaining))
-               skills)))
-      (let* ((predicate (a:rcurry #'typep 'ne:directed-effect))
-             (directed (fetch-skills-if predicate :removep nil))
-             (clusters (partition-by-class directed)))
-        (reconcile-effect-ranges state clusters))
-      (let* ((predicate (a:rcurry #'typep
-                                  '(and nsk:undirected (not ne:effect))))
-             (undirected (fetch-skills-if predicate :removep nil)))
-        (allocate-undirected-skills state undirected))
-      (shapes:with-hex-tile (side height width)
-          (:height height
-           :background-color background-color
-           :save-path save-path)
-        (let ((range-directions (module-range-directions state)))
-          (shapes:module-background)
-          (dolist (direction range-directions)
-            (let ((rotation (position direction ncom:*directions*)))
-              (shapes:module-range-shadow rotation)))
-          (shapes:module-ring)
-          (dolist (direction range-directions)
-            (let ((rotation (position direction ncom:*directions*)))
-              (shapes:module-range rotation)))
-          (shapes:module-circle))
-        (macrolet ((process ((name) &body body)
-                     (a:with-gensyms (skills)
-                       `(a:when-let ((,skills (fetch-skills-if
-                                               (lambda (,name) ,@body))))
-                          (apply #'draw-skills state ,skills)))))
-          (process (x) (typep x '(and nsk:undirected (not ne:effect)))))
-        (when remaining-skills
-          (dolist (skill remaining-skills)
-            (warn 'remaining-skill-after-drawing :skill skill)
-            (draw-skill skill)))))))
+        (skills (copy-list (vs:set-contents (nsk:skills tile)))))
+    (let* ((predicate (a:rcurry #'typep '(and nsk:undirected (not ne:effect))))
+           (undirected (φ:split predicate skills)))
+      (allocate-undirected-skills state undirected))
+    (check-directed-undirected-effects skills)
+    (let* ((predicate (a:rcurry #'typep 'ne:directed-effect))
+           (directed (φ:split predicate skills))
+           (clusters (partition-by-class directed)))
+      (reconcile-effect-ranges state clusters))
+    (shapes:with-hex-tile (side height width)
+        (:height height
+         :background-color background-color
+         :save-path save-path)
+      (draw-module-background state)
+      (flet ((process (predicate)
+               (multiple-value-bind (good bad) (φ:split predicate skills)
+                 (setf skills bad)
+                 (when good (apply #'draw-skills state good)))))
+        (process (lambda (x) (typep x '(and nsk:undirected (not ne:effect)))))
+        (process (lambda (x) (typep x 'ne:effect))))
+      (when skills
+        (dolist (skill skills)
+          (warn 'remaining-skill-after-drawing :skill skill)
+          (draw-skill skill))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Warrior
+
+(defmethod draw-tile ((tile nt:warrior)
+                      &key height background-color save-path
+                        bg-image bg-x-offset bg-y-offset)
+  (let ((state (make-instance 'drawing-state :tile tile))
+        (skills (copy-list (vs:set-contents (nsk:skills tile)))))
+    (let* ((predicate (a:rcurry #'typep '(and nsk:undirected (not ne:effect))))
+           (undirected (φ:split predicate skills)))
+      (allocate-undirected-skills state undirected))
+    (shapes:with-hex-tile (side height width)
+        (:height height
+         :background-color background-color
+         :save-path save-path
+         :bg-image bg-image
+         :bg-x-offset bg-x-offset :bg-y-offset bg-y-offset)
+      (flet ((process (predicate)
+               (multiple-value-bind (good bad) (φ:split predicate skills)
+                 (setf skills bad)
+                 (when good (apply #'draw-skills state good)))))
+        (process (lambda (x) (typep x 'nsk:net)))
+        (dolist (direction ncom:*directions*)
+          (process (lambda (x) (and (typep x 'na:attack)
+                                    (eq direction (nsk:direction x))))))
+        (process (lambda (x) (typep x 'nsk:armor)))
+        (process (lambda (x) (typep x 'nsk:undirected))))
+      (when skills
+        (dolist (skill skills)
+          (warn 'remaining-skill-after-drawing :skill skill)
+          (draw-skill skill))))))

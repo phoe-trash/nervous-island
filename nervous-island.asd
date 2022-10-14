@@ -95,15 +95,7 @@
   :components ((:module "shapes"
                 :components ((:file "package")
                              (:file "common")
-                             (:file "attacks")
-                             (:file "net")
-                             (:file "armor")
-                             (:file "circle")
-                             (:file "text")
-                             (:file "mobility")
-                             (:file "toughness")
-                             (:file "bomb")
-                             (:file "module")))
+                             (:auto-module "impl")))
                (:module "tilemaker"
                 :components ((:file "package")
                              (:file "conditions")

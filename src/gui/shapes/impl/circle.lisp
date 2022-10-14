@@ -63,9 +63,9 @@
         (v:fill-path)))))
 
 (defun ability-circle
-    (&optional (side *side*) (linesp t))
+    (&optional (side *side*) (linesp t) (shadowp t))
   (declare (ignore side))
-  (circle-shadow)
+  (when shadowp (circle-shadow))
   (circle-outer)
   (circle-inner)
   (dotimes (i 8)

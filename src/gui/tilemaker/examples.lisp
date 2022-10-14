@@ -9,15 +9,26 @@
 (draw-tile (make-instance 'nervous-island.armies.hegemony:net-master))
 (draw-tile (make-instance 'nervous-island.armies.hegemony:universal-soldier))
 
-(ncom:define-class my-warrior (nt:warrior) ())
-(draw-tile (make-instance 'my-warrior :skills (vs:set (na:melee :q 6))))
+(draw-tile (make-instance 'nt:warrior :skills (vs:set (na:melee :q 6))))
 (let ((skills (vs:set (na:melee :q) (na:ranged :q) (na:gauss-cannon :q))))
-  (draw-tile (make-instance 'my-warrior :skills skills)))
+  (draw-tile (make-instance 'nt:warrior :skills skills)))
 (let ((skills (vs:set (na:melee :s) (nsk:net :a) (nsk:net :d))))
-  (draw-tile (make-instance 'my-warrior :skills skills)))
+  (draw-tile (make-instance 'nt:warrior :skills skills)))
 
-(draw-tile (make-instance 'nervous-island.armies.hegemony:boss))
+(draw-tile (make-instance 'nervous-island.armies.borgo:medic))
+
 (draw-tile (make-instance 'nervous-island.armies.borgo:super-officer))
+(draw-tile (make-instance 'nervous-island.armies.hegemony:boss))
+(let ((skills (vs:set (ne:directed-melee-officer :q 1)
+                      (ne:directed-ranged-officer :q 1)
+                      (ne:directed-speed :q 1)
+                      (ne:directed-melee-officer :w 1)
+                      (ne:directed-ranged-officer :w 1)
+                      (ne:directed-speed :w 1)
+                      (ne:directed-melee-officer :e 1)
+                      (ne:directed-ranged-officer :e 1)
+                      (ne:directed-speed :e 1))))
+  (draw-tile (make-instance 'nt:module :skills skills)))
 
 (defparameter *armies*
   (alexandria:alist-hash-table
