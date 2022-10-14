@@ -67,11 +67,11 @@
       (v:line-to (* 0.09 side) (* 0.4 side))
       (v:fill-and-stroke))))
 
-(defun module-arrow (&optional (triangles 1) (side *side*))
+(defun module-arrow (&optional (triangles 1) (side *side*) (color '(0 0 0 1)))
   (v:with-graphics-state
     (v:translate 0 (* side (+ 0.63 (* 0.03 triangles))))
     (v:scale 1.2 1.2)
-    (v:set-rgba-fill 0 0 0 1)
+    (apply #'v:set-rgba-fill color)
     (let ((triangle-side (* 0.1 side)))
       (dotimes (i triangles)
         (v:move-to 0 0)
@@ -102,3 +102,14 @@
       (v:line-to (* 0.09 side) (* 0.4 side))
       (v:fill-path))
     (module-arrow triangles)))
+
+(defun star ()
+  (v:with-graphics-state
+    (v:scale 0.1 0.1)
+    (v:set-rgba-fill 1 1 1 1)
+    (v:move-to (* *side* (sin (* 0 pi 4/5)))
+               (* *side* (cos (* 0 pi 4/5))))
+    (dotimes (i 6)
+      (v:line-to (* *side* (sin (* (1+ i) pi 4/5)))
+                 (* *side* (cos (* (1+ i) pi 4/5)))))
+    (v:fill-path)))

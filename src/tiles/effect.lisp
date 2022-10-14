@@ -29,11 +29,11 @@
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
-   #:melee-officer #:ranged-officer #:speed #:additional-initiative
+   #:melee-officer #:ranged-officer #:speed #:saboteur #:additional-initiative
    #:toughness #:healing #:quartermaster #:attack-types
    #:medic #:mobility #:grab #:rotation #:move-doubler
    #:underground #:paralysis #:venom
-   #:scoper #:saboteur #:takeover #:zone #:wastes
+   #:scoper #:takeover #:zone #:wastes
    #:motherland #:net-of-steel-launcher
    #:implant-activation #:muzzle #:net-on-melees #:explosion
    #:power-supply
@@ -48,11 +48,11 @@
 (define-class effect (nsk:passive) ()
   (:protocolp t))
 
-(define-class undirected-effect (nsk:undirected effect) ()
+(define-class undirected-effect (effect nsk:undirected) ()
   (:protocolp t))
-(define-class directed-effect (nsk:directed effect) ()
+(define-class directed-effect (effect nsk:directed) ()
   (:protocolp t))
-(define-class long-range-directed-effect (nsk:directed effect) ()
+(define-class long-range-directed-effect (effect nsk:directed) ()
   (:protocolp t))
 
 (define-class numeric (effect)
@@ -101,6 +101,7 @@
 (define-effect melee-officer (:numericp t))
 (define-effect ranged-officer (:numericp t))
 (define-effect speed (:numericp t))
+(define-effect saboteur (:numericp t))
 (define-effect additional-initiative (:numericp t))
 (define-effect toughness (:numericp t))
 (define-effect healing (:numericp t))
@@ -119,7 +120,6 @@
 (define-effect venom ())
 
 (define-effect scoper ())
-(define-effect saboteur ())
 (define-effect takeover ())
 (define-effect zone ())
 (define-effect wastes ())

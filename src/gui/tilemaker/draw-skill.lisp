@@ -39,14 +39,15 @@
 ;;; Undirected skills
 
 (defmethod draw-skill :around ((skill nsk:undirected) &key corner)
-  (check-type corner ncom:diagonal)
-  (let* ((rotation (position corner ncom:*diagonals*)))
-    (v:with-graphics-state
-      (v:rotate (* rotation pi -1/3))
-      (v:translate (* -0.55 shapes:*side*) 0)
-      (shapes:ability-circle)
-      (v:rotate (* rotation pi 1/3))
-      (call-next-method))))
+  (cond ((null corner) (call-next-method))
+        (t (check-type corner ncom:diagonal)
+           (let* ((rotation (position corner ncom:*diagonals*)))
+             (v:with-graphics-state
+               (v:rotate (* rotation pi -1/3))
+               (v:translate (* -0.55 shapes:*side*) 0)
+               (shapes:ability-circle)
+               (v:rotate (* rotation pi 1/3))
+               (call-next-method))))))
 
 (defmethod draw-skill ((skill nsk:initiative) &key)
   (shapes:text (nsk:value skill)))
@@ -82,3 +83,58 @@
   (v:with-graphics-state
     (shapes:ability-circle shapes:*side* nil nil)
     (shapes:text (ne:strength skill))))
+
+(defmethod draw-skill ((skill ne:saboteur) &key)
+  (v:with-graphics-state
+    (shapes:ability-circle shapes:*side* nil nil)
+    (shapes:text (ne:strength skill) shapes:*side* '(1 0 0 1))))
+
+(defmethod draw-skill ((skill ne:mobility) &key)
+  (v:with-graphics-state
+    (v:scale 2 2)
+    (shapes:mobility)))
+
+(defmethod draw-skill ((skill ne:move-doubler) &key)
+  (flet ((draw (x y)
+           (v:with-graphics-state
+             (v:translate (* shapes:*side* x) (* shapes:*side* y))
+             (shapes:mobility))))
+    (draw 0.10 0.10)
+    (draw 0.10 -0.10)
+    (draw -0.10 0)
+    (v:scale 0.8 0.8)
+    (shapes:text "=")))
+
+(defmethod draw-skill ((skill ne:additional-initiative) &key)
+  (flet ((draw (x y)
+           (v:with-graphics-state
+             (v:translate (* shapes:*side* x) (* shapes:*side* y))
+             (shapes:star))))
+    (draw 0 0.10)
+    (draw 0 -0.10)))
+
+(defmethod draw-skill ((skill ne:quartermaster) &key)
+  (let ((attacks (ncom:set-contents (ne:attack-types skill))))
+    (assert (= 2 (length attacks)))
+    (flet ((draw (x y thing)
+             (v:with-graphics-state
+               (v:translate (* shapes:*side* x) (* shapes:*side* y))
+               (v:translate 0 (* -0.46 shapes:*side*))
+               (v:scale 0.8 0.8)
+               (case thing
+                 (na:melee (shapes:melee shapes:*side* nil nil))
+                 (na:ranged (shapes:ranged shapes:*side* nil nil))
+                 (na:gauss-cannon (shapes:gauss shapes:*side* nil nil))))))
+      (v:with-graphics-state
+        (v:scale 0.6 0.6)
+        (draw -0.20 0 (first attacks))
+        (draw 0.20 0 (second attacks)))
+      (v:with-graphics-state
+        (v:scale 0.8 0.8)
+        (shapes:text "=")))))
+
+(defmethod draw-skill ((skill ne:scoper) &key)
+  (v:with-graphics-state
+    (v:translate 0 (* shapes:*side* -1.15))
+    (v:scale 2 2)
+    (shapes::module-arrow 1 shapes:*side* '(1 0 0 1))))

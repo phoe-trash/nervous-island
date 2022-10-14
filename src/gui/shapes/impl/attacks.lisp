@@ -125,6 +125,6 @@
         (v:translate 0 (* 0.045 height))
         (make-triangle 0 0 0 (* height 0.015))))))
 
-(defun gauss (&optional (side *side*) pointsp)
-  (ranged-shadow side pointsp)
+(defun gauss (&optional (side *side*) pointsp (shadowp t))
+  (when shadowp (ranged-shadow side pointsp))
   (gauss-body side))

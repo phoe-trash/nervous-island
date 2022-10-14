@@ -30,6 +30,8 @@
                       (ne:directed-speed :e 1))))
   (draw-tile (make-instance 'nt:module :skills skills)))
 
+(draw-tile (make-instance 'nervous-island.armies.borgo:grenade))
+
 (defparameter *armies*
   (alexandria:alist-hash-table
    '((:borgo 0.0 0.6 0.8)
@@ -45,7 +47,7 @@
          (symbol (find-symbol symbol-name package)))
     (make-instance symbol)))
 
-(defun save-warriors (&optional (printp t))
+(defun save-tiles (&optional (printp t) (type '(or nt:warrior nt:module)))
   (let* ((army-names (a:hash-table-keys *armies*))
          (directory #p"/tmp/ni-warriors/"))
     (ensure-directories-exist directory)
@@ -55,9 +57,10 @@
       for army = (keyword-army army-name)
       for color = (gethash army-name *armies*)
       do (dolist (tile (nervous-island.army:elements army))
-           (when (typep tile 'nt:warrior)
+           (when (typep tile type)
              (let* ((symbol (class-name (class-of tile)))
-                    (package (package-name (symbol-package symbol)))
+                    (army-class-name (class-name (class-of army)))
+                    (package (package-name (symbol-package army-class-name)))
                     (string (format nil "~(~A.~A~)" package symbol)))
                (unless (member string done :test #'string=)
                  (push string done)

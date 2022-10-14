@@ -48,10 +48,17 @@
     (mapcar #'car (sort result #'> :key #'cdr))))
 
 (defun allocate-undirected-skills (state skills)
-  (let ((corners (compute-best-corners state)))
-    (when (> (length skills) (length corners))
-      ;; TODO handle running out of corners in a better way
-      (error "Too many skills to allocate: ~S" skills))
-    (loop for skill in skills
-          for corner in corners
-          do (push (cons skill corner) (allocated-corners state)))))
+  (flet ((preprocess (skills)
+           (loop for skill in skills
+                 if (typep skill 'nsk:toughness)
+                   nconc (loop repeat (nsk:value skill)
+                               collect skill)
+                 else nconc (list skill))))
+    (let* ((skills (preprocess skills))
+           (corners (compute-best-corners state)))
+      (when (> (length skills) (length corners))
+        ;; TODO handle running out of corners in a better way
+        (error "Too many skills to allocate: ~S" skills))
+      (loop for skill in skills
+            for corner in corners
+            do (push (cons skill corner) (allocated-corners state))))))

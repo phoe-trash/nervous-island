@@ -114,3 +114,71 @@
         (dolist (skill skills)
           (warn 'remaining-skill-after-drawing :skill skill)
           (draw-skill skill))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Instant
+
+(defmethod draw-tile ((tile nt:instant)
+                      &key height background-color save-path
+                        bg-image bg-x-offset bg-y-offset)
+  (shapes:with-hex-tile (side height width)
+      (:height height
+       :background-color background-color
+       :save-path save-path
+       :bg-image bg-image
+       :bg-x-offset bg-x-offset :bg-y-offset bg-y-offset
+       :instantp t)
+    (draw-instant tile background-color)))
+
+(defgeneric draw-instant (tile background-color &rest rest))
+
+(defmethod draw-instant :around ((tile nt:instant) background-color &key)
+  (v:with-graphics-state
+    (shapes::hexagon (* 0.96 shapes:*side*))
+    (v:set-rgb-stroke 0.95 0.95 0.85)
+    (v:set-line-width (* 0.04 shapes:*side*))
+    (v:with-graphics-state
+      (call-next-method)
+      (v:with-graphics-state
+        (v:even-odd-fill-and-stroke))
+      (v:with-graphics-state
+        (v:even-odd-fill))))
+  (v:with-graphics-state
+    (shapes::hexagon (* 0.95 shapes:*side*))
+    (shapes::hexagon shapes:*side*)
+    (v:even-odd-fill)))
+
+(defmethod draw-instant ((tile nt:battle) background-color
+                         &key (side shapes:*side*))
+  (flet ((kaboom (spikes scale &optional (diff 1/2))
+           (v:move-to (* side scale (- 1 diff) (sin 0))
+                      (* side scale (- 1 diff) (cos 0)))
+           (dotimes (i spikes)
+             (let ((mult (if (oddp i) 1 (- 1 diff))))
+               (v:line-to (* side scale mult (sin (* i 2 pi (/ spikes))))
+                          (* side scale mult (cos (* i 2 pi (/ spikes)))))))))
+    (kaboom 40 0.7)
+    (kaboom 16 0.2 0.4)))
+
+(defmethod draw-instant ((tile nt:move) background-color
+                         &key (side shapes:*side*))
+  (shapes::%mobility (* 8 side) nil))
+
+(defmethod draw-instant ((tile nt:push-back) background-color
+                         &key (side shapes:*side*))
+  (shapes::%push-back (* 8 side) nil))
+
+(defmethod draw-instant ((tile nt:instant) background-color &key)
+  (warn 'drawing-an-unknown-skill :skill tile))
+
+(defmethod draw-instant ((tile nt:air-strike) background-color
+                         &key (side shapes:*side*))
+  (shapes::%bomb (* 8 side) nil))
+
+(defmethod draw-instant ((tile nt:sniper) background-color
+                         &key (side shapes:*side*))
+  (shapes::%sniper (* 8 side) nil))
+
+(defmethod draw-instant ((tile nt:grenade) background-color
+                         &key (side shapes:*side*))
+  (shapes::%grenade (* 8 side) nil))

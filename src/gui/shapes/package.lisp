@@ -13,4 +13,4 @@
            #:armor-shadow #:armor
            #:ability-circle
            #:text #:mobility #:toughness #:bomb
-           #:medic))
+           #:medic #:minus #:star))

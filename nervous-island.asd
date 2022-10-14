@@ -136,6 +136,7 @@
                #:nervous-island/tiles
                #:nervous-island/armies
                #:nervous-island/state
+               #:nervous-island/tilemaker
                ;; User package dependencies
                #:utilities.print-tree
                #:split-sequence)

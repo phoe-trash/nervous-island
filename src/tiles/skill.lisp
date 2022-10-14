@@ -172,6 +172,7 @@
 (define-skill flying (passive undirected) ())
 (define-skill drift (passive undirected) ())
 
+;; TODO fold these into numeris mobility
 (define-skill mobility (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill double-mobility (mobility) ()

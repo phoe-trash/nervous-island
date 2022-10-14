@@ -10,9 +10,16 @@
     (draw-skill skill)))
 
 (defmethod draw-skills (state (skill nsk:undirected) &rest skills)
-  (dolist (skill (cons skill skills))
-    (let ((corner (a:assoc-value (allocated-corners state) skill)))
-      (draw-skill skill :corner corner))))
+  ;; WARNING: dangerous implementation. We ignore the passed skills
+  ;; and use the ones from ALLOCATED-CORNERS.
+  (declare (ignore skills))
+  (loop for (skill . corner) in (allocated-corners state)
+        do (draw-skill skill :corner corner))
+  ;; The previous implementation is below:
+  ;; (dolist (skill (cons skill skills))
+  ;;   (let ((corner (a:assoc-value (allocated-corners state) skill)))
+  ;;     (draw-skill skill :corner corner)))
+  )
 
 (defmethod draw-skills (state (skill nsk:armor) &rest skills)
   (dolist (skill (cons skill skills))
@@ -49,19 +56,19 @@
 
 (defmethod draw-skills (state (skill ne:effect) &rest skills)
   (let* ((to-draw (remove-duplicates (cons skill skills) :key #'class-of))
-         (plusp (not (find-if (a:rcurry #'typep 'ne:medic) to-draw))))
-    (labels ((help ()
-               ;; (shapes:ability-circle shapes:*side* nil nil)
-               )
-             (draw (x y)
+         (no-plus-type '(or ne:medic ne:move-doubler ne:quartermaster
+                         ne:additional-initiative ne:scoper))
+         (plusp (not (find-if (a:rcurry #'typep no-plus-type) to-draw))))
+    (labels ((draw (x y)
                (v:with-graphics-state
                  (v:translate (* shapes:*side* x) (* shapes:*side* y))
-                 (help)
                  (draw-skill (pop to-draw))))
              (plus (x x2)
                (v:translate (* shapes:*side* (- x)) 0)
                (v:scale 0.7 0.7)
-               (shapes:medic)
+               (if (typep skill 'ne:saboteur)
+                   (shapes:minus)
+                   (shapes:medic))
                (v:scale (/ 0.7) (/ 0.7))
                (v:translate (* shapes:*side* (+ x x2)) 0)))
       (v:with-graphics-state

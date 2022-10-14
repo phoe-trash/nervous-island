@@ -73,7 +73,8 @@
         (height 800)
         (background-color '(0.5 0.5 0.5))
         save-path
-        bg-image (bg-x-offset 0) (bg-y-offset 0))
+        bg-image (bg-x-offset 0) (bg-y-offset 0)
+        (instantp t))
      &body body)
   (a:once-only (bg-image save-path)
     `(let* ((,height-var ,height)
@@ -84,10 +85,10 @@
          (v:translate (floor ,width-var 2) (floor ,height-var 2))
          (apply #'background ,background-color)
          (when ,bg-image (bg-image ,bg-image ,bg-x-offset ,bg-y-offset))
-         (outer-shadow)
+         ,@(unless instantp `((outer-shadow)))
          ,@body
-         (outer-hexagon)
-         (outer-decoration)
+         ,@(unless instantp `((outer-hexagon)))
+         ,@(unless instantp `((outer-decoration)))
          (when ,save-path
            (v:save-png ,save-path))
          (v:zpng-object)))))

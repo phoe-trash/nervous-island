@@ -94,4 +94,4 @@
   (ne:directed-mobility :w) (ne:directed-mobility :e))
 
 (nt:define-unit quartermaster (nt:module)
-  (ne:directed-quartermaster :w))
+  (ne:directed-quartermaster :w 'na:melee 'na:ranged))
