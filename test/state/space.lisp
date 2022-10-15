@@ -121,6 +121,25 @@
         (let ((other-unit (make-instance 'space-test-other-unit)))
           (false (nsp:find-element dict other-unit)))))))
 
+(define-test space-all-elements
+  (let* ((token (make-instance 'space-test-token))
+         (instant (make-instance 'space-test-instant))
+         (unit (make-instance 'space-test-unit))
+         (foundation (make-instance 'space-test-foundation)))
+    (flet ((make (q r &rest args)
+             (apply #'make-instance 'nsp:space :axial (nc:axial q r) args)))
+      (let* ((omega-space (make 0 0 :tokens (list token) :overlay instant
+                                    :unit unit :unit-rotation 0
+                                    :foundation foundation))
+             (elements (nsp:all-elements omega-space)))
+        (is = 4 (length elements))
+        (true (find token elements :test #'eqv))
+        (true (find instant elements :test #'eqv))
+        (true (find unit elements :test #'eqv))
+        (true (find foundation elements :test #'eqv))
+        (let ((other-unit (make-instance 'space-test-other-unit)))
+          (false (find other-unit elements :test #'eqv)))))))
+
 (define-test space-augment-spaces
   (flet ((make (q r &rest args)
            (apply #'make-instance 'nsp:space :axial (nc:axial q r) args)))

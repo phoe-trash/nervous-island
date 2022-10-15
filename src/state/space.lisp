@@ -12,7 +12,7 @@
   (:export #:space
            #:axial #:tokens #:overlay #:unit #:unit-rotation #:foundation
            ;; TODO remove MAKE- prefix from constructors
-           #:space #:spaces #:find-element #:augment-spaces))
+           #:space #:spaces #:all-elements #:find-element #:augment-spaces))
 
 (in-package #:nervous-island.space)
 
@@ -72,6 +72,12 @@
       (multiple-value-bind (space axial) (space thing)
         (push axial result)
         (push space result)))))
+
+(defun all-elements (space)
+  (append (tokens space)
+          (a:ensure-list (overlay space))
+          (a:ensure-list (unit space))
+          (a:ensure-list (foundation space))))
 
 (defun find-element (dict element)
   (φ:fbind ((fn (etypecase element

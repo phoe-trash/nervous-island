@@ -8,8 +8,10 @@
                     (#:nsp #:nervous-island.space))
   (:export
    #:board #:spaces #:standard-board
+   #:find-space #:all-elements
    #:space-not-found #:space-not-found-axial #:space-not-found-board
-   #:find-space #:remove-missing-axials
+   #:remove-missing-axials
+   #:find-element #:augment-board
    #:neighbors #:neighbor #:diagonals #:diagonal #:range #:distance
    #:range-intersection #:rotate #:ring #:spiral #:pathfind))
 
@@ -42,6 +44,10 @@
 
 (defun find-space (board axial)
   (dict-find (spaces board) axial))
+
+(defun all-elements (board)
+  (loop for (axial . space) in (dict-contents (spaces board))
+        nconc (nsp:all-elements space)))
 
 (define-condition space-not-found (ncom:nervous-island-error)
   ((%axial :reader space-not-found-axial :initarg :axial)
