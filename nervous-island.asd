@@ -137,10 +137,10 @@
                #:nervous-island/state
                #:nervous-island/tilemaker
                ;; User package dependencies
+               ;; TODO split off user into a separate system
                #:spinneret
                #:utilities.print-tree
-               #:split-sequence
-               #:binding-arrows)
+               #:split-sequence)
   :pathname "src"
   :components ((:file "user"))
   :in-order-to ((test-op (load-op :nervous-island/test)))

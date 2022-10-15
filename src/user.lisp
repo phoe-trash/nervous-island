@@ -15,8 +15,7 @@
                                                            (length prefix)))
                                       (make-symbol package-name)))))
          `(uiop:define-package #:nervous-island.user
-            (:use #:nervous-island.cl
-                  #:binding-arrows)
+            (:use #:nervous-island.cl)
             (:local-nicknames (#:a #:alexandria)
                               (#:s #:split-sequence))
             ;; Tiles
@@ -142,7 +141,7 @@
                  (axial (nc:axial q r))
                  (background (if (nb:find-space board axial)
                                  "#CCCCCC"
-                                 "#FFFFFF"))
+                                 "#F3F3F3"))
                  (id (format nil "axial.~D.~D" q r)))
             (spinneret:with-html
               (:div :class "hex" :id id
@@ -162,13 +161,18 @@
 
 (defparameter *board*
   (flet ((place (x y unit rot) (nsp:space (nc:axial x y) (list unit rot))))
-    (-<> (nb:standard-board)
-      (nb:augment-board <> (place 0 0 'borgo:mutant 0))
-      (nb:augment-board <> (place 0 1 'borgo:hq 1))
-      (nb:augment-board <> (place 1 0 'outpost:hq 3))
-      (nb:augment-board <> (place 2 -2 'outpost:runner 4)))))
+    (nb:augment-board
+     (nb:standard-board)
+     (place 0 0 'borgo:mutant 0)
+     (place 0 1 'borgo:hq 1)
+     (place 1 0 'outpost:hq 3)
+     (place 2 -2 'outpost:runner 4))))
 
 (defun generate-board ()
-  (a:with-output-to-file (spinneret:*html* #p"/tmp/a.html" :if-exists :supersede)
-    (let* ((board *board*))
+  (a:with-output-to-file (spinneret:*html* #p"/tmp/a.html"
+                                           :if-exists :supersede)
+    (let* ((board  *board*
+                   ))
       (call-with-html-base (lambda () (html-generate-board :board board))))))
+
+(generate-board)
