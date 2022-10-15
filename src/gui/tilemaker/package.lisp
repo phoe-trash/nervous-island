@@ -13,4 +13,5 @@
                     (#:ne #:nervous-island.effect)
                     (#:nsk #:nervous-island.skill)
                     (#:nt #:nervous-island.tile)
-                    (#:shapes #:nervous-island.gui.shapes)))
+                    (#:shapes #:nervous-island.gui.shapes))
+  (:export #:*armies* #:draw-tile #:save-tiles))
