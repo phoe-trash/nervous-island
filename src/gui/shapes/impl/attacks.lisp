@@ -18,10 +18,10 @@
                      (stop-y (* 0.32 height)))
                  ;; Illustrate the points
                  (when pointsp
-                   (v:set-rgb-fill 0 1 0)
+                   (v:set-rgba-fill 0 1 0 1)
                    (v:arc start-x start-y 5 0 (* 2 pi))
                    (v:fill-path)
-                   (v:set-rgb-fill 1 0 0)
+                   (v:set-rgba-fill 1 0 0 1)
                    (v:arc stop-x stop-y 5 0 (* 2 pi))
                    (v:fill-path))
                  ;; Actual shadow
@@ -86,10 +86,10 @@
                      (stop-y (* 0.31 height)))
                  ;; Illustrate the points
                  (when pointsp
-                   (v:set-rgb-fill 0 1 0)
+                   (v:set-rgba-fill 0 1 0 1)
                    (v:arc start-x start-y 5 0 (* 2 pi))
                    (v:fill-path)
-                   (v:set-rgb-fill 1 0 0)
+                   (v:set-rgba-fill 1 0 0 1)
                    (v:arc stop-x stop-y 5 0 (* 2 pi))
                    (v:fill-path))
                  ;; Actual shadow

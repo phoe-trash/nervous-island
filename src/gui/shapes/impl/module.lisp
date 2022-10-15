@@ -11,12 +11,17 @@
     (v:arc 0 0 (* side 0.58) 0 (* 2 pi))
     (v:even-odd-fill)))
 
-(defun module-ring-shadow-inner (&optional (side *side*))
+(defun module-ring-shadow-inner-linear-domain (x)
+  (v:linear-domain (* 3.5 (- x 0.9))))
+
+(defun module-ring-shadow-inner
+    (&optional (side *side*) (stop 1)
+       (domain #'module-ring-shadow-inner-linear-domain))
   (v:with-graphics-state
     (v:set-gradient-fill
      0 0 0 0 0 0
-     (* side 0.48) 0 0 0 0 1
-     :domain-function (lambda (x) (v:linear-domain (* 3.5 (- x 0.9))))
+     (* side 0.48 stop) 0 0 0 0 1
+     :domain-function domain
      :coordinates-function 'v:polar-coordinates)
     (v:arc 0 0 (* side 0.55) 0 (* 2 pi))
     (v:fill-path)))
@@ -37,21 +42,25 @@
     (v:scale scale scale)
     (circle-shadow (* 0.85 side))))
 
-(defun module-circle (&optional (side *side*) (scale 3.0))
+(defun module-circle (&optional (side *side*) (scale 3.0) (total 8)
+                        (translation (* 0.12 side)) (size (* 0.012 side))
+                        (background-color '(0 0 0 1)))
   (v:with-graphics-state
     (v:scale scale scale)
     (circle-outer side '(1 1 1 1) 0.4)
-    (circle-inner)
-    (dotimes (i 8)
+    (circle-inner side background-color t)
+    (dotimes (i total)
       (v:with-graphics-state
-        (v:rotate (* i 1/8 2 pi))
-        (circle-decoration-square side '(1 1 1 1))))))
+        (v:rotate (* i (/ total) 2 pi))
+        (circle-decoration-square side '(1 1 1 1)
+                                  translation size)))))
 
-(defun module-background (&optional (side *side*))
-  (module-circle-shadow side)
-  (module-ring-shadow-outer)
-  (module-ring-shadow-inner)
-  (module-ring side t))
+(defun module-background (&optional (side *side*) (ringp t) (scale 3.0))
+  (module-circle-shadow side scale)
+  (when ringp
+    (module-ring-shadow-outer)
+    (module-ring-shadow-inner)
+    (module-ring side t)))
 
 (defun module-range-shadow (&optional (direction 0) (side *side*))
   (v:with-graphics-state

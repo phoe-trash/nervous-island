@@ -9,7 +9,7 @@
 
 (defparameter *draw-tile-defaults*
   (list :height 800
-        :background-color '(0.5 0.5 0.5)
+        :background-color '(0.5 0.5 0.5 1)
         :save-path *default-save-path*
         :bg-x-offset 0
         :bg-y-offset 0))
@@ -84,6 +84,55 @@
           (draw-skill skill))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; HQ
+
+(defun draw-hq-background (state)
+  (let ((range-directions (module-range-directions state)))
+    (shapes:module-background shapes:*side* nil 3.25)
+    (dolist (direction range-directions)
+      (let ((rotation (position direction ncom:*directions*)))
+        (shapes:module-range-shadow rotation)))
+    (dolist (direction range-directions)
+      (let ((rotation (position direction ncom:*directions*)))
+        (shapes:module-range rotation)))
+    (shapes:module-circle shapes:*side* 3.25 25
+                          (* 0.125 shapes:*side*) (* 0.006 shapes:*side*)
+                          (hq-background-color state))))
+
+(defmethod draw-tile ((tile nt:hq) &key height background-color save-path)
+  (let ((state (make-instance 'drawing-state
+                              :tile tile
+                              :hq-background-color background-color))
+        (skills (copy-list (vs:set-contents (nsk:skills tile)))))
+    (let* ((predicate (a:rcurry #'typep '(and nsk:undirected (not ne:effect))))
+           (undirected (φ:split predicate skills)))
+      (allocate-undirected-skills state undirected))
+    (check-directed-undirected-effects skills)
+    (let* ((predicate (a:rcurry #'typep 'ne:directed-effect))
+           (directed (φ:split predicate skills))
+           (clusters (partition-by-class directed)))
+      (reconcile-effect-ranges state clusters))
+    (shapes:with-hex-tile (side height width)
+        (:height height
+         :background-color background-color
+         :save-path save-path)
+      (draw-hq-background state)
+      (v:with-graphics-state
+        (flet ((process (predicate)
+                 (multiple-value-bind (good bad) (φ:split predicate skills)
+                   (setf skills bad)
+                   (when good (apply #'draw-skills state good)))))
+          (dolist (direction ncom:*directions*)
+            (process (lambda (x) (and (typep x 'na:attack)
+                                      (eq direction (nsk:direction x))))))
+          (process (lambda (x) (typep x '(and nsk:undirected (not ne:effect)))))
+          (process (lambda (x) (typep x 'ne:effect))))
+        (when skills
+          (dolist (skill skills)
+            (warn 'remaining-skill-after-drawing :skill skill)
+            (draw-skill skill)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Warrior
 
 (defmethod draw-tile ((tile nt:warrior)
@@ -135,7 +184,7 @@
 (defmethod draw-instant :around ((tile nt:instant) background-color &key)
   (v:with-graphics-state
     (shapes::hexagon (* 0.96 shapes:*side*))
-    (v:set-rgb-stroke 0.95 0.95 0.85)
+    (v:set-rgba-stroke 0.95 0.95 0.85 1)
     (v:set-line-width (* 0.04 shapes:*side*))
     (v:with-graphics-state
       (call-next-method)

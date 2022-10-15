@@ -12,9 +12,9 @@
     (v:line-to (- (/ side 2)) (- half-height))
     (v:line-to (- side) 0)))
 
-(defun background (&optional (r 0.5) (g 0.5) (b 0.5))
+(defun background (&optional (r 0.5) (g 0.5) (b 0.5) (a 1))
   (v:with-graphics-state
-    (v:set-rgb-fill r g b)
+    (v:set-rgba-fill r g b a)
     (hexagon)
     (v:fill-path)))
 
@@ -71,10 +71,10 @@
     ((side-var height-var width-var)
      (&key
         (height 800)
-        (background-color '(0.5 0.5 0.5))
+        (background-color '(0.5 0.5 0.5 1))
         save-path
         bg-image (bg-x-offset 0) (bg-y-offset 0)
-        (instantp t))
+        (instantp nil))
      &body body)
   (a:once-only (bg-image save-path)
     `(let* ((,height-var ,height)

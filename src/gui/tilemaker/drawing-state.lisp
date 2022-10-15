@@ -8,10 +8,13 @@
    (%allocated-corners :accessor allocated-corners
                        :initarg :allocated-corners)
    (%module-range-directions :accessor module-range-directions
-                             :initarg :module-range-directions))
+                             :initarg :module-range-directions)
+   (%hq-background-color :accessor hq-background-color
+                         :initarg :hq-background-color))
   (:default-initargs :allocated-corners '()
                      :module-range-directions '()
-                     :tile (a:required-argument :tile)))
+                     :tile (a:required-argument :tile)
+                     :hq-background-color '(0 0 0 1)))
 
 (defun allocated-corner-p (state corner)
   (member corner (allocated-corners state) :key #'cdr))

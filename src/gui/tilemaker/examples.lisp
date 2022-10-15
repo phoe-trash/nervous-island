@@ -30,14 +30,14 @@
                       (ne:directed-speed :e 1))))
   (draw-tile (make-instance 'nt:module :skills skills)))
 
-(draw-tile (make-instance 'nervous-island.armies.borgo:grenade))
+(draw-tile (make-instance 'nervous-island.armies.outpost:hq))
 
 (defparameter *armies*
   (alexandria:alist-hash-table
-   '((:borgo 0.0 0.6 0.8)
-     (:moloch 0.8 0.0 0.0)
-     (:outpost 0.0 0.9 0.2)
-     (:hegemony 0.8 0.7 0.0))))
+   '((:borgo 0.0 0.6 0.8 1)
+     (:moloch 0.8 0.0 0.0 1)
+     (:outpost 0.0 0.9 0.2 1)
+     (:hegemony 0.8 0.7 0.0 1))))
 
 (defun keyword-army (keyword)
   (let* ((prefix '#:nervous-island.armies)
@@ -56,7 +56,8 @@
       for army-name in army-names
       for army = (keyword-army army-name)
       for color = (gethash army-name *armies*)
-      do (dolist (tile (nervous-island.army:elements army))
+      do (dolist (tile (append (nervous-island.army:hq-elements army)
+                               (nervous-island.army:elements army)))
            (when (typep tile type)
              (let* ((symbol (class-name (class-of tile)))
                     (army-class-name (class-name (class-of army)))
