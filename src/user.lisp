@@ -15,7 +15,8 @@
                                                            (length prefix)))
                                       (make-symbol package-name)))))
          `(uiop:define-package #:nervous-island.user
-            (:use #:nervous-island.cl)
+            (:use #:nervous-island.cl
+                  #:binding-arrows)
             (:local-nicknames (#:a #:alexandria)
                               (#:s #:split-sequence))
             ;; Tiles
@@ -102,3 +103,72 @@
                                    (declare (ignore object))
                                    (princ "()" stream)))
       (format t "~&~{~S~^~%~%~}" forms))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; HTML generator
+
+(defparameter *css* "
+.hex {
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  position: absolute;
+}
+")
+
+(defun call-with-html-base (thunk)
+  (spinneret:with-html
+    (:doctype)
+    (:html
+     (:head (:title "Nervous Island board")
+            (:style *css*))
+     (:body (:div :class "board" (funcall thunk))))))
+
+(defun make-hex-css-style (scale top left background)
+  (format nil "width: ~Dpx; height: ~:*~Dpx; ~
+               top: ~Dpx; left: ~Dpx; background: ~A;"
+          scale top left background))
+
+(defun html-generate-board (&key (board (nb:standard-board)) (scale 200))
+  (multiple-value-bind (dimensions max min) (nb:dimensions board)
+    (declare (ignore max))
+    (destructuring-bind (height width) dimensions
+      (dotimes (y height)
+        (dotimes (x width)
+          (let* ((nx (- x (first min)))
+                 (ny (- y (second min)))
+                 (q nx)
+                 (r (- ny (/ (- q (logand q 1)) 2)))
+                 (top (* (+ (if (oddp x) (* scale 0.5) 0) (* y scale)) 0.95))
+                 (left (* x scale 0.8))
+                 (axial (nc:axial q r))
+                 (background (if (nb:find-space board axial)
+                                 "#CCCCCC"
+                                 "#FFFFFF"))
+                 (id (format nil "axial.~D.~D" q r)))
+            (spinneret:with-html
+              (:div :class "hex" :id id
+                    :style (make-hex-css-style scale top left background)
+                    (:h3 :style "text-align: center;"
+                         (format nil "~D ~D" q r))))
+            (a:when-let* ((space (nb:find-space board axial))
+                          (unit (nsp:unit space)))
+              (spinneret:with-html
+                (:div :class "hex"
+                      :style (make-hex-css-style (* scale 0.6)
+                                                 (+ top (* scale 0.2))
+                                                 (+ left (* scale 0.2))
+                                                 "#CC0000")
+                      (:h3 :style "text-align: center;"
+                           (format nil "UNIT")))))))))))
+
+(defparameter *board*
+  (flet ((place (x y unit rot) (nsp:space (nc:axial x y) (list unit rot))))
+    (-<> (nb:standard-board)
+      (nb:augment-board <> (place 0 0 'borgo:mutant 0))
+      (nb:augment-board <> (place 0 1 'borgo:hq 1))
+      (nb:augment-board <> (place 1 0 'outpost:hq 3))
+      (nb:augment-board <> (place 2 -2 'outpost:runner 4)))))
+
+(defun generate-board ()
+  (a:with-output-to-file (spinneret:*html* #p"/tmp/a.html" :if-exists :supersede)
+    (let* ((board *board*))
+      (call-with-html-base (lambda () (html-generate-board :board board))))))

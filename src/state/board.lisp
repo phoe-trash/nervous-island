@@ -8,7 +8,7 @@
                     (#:nsp #:nervous-island.space))
   (:export
    #:board #:spaces #:standard-board
-   #:find-space #:all-elements
+   #:find-space #:all-elements #:dimensions
    #:space-not-found #:space-not-found-axial #:space-not-found-board
    #:remove-missing-axials
    #:find-element #:augment-board
@@ -49,6 +49,19 @@
   (loop for (axial . space) in (dict-contents (spaces board))
         nconc (nsp:all-elements space)))
 
+(defun dimensions (board)
+  (let ((contents (dict-contents (spaces board))))
+    (if (null contents)
+        (list 0 0)
+        (loop for (axial . space) in contents
+              for q = (nc:q axial) for r = (nc:r axial)
+              minimize q into min-q maximize q into max-q
+              minimize r into min-r maximize r into max-r
+              finally (return (values (list (1+ (- max-q min-q))
+                                            (1+ (- max-r min-r)))
+                                      (list min-q min-r)
+                                      (list max-q max-r)))))))
+
 (define-condition space-not-found (ncom:nervous-island-error)
   ((%axial :reader space-not-found-axial :initarg :axial)
    (%board :reader space-not-found-board :initarg :board))
@@ -78,7 +91,8 @@
   (nsp:find-element (spaces board) element))
 
 (defun augment-board (board &rest dicts-and-spaces)
-  (apply #'nsp:augment-spaces (spaces board) dicts-and-spaces))
+  (let ((spaces (apply #'nsp:augment-spaces (spaces board) dicts-and-spaces)))
+    (make-instance 'board :spaces spaces)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Operations

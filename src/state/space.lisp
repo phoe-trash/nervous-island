@@ -55,7 +55,21 @@
 
 (deftype axial-designator () '(cons integer (cons integer null)))
 
-(defun space (thing)
+(defun add-elements (space elements)
+  ;; Not exported: we assume here the space is freshly constructed.
+  (dolist (element elements space)
+    (etypecase element
+      (nto:token (push element (slot-value space '%tokens)))
+      (nt:instant (setf (slot-value space 'overlay) element))
+      ((cons symbol (cons (mod 6) null))
+       (setf (slot-value space '%unit) (make-instance (first element))
+             (slot-value space '%unit-rotation) (second element)))
+      ((cons nt:unit (cons (mod 6) null))
+       (setf (slot-value space '%unit) (first element)
+             (slot-value space '%unit-rotation) (second element)))
+      (nt:foundation (setf (slot-value space '%foundation) element)))))
+
+(defun space (thing &rest elements)
   (let (axial space)
     (etypecase thing
       (axial-designator (setf axial (apply #'nc:axial thing)
@@ -63,8 +77,8 @@
       (nc:axial (setf axial thing
                       space (make-instance 'space :axial axial)))
       (space (setf axial (axial thing)
-                   space thing)))
-    (values space axial)))
+                   space (copy thing))))
+    (values (add-elements space elements) axial)))
 
 (defun spaces (&rest things)
   (let ((result '()))

@@ -122,7 +122,6 @@
                ;;               (:file "step")
                ;;               (:file "choice")
                ;;               (:file "state")))
-               ;; (:file "user")
                ))
 
 (asdf:defsystem #:nervous-island
@@ -138,8 +137,10 @@
                #:nervous-island/state
                #:nervous-island/tilemaker
                ;; User package dependencies
+               #:spinneret
                #:utilities.print-tree
-               #:split-sequence)
+               #:split-sequence
+               #:binding-arrows)
   :pathname "src"
   :components ((:file "user"))
   :in-order-to ((test-op (load-op :nervous-island/test)))
