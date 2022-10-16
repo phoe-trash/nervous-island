@@ -6,10 +6,10 @@
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common))
-  (:export #:owner #:auto-reparenting-object
-           #:element-metacontainer #:name
-           #:element-container #:owner
-           #:element #:color #:hq-element #:element-designator))
+  (:export #:owner #:auto-reparenting
+           #:color #:colored #:name
+           #:element-metacontainer #:element-container #:element
+           #:hq-element #:element-designator))
 
 (in-package #:nervous-island.element)
 

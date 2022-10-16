@@ -25,7 +25,6 @@
   (:export
    ;; Module effects - protocol
    #:effect #:undirected-effect #:directed-effect :long-range-directed-effect
-   #:numeric #:strength
    ;; Module effects - trap (DDM)
    #:trap #:directed-trap)
   (:export-effects
@@ -55,10 +54,6 @@
 (define-class long-range-directed-effect (effect nsk:directed) ()
   (:protocolp t))
 
-(define-class numeric (effect)
-  ((strength :type (integer 1) :initform 1))
-  (:protocolp t))
-
 (defmacro define-effect (name (&key numericp quartermasterp))
   (let ((undirected-name (a:symbolicate '#:undirected- name))
         (directed-name (a:symbolicate '#:directed- name))
@@ -66,8 +61,8 @@
         (slots (cond (quartermasterp '((attack-types :type set
                                                      :initform (set))))
                      (t '())))
-        (superclass (cond (numericp 'numeric)
-                          (t 'effect)))
+        (superclasses (cond (numericp '(nsk:numeric effect))
+                            (t '(effect))))
         (lambda-list (cond (numericp '(&optional (strength 1)))
                            (quartermasterp '(&rest attack-types))
                            (t '())))
@@ -80,7 +75,7 @@
                                           (set 'na:melee 'na:ranged))))
                        (t '()))))
     `(progn
-       (define-class ,name (,superclass) (,@slots)
+       (define-class ,name (,@superclasses) (,@slots)
          (:protocolp t)
          ,@options)
        (define-class ,undirected-name (,name undirected-effect) ())

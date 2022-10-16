@@ -50,7 +50,7 @@
                (call-next-method))))))
 
 (defmethod draw-skill ((skill nsk:initiative) &key)
-  (shapes:text (nsk:value skill)))
+  (shapes:text (nsk:strength skill)))
 
 (defmethod draw-skill ((skill nsk:mobility) &key)
   (shapes:mobility))
@@ -82,12 +82,12 @@
 (defmethod draw-skill ((skill ne:speed) &key)
   (v:with-graphics-state
     (shapes:ability-circle shapes:*side* nil nil)
-    (shapes:text (ne:strength skill))))
+    (shapes:text (nsk:strength skill))))
 
 (defmethod draw-skill ((skill ne:saboteur) &key)
   (v:with-graphics-state
     (shapes:ability-circle shapes:*side* nil nil)
-    (shapes:text (ne:strength skill) shapes:*side* '(1 0 0 1))))
+    (shapes:text (nsk:strength skill) shapes:*side* '(1 0 0 1))))
 
 (defmethod draw-skill ((skill ne:mobility) &key)
   (v:with-graphics-state

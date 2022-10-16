@@ -6,6 +6,7 @@
 ;;; Element
 
 (define-class element-test-element-container (nel:element-container) ()
+  ;; TODO test those
   (:default-initargs :reparent-predicate (constantly nil)
                      :reparent-reader (constantly nil)
                      :reparent-writer (constantly nil)))

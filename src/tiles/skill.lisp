@@ -11,18 +11,19 @@
   (:export
    ;; Skills - protocol
    #:skill-having #:skills
-   #:skill #:skill-printables #:directed #:direction #:undirected
+   #:skill #:skill-printables #:numeric #:strength
+   #:directed #:direction #:undirected
    #:*activation-times* #:activation-time #:active #:activation-time #:passive
-   #:zombie #:friendly-fire
+   #:zombie #:hidden #:friendly-fire
    ;; Skills - concrete classes
    #:*special-initiative-values* #:special-initiative-value #:initiative-value
    #:armor #:net #:friendly-fire-net #:redirection-input #:redirection-output
    #:reflection #:tentacles
-   #:toughness #:initiative #:value #:zombie-initiative
+   #:toughness #:initiative #:zombie-initiative
    #:venom #:sharpshooter #:spy #:return #:open #:paralysis #:mortar
    #:underground #:powered #:revival #:charge #:devouring #:thrower
    #:bloodlust #:lair #:flying #:drift
-   #:mobility #:double-mobility #:rotation #:push-back #:grab #:net-of-steel
+   #:mobility #:rotation #:push-back #:grab #:net-of-steel
    #:execution #:adaptation #:cannibalism
    #:sandstorm-move
    #:scavenger
@@ -53,6 +54,13 @@
   (print-unreadable-object (object stream :type nil :identity nil)
     (format stream "~{~A~^ ~}" (reverse (skill-printables object)))))
 
+(define-class numeric (skill)
+  ((strength :type (or keyword (integer 0)) :initform 1))
+  (:protocolp t))
+
+(defmethod skill-printables append ((skill numeric))
+  (list (strength skill)))
+
 (deftype direction ()
   `(or ncom:direction ncom:diagonal ncom:anywhere ncom:self))
 
@@ -76,17 +84,10 @@
 (defmethod skill-printables append ((skill active))
   (list (activation-time skill)))
 
-(define-class passive (skill) ()
-  (:protocolp t))
-
-(define-class zombie (skill) ()
-  (:protocolp t))
-
-(define-class hidden (skill) ()
-  (:protocolp t))
-
-(define-class friendly-fire (skill) ()
-  (:protocolp t))
+(define-class passive (skill) () (:protocolp t))
+(define-class zombie (skill) () (:protocolp t))
+(define-class hidden (skill) () (:protocolp t))
+(define-class friendly-fire (skill) () (:protocolp t))
 
 (defmacro define-skill (name (&rest superclasses)
                         &body ((&rest slots) &body args))
@@ -105,16 +106,19 @@
              (default-initargs (a:assoc-value args :default-initargs))
              (directedp (member 'directed superclasses))
              (activep (member 'active superclasses))
+             (numericp (member 'numeric superclasses))
              (directionp (and directedp
                               (not (getf default-initargs :direction))))
              (activation-time-p (and activep (not (getf default-initargs
                                                         :activation-time))))
-             (lambda-list `(,@(when directionp '(direction))
-                            ,@(when activation-time-p '(activation-time))
+             (lambda-list `(,@(when activation-time-p '(activation-time))
+                            ,@(when directionp '(direction))
                             ,@slot-names-no-initform
                             &optional
+                            ,@(when numericp '((strength 1)))
                             ,@slot-names-initform))
-             (initargs `(,@(when directionp '(:direction direction))
+             (initargs `(,@(when numericp '(:strength strength))
+                         ,@(when directionp '(:direction direction))
                          ,@(when activation-time-p
                              '(:activation-time activation-time))
                          ,@(mapcan #'list keywords slot-names))))
@@ -126,18 +130,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skills - concrete classes
 
-(defvar *special-initiative-values* '(:before :agony :after))
-(deftype special-initiative-value () '(member :before :agony :after))
+(defmacro define-special-initiative-values (&rest values)
+  (flet ((make (thing)
+           `((defmethod generic-eqv ((x (cl:eql ,thing)) (y integer))
+               (values nil nil nil nil))
+             (defmethod generic-eqv ((x integer) (y (cl:eql ,thing)))
+               (values nil nil nil nil)))))
+    `(progn
+       (defvar *special-initiative-values* '(,@values))
+       (deftype special-initiative-value () '(member ,@values))
+       ,@(a:mappend #'make values))))
 
-(macrolet ((make (thing)
-             `(progn
-                (defmethod generic-eqv ((x (cl:eql ,thing)) (y integer))
-                  (values nil nil nil nil))
-                (defmethod generic-eqv ((x integer) (y (cl:eql ,thing)))
-                  (values nil nil nil nil)))))
-  (make :before)
-  (make :agony)
-  (make :after))
+(define-special-initiative-values :before :agony :after)
 
 (deftype initiative-value () '(or special-initiative-value (integer 0)))
 
@@ -149,12 +153,10 @@
 (define-skill reflection (passive directed) ())
 (define-skill tentacles (passive directed) ())
 
-(define-skill toughness (passive undirected)
-  ((value :type (integer 1) :initform 1)))
-(define-skill initiative (passive undirected)
-  ((value :type initiative-value)))
-(define-skill zombie-initiative (zombie initiative)
-  ((value :type initiative-value)))
+(define-skill toughness (passive undirected numeric) ())
+(define-skill initiative (passive undirected numeric) ())
+(define-skill zombie-initiative (zombie initiative numeric) ())
+
 (define-skill venom (passive undirected) ())
 (define-skill sharpshooter (passive undirected) ())
 (define-skill spy (passive undirected) ())
@@ -172,11 +174,9 @@
 (define-skill flying (passive undirected) ())
 (define-skill drift (passive undirected) ())
 
-;; TODO fold these into numeris mobility
-(define-skill mobility (active undirected) ()
+(define-skill mobility (active undirected numeric) ()
   (:default-initargs :activation-time :turn))
-(define-skill double-mobility (mobility) ()
-  (:default-initargs :activation-time :turn))
+
 (define-skill rotation (active undirected) ()
   (:default-initargs :activation-time :turn))
 (define-skill push-back (active undirected) ()
@@ -217,9 +217,3 @@
   (:default-initargs :activation-time :turn))
 (define-skill sacrifice (active undirected hidden) ()
   (:default-initargs :activation-time :turn))
-
-(defmethod skill-printables append ((skill toughness))
-  (list (value skill)))
-
-(defmethod skill-printables append ((skill initiative))
-  (list (value skill)))

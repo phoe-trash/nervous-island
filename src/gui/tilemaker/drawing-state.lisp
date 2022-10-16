@@ -54,7 +54,7 @@
   (flet ((preprocess (skills)
            (loop for skill in skills
                  if (typep skill 'nsk:toughness)
-                   nconc (loop repeat (nsk:value skill)
+                   nconc (loop repeat (nsk:strength skill)
                                collect skill)
                  else nconc (list skill))))
     (let* ((skills (preprocess skills))
