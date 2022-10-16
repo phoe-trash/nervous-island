@@ -5,7 +5,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element
 
-(define-class element-test-element-container (nel:element-container) ())
+(define-class element-test-element-container (nel:element-container) ()
+  (:default-initargs :reparent-predicate (constantly nil)
+                     :reparent-reader (constantly nil)
+                     :reparent-writer (constantly nil)))
 
 (define-class element-test-element (nel:element) ())
 

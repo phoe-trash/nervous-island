@@ -32,7 +32,29 @@
   (:protocolp t)
   (:extra-args :designators :token-designators :discard)
   (:before #'make-army-before)
-  (:after #'make-army-after))
+  (:after #'make-army-after)
+  (:default-initargs :reparent-predicate #'army-reparent-predicate
+                     :reparent-reader #'army-reparent-reader
+                     :reparent-writer #'army-reparent-writer))
+
+(defun army-reparent-predicate (army)
+  (flet ((foreign-elements-p (elements)
+           (find-if-not (a:curry #'eqv army) elements :key #'nel:owner)))
+    (or (foreign-elements-p (hq-elements army))
+        (foreign-elements-p (elements army))
+        (foreign-elements-p (tokens army)))))
+
+(defun army-reparent-reader (army)
+  (append (hq-elements army) (elements army) (tokens army)))
+
+(defun army-reparent-writer (rest army)
+  (multiple-value-bind (hq-elements rest)
+      (φ:split (a:rcurry #'typep 'nel:hq-element) rest)
+    (multiple-value-bind (tokens elements)
+        (φ:split (a:rcurry #'typep 'nto:token) rest)
+      (setf (slot-value army '%hq-elements) hq-elements
+            (slot-value army '%elements) elements
+            (slot-value army '%tokens) tokens))))
 
 (defmethod print-object ((object army) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
@@ -92,15 +114,6 @@
     (let ((tokens (process-element-designators token-designators army)))
       (setf (slot-value army '%tokens) tokens))))
 
-(defun ensure-element-owner (army)
-  (flet ((frob (element)
-           (if (eqv army (nel:owner element))
-               element
-               (copy element :owner army))))
-    (setf (slot-value army '%hq-elements) (mapcar #'frob (hq-elements army))
-          (slot-value army '%elements) (mapcar #'frob (elements army))
-          (slot-value army '%tokens) (mapcar #'frob (tokens army)))))
-
 (define-condition element-count-error (ncom:nervous-island-error)
   ((%expected :reader element-count-error-expected :initarg :expected)
    (%actual :reader element-count-error-actual :initarg :actual)
@@ -158,13 +171,6 @@
                                (token-designators nil token-designators-p)
                                (discard '() discardp)
                         &allow-other-keys)
-  (flet ((foreign-elements-p (elements)
-           (find-if-not (a:curry #'eqv army) elements :key #'nel:owner)))
-    (when (or (foreign-elements-p (hq-elements army))
-              (foreign-elements-p (elements army))
-              (foreign-elements-p (tokens army)))
-      ;; TODO document the reparenting behavior.
-      (ensure-element-owner army)))
   (when designatorsp
     (set-elements-from-designators army :designators designators))
   (when token-designators-p

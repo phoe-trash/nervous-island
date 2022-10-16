@@ -31,11 +31,10 @@
 (defgeneric name (thing)
   (:method ((thing null)) nil))
 
-(defgeneric owner (thing)
-  (:method ((thing null)) nil))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Auto-reparenting
+
+(defgeneric owner (thing))
 
 (define-class auto-reparenting ()
   ((reparent-predicate :type function)
@@ -46,7 +45,10 @@
 (defmethod shared-initialize :after
     ((instance auto-reparenting) slot-names &key)
   (when (funcall (reparent-predicate instance) instance)
-    (flet ((reparent (x) (copy x :owner instance)))
+    (flet ((reparent (element)
+             (if (eqv instance (owner element))
+                 element
+                 (copy element :owner instance))))
       (let* ((value (funcall (reparent-reader instance) instance))
              (new-value (mapcar #'reparent value)))
         (funcall (reparent-writer instance) new-value instance)))))
@@ -54,8 +56,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element metacontainer
 
-(define-class element-metacontainer (colored ;; auto-reparenting
-                                     )
+(define-class element-metacontainer (colored auto-reparenting)
   ((name :type symbol))
   (:protocolp t))
 
@@ -68,8 +69,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element container
 
-(define-class element-container (colored ;; auto-reparenting
-                                 )
+(define-class element-container (colored auto-reparenting)
   ((owner :type element-container-owner :initform nil)
    (name :type symbol))
   (:protocolp t))
