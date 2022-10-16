@@ -1,14 +1,8 @@
 (uiop:define-package #:nervous-island.gui.tilecache
-  (:use #:cl)
+  (:use #:nervous-island.cl)
   (:local-nicknames (#:a #:alexandria)
                     (#:tm #:nervous-island.gui.tilemaker)
-                    (#:na #:nervous-island.attack)
-                    (#:ncom #:nervous-island.common)
-                    (#:ne #:nervous-island.effect)
-                    (#:nel #:nervous-island.element)
-                    (#:nsk #:nervous-island.skill)
-                    (#:nr #:nervous-island.army)
-                    (#:nt #:nervous-island.tile))
+                    (#:nel #:nervous-island.element))
   (:export #:ensure-tile-drawn))
 
 (in-package #:nervous-island.gui.tilecache)
@@ -21,8 +15,9 @@
 (defun army-tile-pathname (tile)
   (let* ((class-name (class-name (class-of tile)))
          (package-name (package-name (symbol-package class-name)))
-         (prefix (symbol-name '#:nervous-island.armies.)))
-    (when (eql 0 (search prefix package-name))
+         (prefix (symbol-name '#:nervous-island.armies.))
+         (match (search prefix package-name)))
+    (when (and match (= 0 match))
       (let ((army-name (string-downcase (subseq package-name (length prefix))))
             (tile-name (string-downcase (symbol-name class-name)))
             (color (color-string (nel:color (nel:owner tile)))))
@@ -36,7 +31,7 @@
 (defvar *cache* '())
 
 (defun in-memory-cache-based-tile-pathname (tile)
-  (macrolet ((place () `(a:assoc-value *cache* tile :test #'ncom:eqv)))
+  (macrolet ((place () `(a:assoc-value *cache* tile :test #'eqv)))
     (multiple-value-bind (value foundp) (place)
       (if foundp
           value
@@ -57,7 +52,7 @@
          (color (nel:color (nel:owner tile))))
     (ensure-directories-exist pathname)
     (unless (probe-file pathname)
-      (nervous-island.gui.tilemaker:draw-tile tile :save-path pathname
-                                                   :background color
-                                                   :height height))
+      (tm:draw-tile tile :save-path pathname
+                         :background color
+                         :height height))
     pathname))

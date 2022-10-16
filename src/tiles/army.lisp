@@ -160,15 +160,15 @@
                         &allow-other-keys)
   (flet ((foreign-elements-p (elements)
            (find-if-not (a:curry #'eqv army) elements :key #'nel:owner)))
-    (when designatorsp
-      (set-elements-from-designators army :designators designators))
-    (when token-designators-p
-      (set-elements-from-designators army :token-designators token-designators))
     (when (or (foreign-elements-p (hq-elements army))
               (foreign-elements-p (elements army))
               (foreign-elements-p (tokens army)))
       ;; TODO document the reparenting behavior.
       (ensure-element-owner army)))
+  (when designatorsp
+    (set-elements-from-designators army :designators designators))
+  (when token-designators-p
+    (set-elements-from-designators army :token-designators token-designators))
   (when discardp
     (discard-elements army discard))
   ;; TODO check against REINITIALIZE-INSTANCE
