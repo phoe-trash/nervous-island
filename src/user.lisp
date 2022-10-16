@@ -31,6 +31,8 @@
             (:local-nicknames (#:nc #:nervous-island.coord)
                               (#:nsp #:nervous-island.space)
                               (#:nb #:nervous-island.board))
+            ;; Tile drawing
+            (:local-nicknames (#:ntc #:nervous-island.gui.tilecache))
             ;; Old junk
             ;; (:local-nicknames (#:nd #:nervous-island.damage)
             ;;                   (#:nch #:nervous-island.choice)
@@ -110,6 +112,9 @@
 .hex {
   clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 ")
 
@@ -149,18 +154,28 @@
                     (:h3 :style "text-align: center;"
                          (format nil "~D ~D" q r))))
             (a:when-let* ((space (nb:find-space board axial))
-                          (unit (nsp:unit space)))
-              (spinneret:with-html
-                (:div :class "hex"
-                      :style (make-hex-css-style (* scale 0.6)
-                                                 (+ top (* scale 0.2))
-                                                 (+ left (* scale 0.2))
-                                                 "#CC0000")
-                      (:h3 :style "text-align: center;"
-                           (format nil "UNIT")))))))))))
+                          (unit (nsp:unit space))
+                          (unit-rotation (* (nsp:unit-rotation space) 60)))
+              (let* ((pathname (ntc:ensure-tile-drawn unit :height scale))
+                     (namestring (uiop:native-namestring pathname)))
+                (spinneret:with-html
+                  (:div :class "hex"
+                        :style (make-hex-css-style scale top left "black")
+                        ;; (make-hex-css-style (* scale 0.6)
+                        ;;                     (+ top (* scale 0.2))
+                        ;;                     (+ left (* scale 0.2))
+                        ;;                     "black")
+                        (:img :src namestring
+                              :style (format nil "transform: rotate(~Ddeg); ~
+                                                  max-width: 100%; ~
+                                                  max-height: 100%;"
+                                             unit-rotation))))))))))))
 
 (defparameter *board*
   (flet ((place (x y unit rot) (nsp:space (nc:axial x y) (list unit rot))))
+    ;; TODO AUGMENT-BOARD should be named just AUGMENT
+    ;; TODO AUGMENT-SPACES, really necessary? there's a ton of things
+    ;;      to think over here
     (nb:augment-board
      (nb:standard-board)
      (place 0 0 'borgo:mutant 0)
@@ -171,8 +186,7 @@
 (defun generate-board ()
   (a:with-output-to-file (spinneret:*html* #p"/tmp/a.html"
                                            :if-exists :supersede)
-    (let* ((board  *board*
-                   ))
+    (let* ((board *board*))
       (call-with-html-base (lambda () (html-generate-board :board board))))))
 
 (generate-board)

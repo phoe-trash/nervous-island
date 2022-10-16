@@ -10,5 +10,5 @@
     (apply #'v:set-rgba-fill color)
     (let* ((pathname (merge-pathnames #p"SWZBLKN.TTF" *font-directory*))
            (font (v:get-font pathname)))
-      (v:set-font font 90)
+      (v:set-font font (* 90 (/ side 462)))
       (v:draw-centered-string 0 0 (format nil "~A" n)))))

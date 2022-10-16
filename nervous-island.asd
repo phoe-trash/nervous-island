@@ -102,7 +102,9 @@
                              (:file "drawing-state")
                              (:file "draw-skill")
                              (:file "draw-skills")
-                             (:file "draw-tile")))))
+                             (:file "draw-tile")))
+               (:module "tilecache"
+                :components ((:file "tilecache")))))
 
 (asdf:defsystem #:nervous-island/junk
   :description "ネウロ島六角ボードゲームエンジン"

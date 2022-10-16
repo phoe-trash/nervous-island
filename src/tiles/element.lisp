@@ -7,7 +7,7 @@
                     (#:φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common))
   (:export #:element-container #:name
-           #:element #:owner #:hq-element #:element-designator))
+           #:element #:owner #:color #:hq-element #:element-designator))
 
 (in-package #:nervous-island.element)
 
@@ -17,8 +17,15 @@
 (defgeneric name (owner)
   (:method ((owner null)) 'unowned))
 
+(deftype value () '(real 0 1))
+(deftype color () '(cons value (cons value (cons value (cons value null)))))
+
+(defgeneric color (owner)
+  (:method ((color null)) '(0.5 0.5 0.5 1)))
+
 (define-class element-container ()
-  ((name :type symbol))
+  ((name :type symbol)
+   (color :type color :initform '(0.5 0.5 0.5 1)))
   (:protocolp t))
 
 (deftype owner () '(or null element-container))

@@ -22,6 +22,7 @@
 ;;; Army
 
 (define-class army (nel:element-container)
+  ;; TODO move COLOR to NI.ELEMENT and define it for null owner
   ((total-element-count :type (integer 1) :initform 35)
    (hq-element-count :type (integer 1) :initform 1)
    (hq-elements :type (φ:list-of nel:hq-element) :initform '())
@@ -186,5 +187,5 @@
                              :key #'package-name)
         for package-name = (package-name package)
         for result = (search prefix package-name)
-        when (and result (= 0 result))
+        when (eql 0 result)
           collect (make-instance (find-symbol (symbol-name '#:army) package))))
