@@ -6,8 +6,9 @@
                     (#:p #:protest/base)
                     (#:φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common))
-  (:export #:element-container #:name
-           #:element #:owner #:color #:hq-element #:element-designator))
+  (:export #:element-metacontainer #:name
+           #:element-container #:owner
+           #:element #:color #:hq-element #:element-designator))
 
 (in-package #:nervous-island.element)
 
@@ -23,19 +24,26 @@
 (defgeneric color (owner)
   (:method ((color null)) '(0.5 0.5 0.5 1)))
 
+(define-class element-metacontainer ()
+  ((name :type string))
+  (:protocolp t))
+
+(deftype element-container-owner () '(or null element-metacontainer))
+
 (define-class element-container ()
-  ((name :type symbol)
+  ((owner :type element-container-owner :initform nil)
+   (name :type symbol)
    (color :type color :initform '(0.5 0.5 0.5 1)))
   (:protocolp t))
 
-(deftype owner () '(or null element-container))
+(deftype element-owner () '(or null element-container))
 
 (defmethod generic-eqv ((x element-container) (y null)) nil)
 
 (defmethod generic-eqv ((x null) (y element-container)) nil)
 
 (define-class element ()
-  ((owner :type owner :initform nil))
+  ((owner :type element-owner :initform nil))
   (:protocolp t))
 
 (defmethod print-object ((object element) stream)
