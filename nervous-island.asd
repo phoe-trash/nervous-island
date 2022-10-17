@@ -1,5 +1,10 @@
 ;;;; nervous-island.asd
 
+(uiop:define-package #:nervous-island.asdf
+  (:use #:cl #:asdf #:uiop))
+
+(in-package #:nervous-island.asdf)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; AUTO-MODULE - adapted from https://github.com/sjl/rosalind
 
@@ -162,8 +167,7 @@
   :perform
   (test-op (o c)
     (symbol-call '#:parachute '#:test '#:nervous-island.test
-                 :report (find-symbol "INTERACTIVE"
-                                      "PARACHUTE"))))
+                 :report (find-symbol "INTERACTIVE" "PARACHUTE"))))
 
 (asdf:defsystem #:nervous-island/test
   :description "Test suite for Nervous Island"
@@ -177,17 +181,6 @@
                #:nervous-island)
   :pathname "test"
   :components ((:file "package")
-               (:module "tiles"
-                :components ((:file "element")
-                             (:file "token")
-                             (:file "army")
-                             (:file "skill")
-                             (:file "attack")
-                             (:file "effect")
-                             (:file "tile")
-                             ))
-               (:module "state"
-                :components ((:file "coord")
-                             (:file "space")
-                             (:file "board")))
+               (:auto-module "tiles")
+               (:auto-module "state")
                (:file "armies")))

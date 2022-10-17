@@ -18,7 +18,8 @@
             (:use #:nervous-island.cl)
             (:local-nicknames (#:a #:alexandria)
                               (#:s #:split-sequence)
-                              (#:h #:hunchentoot))
+                              (#:h #:hunchentoot)
+                              (#:pt #:utilities.print-tree))
             ;; Tiles
             (:local-nicknames (#:ncom #:nervous-island.common)
                               (#:nel #:nervous-island.element)
@@ -65,16 +66,13 @@
 (defgeneric children (x)
   (:method (x) '())
   (:method ((cons cons)) cons)
-  (:method ((army nervous-island.army:army))
-    (elements-bulk (append (nervous-island.army:hq-elements army)
-                           (nervous-island.army:elements army)
-                           (nervous-island.army:tokens army))))
+  (:method ((army nr:army))
+    (elements-bulk
+     (append (nr:hq-elements army) (nr:elements army) (nr:tokens army))))
   (:method ((bulk bulk))
     (let ((element (bulk-element bulk)))
       (typecase element
-        (nervous-island.skill:skill-having
-         (nervous-island.common:set-contents
-          (nervous-island.skill:skills element)))
+        (nsk:skill-having (set-contents (nsk:skills element)))
         (t '())))))
 
 (defun describe-army (army &optional (stream *standard-output*))
@@ -87,9 +85,8 @@
              (t (princ thing stream)))))
     (fresh-line)
     (terpri)
-    (utilities.print-tree:print-tree
-     stream army
-     (utilities.print-tree:make-node-printer #'frob nil #'children))))
+    (pt:print-tree stream army
+                   (pt:make-node-printer #'frob nil #'children))))
 
 (defun frob-faq (pathname prefix &aux (i 0))
   (flet ((frob (x)
@@ -199,8 +196,8 @@
   (ensure-directories-exist *root*)
   (let ((acceptor (make-instance 'h:easy-acceptor
                                  :port 4242 :document-root *root*)))
-    (setf (h:acceptor-access-log-destination *acceptor*) nil
-          (h:acceptor-message-log-destination *acceptor*) nil)
+    (setf (h:acceptor-access-log-destination acceptor) nil
+          (h:acceptor-message-log-destination acceptor) nil)
     acceptor))
 
 (defvar *acceptor* (make-acceptor))
