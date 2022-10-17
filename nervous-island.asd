@@ -126,6 +126,25 @@
                ;;               (:file "state")))
                ))
 
+(asdf:defsystem #:nervous-island/user
+  :description "ネウロ島六角ボードゲームエンジン"
+  :author "Michał \"phoe\" Herda <phoe@disroot.org>"
+  :license "AGPLv3"
+  :version "0.0"
+  :serial t
+  :depends-on (#:nervous-island/common
+               #:nervous-island/tiles
+               #:nervous-island/armies
+               #:nervous-island/state
+               #:nervous-island/tilemaker
+               ;; User dependencies
+               #:spinneret
+               #:utilities.print-tree
+               #:split-sequence
+               #:hunchentoot)
+  :pathname "src"
+  :components ((:file "user")))
+
 (asdf:defsystem #:nervous-island
   :description "ネウロ島六角ボードゲームエンジン"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
@@ -138,13 +157,7 @@
                #:nervous-island/armies
                #:nervous-island/state
                #:nervous-island/tilemaker
-               ;; User package dependencies
-               ;; TODO split off user into a separate system
-               #:spinneret
-               #:utilities.print-tree
-               #:split-sequence)
-  :pathname "src"
-  :components ((:file "user"))
+               #:nervous-island/user)
   :in-order-to ((test-op (load-op :nervous-island/test)))
   :perform
   (test-op (o c)

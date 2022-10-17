@@ -11,7 +11,7 @@
    #:find-space #:all-elements #:dimensions
    #:space-not-found #:space-not-found-axial #:space-not-found-board
    #:remove-missing-axials
-   #:find-element #:augment-board
+   #:find-element #:augment
    #:neighbors #:neighbor #:diagonals #:diagonal #:range #:distance
    #:range-intersection #:rotate #:ring #:spiral #:pathfind))
 
@@ -90,7 +90,7 @@
 (defun find-element (board element)
   (nsp:find-element (spaces board) element))
 
-(defun augment-board (board &rest dicts-and-spaces)
+(defun augment (board &rest dicts-and-spaces)
   (let ((spaces (apply #'nsp:augment-spaces (spaces board) dicts-and-spaces)))
     (make-instance 'board :spaces spaces)))
 

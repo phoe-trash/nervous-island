@@ -17,7 +17,8 @@
          `(uiop:define-package #:nervous-island.user
             (:use #:nervous-island.cl)
             (:local-nicknames (#:a #:alexandria)
-                              (#:s #:split-sequence))
+                              (#:s #:split-sequence)
+                              (#:h #:hunchentoot))
             ;; Tiles
             (:local-nicknames (#:ncom #:nervous-island.common)
                               (#:nel #:nervous-island.element)
@@ -118,12 +119,17 @@
 }
 ")
 
+(defvar *root* #p"/tmp/nervous-island/")
+
 (defun call-with-html-base (thunk)
   (spinneret:with-html
     (:doctype)
     (:html
      (:head (:title "Nervous Island board")
-            (:style *css*))
+            (:style *css*)
+            (:script :type "text/javascript"
+                     :src "https://livejs.com/live.js"))
+     ;; <script type="text/javascript" src="https://livejs.com/live.js" />
      (:body (:div :class "board" (funcall thunk))))))
 
 (defun make-hex-css-style (scale top left background)
@@ -156,15 +162,14 @@
             (a:when-let* ((space (nb:find-space board axial))
                           (unit (nsp:unit space))
                           (unit-rotation (* (nsp:unit-rotation space) 60)))
-              (let* ((pathname (ntc:ensure-tile-drawn unit :height scale))
-                     (namestring (uiop:native-namestring pathname)))
+              (let* ((cache (merge-pathnames #p"cache/" *root*))
+                     (pathname (ntc:ensure-tile-drawn unit :height scale
+                                                           :cache cache))
+                     (namestring (enough-namestring
+                                  (uiop:native-namestring pathname) *root*)))
                 (spinneret:with-html
                   (:div :class "hex"
                         :style (make-hex-css-style scale top left "black")
-                        ;; (make-hex-css-style (* scale 0.6)
-                        ;;                     (+ top (* scale 0.2))
-                        ;;                     (+ left (* scale 0.2))
-                        ;;                     "black")
                         (:img :src namestring
                               :style (format nil "transform: rotate(~Ddeg); ~
                                                   max-width: 100%; ~
@@ -173,10 +178,9 @@
 
 (defparameter *board*
   (flet ((place (x y unit rot) (nsp:space (nc:axial x y) (list unit rot))))
-    ;; TODO AUGMENT-BOARD should be named just AUGMENT
     ;; TODO AUGMENT-SPACES, really necessary? there's a ton of things
     ;;      to think over here
-    (nb:augment-board
+    (nb:augment
      (nb:standard-board)
      (place 0 0 'borgo:mutant 0)
      (place 0 1 'borgo:hq 1)
@@ -184,9 +188,19 @@
      (place 2 -2 'outpost:runner 4))))
 
 (defun generate-board ()
-  (a:with-output-to-file (spinneret:*html* #p"/tmp/a.html"
-                                           :if-exists :supersede)
-    (let* ((board *board*))
-      (call-with-html-base (lambda () (html-generate-board :board board))))))
+  (let ((index (merge-pathnames #p"index.html" *root*)))
+    (a:with-output-to-file (spinneret:*html* index :if-exists :supersede)
+      (let* ((board *board*))
+        (call-with-html-base (lambda () (html-generate-board :board board)))))))
 
 (generate-board)
+
+(defun make-acceptor ()
+  (ensure-directories-exist *root*)
+  (let ((acceptor (make-instance 'h:easy-acceptor
+                                 :port 4242 :document-root *root*)))
+    (setf (h:acceptor-access-log-destination *acceptor*) nil
+          (h:acceptor-message-log-destination *acceptor*) nil)
+    acceptor))
+
+(defvar *acceptor* (make-acceptor))

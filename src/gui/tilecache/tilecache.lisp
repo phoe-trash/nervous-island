@@ -3,7 +3,7 @@
   (:local-nicknames (#:a #:alexandria)
                     (#:tm #:nervous-island.gui.tilemaker)
                     (#:nel #:nervous-island.element))
-  (:export #:ensure-tile-drawn))
+  (:export #:*default-cache-pathname* #:flush-cache #:ensure-tile-drawn))
 
 (in-package #:nervous-island.gui.tilecache)
 
@@ -30,6 +30,10 @@
 (defvar *cache-counter* 0)
 (defvar *cache* '())
 
+(defun flush-cache ()
+  (setf *cache-counter* 0
+        *cache* '()))
+
 (defun in-memory-cache-based-tile-pathname (tile)
   (macrolet ((place () `(a:assoc-value *cache* tile :test #'eqv)))
     (multiple-value-bind (value foundp) (place)
@@ -47,11 +51,12 @@
 
 (defun ensure-tile-drawn (tile &key
                                  (cache *default-cache-pathname*)
-                                 (height 300))
+                                 (height 300)
+                                 (force nil))
   (let* ((pathname (merge-pathnames (tile-pathname tile) cache))
          (color (nel:color (nel:owner tile))))
     (ensure-directories-exist pathname)
-    (unless (probe-file pathname)
+    (when (or force (null (probe-file pathname)))
       (tm:draw-tile tile :save-path pathname
                          :background color
                          :height height))
