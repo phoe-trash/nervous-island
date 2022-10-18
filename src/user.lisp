@@ -50,30 +50,30 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Describer
 
-(defstruct (bulk (:constructor make-bulk (element))) element (count 0))
+(defstruct (bulk (:constructor %bulk (element))) element (count 0))
 
-(defun elements-bulk (elements)
-  (let ((vector (make-array 0 :adjustable t :fill-pointer t)))
-    (dolist (element elements (coerce vector 'list))
+(defun bulk (elements)
+  (let ((result '()))
+    (dolist (element elements (nreverse result))
       (let* ((class (class-of element))
-             (bulk (or (find class vector
-                             :key (alexandria:compose #'class-of #'bulk-element))
-                       (let ((bulk (make-bulk element)))
-                         (vector-push-extend bulk vector)
+             (bulk (or (find class result
+                             :key (a:compose #'class-of #'bulk-element))
+                       (let ((bulk (%bulk element)))
+                         (push bulk result)
                          bulk))))
         (incf (bulk-count bulk))))))
 
 (defgeneric children (x)
-  (:method (x) '())
-  (:method ((cons cons)) cons)
+  (:method (thing) '())
+  (:method ((list list)) list)
+  (:method ((quartermaster ne:quartermaster))
+    (set-contents (ne:attack-types quartermaster)))
   (:method ((army nr:army))
-    (elements-bulk
-     (append (nr:hq-elements army) (nr:elements army) (nr:tokens army))))
+    (bulk (append (nr:hq-elements army) (nr:elements army) (nr:tokens army))))
+  (:method ((skill-having nsk:skill-having))
+    (set-contents (nsk:skills skill-having)))
   (:method ((bulk bulk))
-    (let ((element (bulk-element bulk)))
-      (typecase element
-        (nsk:skill-having (set-contents (nsk:skills element)))
-        (t '())))))
+    (children (bulk-element bulk))))
 
 (defun describe-army (army &optional (stream *standard-output*))
   (flet ((frob (stream depth thing)
@@ -126,7 +126,6 @@
             (:style *css*)
             (:script :type "text/javascript"
                      :src "https://livejs.com/live.js"))
-     ;; <script type="text/javascript" src="https://livejs.com/live.js" />
      (:body (:div :class "board" (funcall thunk))))))
 
 (defun make-hex-css-style (scale top left background)
@@ -190,12 +189,13 @@
       (let* ((board *board*))
         (call-with-html-base (lambda () (html-generate-board :board board)))))))
 
+#+(or)
 (generate-board)
 
-(defun make-acceptor ()
+(defun make-acceptor (&optional (port 4242))
   (ensure-directories-exist *root*)
   (let ((acceptor (make-instance 'h:easy-acceptor
-                                 :port 4242 :document-root *root*)))
+                                 :port port :document-root *root*)))
     (setf (h:acceptor-access-log-destination acceptor) nil
           (h:acceptor-message-log-destination acceptor) nil)
     acceptor))

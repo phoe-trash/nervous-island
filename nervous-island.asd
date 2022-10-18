@@ -71,14 +71,14 @@
   :pathname "src"
   :components ((:auto-module "armies")))
 
-(asdf:defsystem #:nervous-island/state
+(asdf:defsystem #:nervous-island/board
   :description "ネウロ島六角ボードゲームエンジン"
   :author "Michał \"phoe\" Herda <phoe@disroot.org>"
   :license "AGPLv3"
   :version "0.0"
   :serial t
   :depends-on (#:nervous-island/common)
-  :pathname "src/state"
+  :pathname "src/board"
   :components ((:file "coord")
                (:file "space")
                (:file "board")))
@@ -140,7 +140,7 @@
   :depends-on (#:nervous-island/common
                #:nervous-island/tiles
                #:nervous-island/armies
-               #:nervous-island/state
+               #:nervous-island/board
                #:nervous-island/tilemaker
                ;; User dependencies
                #:spinneret
@@ -160,7 +160,7 @@
                #:nervous-island/common
                #:nervous-island/tiles
                #:nervous-island/armies
-               #:nervous-island/state
+               #:nervous-island/board
                #:nervous-island/tilemaker
                #:nervous-island/user)
   :in-order-to ((test-op (load-op :nervous-island/test)))
@@ -182,5 +182,5 @@
   :pathname "test"
   :components ((:file "package")
                (:auto-module "tiles")
-               (:auto-module "state")
+               (:auto-module "board")
                (:file "armies")))
