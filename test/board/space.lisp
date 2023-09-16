@@ -53,8 +53,10 @@
     (is eqv unit (nsp:unit space))
     (is eqv unit-rotation (nsp:unit-rotation space))
     (is eqv foundation (nsp:foundation space))
-    (is eqv space (reinitialize-instance space
-                                         :unit-rotation (- 6 unit-rotation)))
+    ;; TODO make this test not depend on this; test COPY instead
+    (let ((value-semantics-utils::*safe-to-reinitialize-instance* t))
+      (is eqv space (reinitialize-instance space
+                                           :unit-rotation (- 6 unit-rotation))))
     (is eqv axial (nsp:axial space))
     (is eqv tokens (nsp:tokens space))
     (is eqv overlay (nsp:overlay space))
@@ -63,7 +65,9 @@
     (is eqv foundation (nsp:foundation space))
     (let* ((new-axial (nc:axial 1 1))
            (args (list :axial new-axial :tokens '() :overlay nil
-                       :unit nil :unit-rotation nil :foundation nil)))
+                       :unit nil :unit-rotation nil :foundation nil))
+           ;; TODO ditto
+           (value-semantics-utils::*safe-to-reinitialize-instance* t))
       (is eqv space (apply #'reinitialize-instance space args))
       (is eqv new-axial (nsp:axial space))
       (false (nsp:tokens space))

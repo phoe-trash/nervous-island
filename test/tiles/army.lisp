@@ -82,7 +82,10 @@
          (element-count (nr:total-element-count army))
          (hq-elements (nr:hq-elements army))
          (elements (nr:elements army)))
-    (is eqv army (reinitialize-instance army))
+    ;; TODO: make this test not depend on the below.
+    ;;       Maybe just test COPY instead?
+    (let ((value-semantics-utils::*safe-to-reinitialize-instance* t))
+      (is eqv army (reinitialize-instance army)))
     (is eqv name (nel:name army))
     (is eqv element-count (nr:total-element-count army))
     (is eqv hq-elements (nr:hq-elements army))
@@ -90,7 +93,9 @@
     (let ((hq-elements (loop repeat 3
                              collect (make-instance 'element-test-hq-element)))
           (elements (loop repeat 32
-                          collect (make-instance 'element-test-element))))
+                          collect (make-instance 'element-test-element)))
+          ;; TODO ditto
+          (value-semantics-utils::*safe-to-reinitialize-instance* t))
       ;; TODO add a second R-I call in all other tests, one that actually makes
       ;;      use of kwargs to be passed around - like below
       (is eqv army (reinitialize-instance army :hq-elements hq-elements
