@@ -71,8 +71,6 @@
                 :elements ())
         nr:element-count-error)))
 
-;; TODO Why the hell do we want REINITIALIZE-INSTANCE in an immutable system?
-;; It should probably signal an error since it attempts to mutate the object.
 (define-test army-reinitialize
   (let* ((army (make-instance
                 'army-test-army
