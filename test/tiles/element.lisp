@@ -5,11 +5,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element
 
+(defun element-test-element-container-pred (&rest args)
+  (declare (ignore args)))
+
 (define-class element-test-element-container (nel:element-container) ()
   ;; TODO test those
-  (:default-initargs :reparent-predicate (constantly nil)
-                     :reparent-reader (constantly nil)
-                     :reparent-writer (constantly nil)))
+  (:default-initargs :reparent-predicate #'element-test-element-container-pred
+                     :reparent-reader #'element-test-element-container-pred
+                     :reparent-writer #'element-test-element-container-pred))
 
 (define-class element-test-element (nel:element) ())
 
