@@ -62,7 +62,8 @@
     (fail (make :designators '(0)) type-error)
     (handler-bind ((style-warning #'muffle-warning))
       (fail (make :designators '(#:foo)) type-error)
-      (fail (make :designators '(army-test-hq-element (army-test-element #:foo)))
+      (fail (make :designators '(army-test-hq-element
+                                 (army-test-element #:foo)))
           type-error)
       (fail (make :hq-elements '(#:foo)) (or type-error program-error))
       (fail (make :elements '((#:foo 34))) (or type-error program-error)))
@@ -70,6 +71,8 @@
                 :elements ())
         nr:element-count-error)))
 
+;; TODO Why the hell do we want REINITIALIZE-INSTANCE in an immutable system?
+;; It should probably signal an error since it attempts to mutate the object.
 (define-test army-reinitialize
   (let* ((army (make-instance
                 'army-test-army
@@ -102,3 +105,5 @@
       (is = 3 (length (nr:hq-elements army)))
       (is = 32 (nr:element-count army))
       (is = 32 (length (nr:elements army))))))
+
+;; TODO test reparenting

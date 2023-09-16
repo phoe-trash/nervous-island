@@ -7,6 +7,7 @@
                     (#:φ #:phoe-toolbox)
                     (#:ncom #:nervous-island.common))
   (:export #:owner #:auto-reparenting
+           #:reparent-predicate #:reparent-reader #:reparent-writer
            #:color #:colored #:name
            #:element-metacontainer #:element-container #:element
            #:hq-element #:element-designator))
@@ -16,9 +17,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Protocol (TODO this should go into NCOM)
 
-(deftype value () '(real 0 1))
+(deftype color-value () '(real 0 1))
 
-(deftype color () '(cons value (cons value (cons value (cons value null)))))
+(deftype color ()
+  (loop repeat 4
+        with type = 'null
+        do (setf type (list 'cons 'color-value type))
+        finally (return type)))
 
 (defgeneric color (owner)
   (:method ((color null)) '(0.5 0.5 0.5 1)))
@@ -36,10 +41,21 @@
 
 (defgeneric owner (thing))
 
-(define-class auto-reparenting ()
-  ((reparent-predicate :type function)
-   (reparent-reader :type function)
-   (reparent-writer :type function))
+(define-class owned ()
+  ((owner :initform nil)))
+
+;;; TODO test these
+
+(defgeneric reparent-predicate (thing)
+  (:method (thing) (constantly nil)))
+
+(defgeneric reparent-reader (thing)
+  (:method (thing) (constantly nil)))
+
+(defgeneric reparent-writer (thing)
+  (:method (thing) (constantly nil)))
+
+(define-class auto-reparenting () ()
   (:protocolp t))
 
 (defmethod shared-initialize :after
@@ -69,7 +85,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element container
 
-(define-class element-container (colored auto-reparenting)
+(define-class element-container (owned colored auto-reparenting)
   ((owner :type element-container-owner :initform nil)
    (name :type symbol))
   (:protocolp t))
@@ -83,7 +99,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Element
 
-(define-class element ()
+(define-class element (owned)
   ((owner :type element-owner :initform nil))
   (:protocolp t))
 

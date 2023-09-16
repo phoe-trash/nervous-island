@@ -154,7 +154,8 @@
               (:div :class "hex" :id id
                     :style (make-hex-css-style scale top left background)
                     (:h3 :style "text-align: center;"
-                         (format nil "~D ~D" q r))))
+                         (format nil "~D ~D" q r))
+                    ))
             (a:when-let* ((space (nb:find-space board axial))
                           (unit (nsp:unit space))
                           (unit-rotation (* (nsp:unit-rotation space) 60)))

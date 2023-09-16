@@ -32,10 +32,7 @@
   (:protocolp t)
   (:extra-args :designators :token-designators :discard)
   (:before #'make-army-before)
-  (:after #'make-army-after)
-  (:default-initargs :reparent-predicate #'army-reparent-predicate
-                     :reparent-reader #'army-reparent-reader
-                     :reparent-writer #'army-reparent-writer))
+  (:after #'make-army-after))
 
 (defun army-reparent-predicate (army)
   (flet ((foreign-elements-p (elements)
@@ -44,8 +41,12 @@
         (foreign-elements-p (elements army))
         (foreign-elements-p (tokens army)))))
 
+(defmethod nel:reparent-predicate ((army army)) #'army-reparent-predicate)
+
 (defun army-reparent-reader (army)
   (append (hq-elements army) (elements army) (tokens army)))
+
+(defmethod nel:reparent-reader ((army army)) #'army-reparent-reader)
 
 (defun army-reparent-writer (rest army)
   (multiple-value-bind (hq-elements rest)
@@ -55,6 +56,8 @@
       (setf (slot-value army '%hq-elements) hq-elements
             (slot-value army '%elements) elements
             (slot-value army '%tokens) tokens))))
+
+(defmethod nel:reparent-writer ((army army)) #'army-reparent-writer)
 
 (defmethod print-object ((object army) stream)
   (print-unreadable-object (object stream :type nil :identity nil)
