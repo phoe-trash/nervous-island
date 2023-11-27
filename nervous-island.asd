@@ -6,7 +6,7 @@
 (in-package #:nervous-island.asdf)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; AUTO-MODULE - adapted from https://github.com/sjl/rosalind
+;;; AUTO-MODULE - adapted from https://github.com/sjl/rosalind and fixed a bit
 
 (defclass auto-module (module)
   ((cachedp :initform nil)))
@@ -18,11 +18,13 @@
                             :name (pathname-name pathname)
                             :type "lisp"
                             :pathname pathname
-                            :parent (component-parent self))))
+                            :parent self))
+           (lisp-file-p (pathname) (equal "lisp" (pathname-type pathname))))
       (let* ((pattern (make-pathname :directory nil :name uiop:*wild*
                                      :type "lisp"))
-             (pathnames (directory-files (component-pathname self) pattern))
-             (children (mapcar #'make-file pathnames)))
+             (pathnames (uiop:directory-files (component-pathname self) pattern))
+             (lisp-pathnames (remove-if-not #'lisp-file-p pathnames))
+             (children (mapcar #'make-file lisp-pathnames)))
         (setf (slot-value self 'asdf/component:children) children
               (slot-value self 'cachedp) t)))))
 

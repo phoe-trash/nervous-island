@@ -48,6 +48,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Nervous Island CL package
 
+;;; Needed for EQV hash tables. (sb-ext:define-hash-table-test eqv sxhash)
+;;; TODO provide replacements for standard functions that use EQV as a default
+;;; instead of EQL?
+
 (macrolet
     ((create-ncl-package ()
        (flet ((c2cl-symbols ()
